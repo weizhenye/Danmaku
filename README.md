@@ -2,7 +2,7 @@
 
 It's based on [CommentCoreLibrary](https://github.com/jabbany/CommentCoreLibrary).
 
-See [Demo](https://github.com/weizhenye/Danmaku).
+See [Demo](https://weizhenye.github.com/Danmaku/).
 
 # Usage
 	<script src="js/danmaku.js"></script>
