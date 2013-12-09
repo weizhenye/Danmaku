@@ -38,3 +38,5 @@ You may write control.js yourself. My [control.js](https://github.com/weizhenye/
 	danmaku.start();
 ### Stop
 	danmaku.stop();
+### Set current time
+	danmaku.setCurrentTime(video.currentTime * 1000);// Milliseconds

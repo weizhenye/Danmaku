@@ -130,6 +130,10 @@ function Danmaku(){
 	this.add = function(cmt){
 		this.timeline.splice(this.binSearch(cmt.stime) + 1, 0, cmt);
 	}
+	this.setCurrentTime = function(time){
+		this.clear();
+		this.position = this.binSearch(time);
+	}
 	this.getChannel = function(cmt){
 		var	channel = -1;
 
