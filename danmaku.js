@@ -136,7 +136,6 @@ function Danmaku(){
 	}
 	this.getChannel = function(cmt){
 		var	channel = -1;
-
 		if(cmt.mode == 1){
 			function checkConflict(channel, cmt){
 				for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i){
@@ -170,7 +169,6 @@ function Danmaku(){
 				if(cmt.mode == 5) this.channelTop[i] = 1;
 			}
 		}
-
 		return channel;
 	}
 	this.freeChannel = function(cmt){

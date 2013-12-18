@@ -80,7 +80,7 @@ function control(that){
 
 	bar.onclick = function(e){
 		progress.style.width = e.offsetX + 'px';
-		video.currentTime =  video.duration * e.offsetX / video.offsetWidth;
+		video.currentTime = video.duration * e.offsetX / video.offsetWidth;
 		that.setCurrentTime(video.currentTime * 1000);
 	}
 	bar.onmousemove = function(e){
