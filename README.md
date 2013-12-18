@@ -28,10 +28,10 @@ You may write control.js yourself. My [control.js](https://github.com/weizhenye/
 	});
 ### Add comment
 	danmaku.add({
-		mode: 1,
-		size: 22,
+		mode: 1,/*fly: 1, top: 5, bottom: 4*/
+		size: 22,/*font size*/
 		color: '#FFFFFF',
-		stime: 2333,
+		stime: 2333,/*strat time*/
 		text: 'example'
 	});
 ### Start
