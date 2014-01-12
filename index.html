@@ -22,10 +22,10 @@
 <script>
 	var	danmaku = new Danmaku();
 	danmaku.init({
-		url: 'example.json',
-		video: document.getElementById('video'),
-		control: control /*in control.js*/
+		comments: 'example.json',
+		video: document.getElementById('video')
 	});
+	control(danmaku);
 </script>
 
 </body>
