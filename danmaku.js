@@ -131,6 +131,7 @@ function Danmaku(){
 			if(time <= this.timeline[middle].stime) right = middle - 1;
 			else left = middle + 1;
 		}
+		if(right < 0) right = 0;
 		return right;
 	}
 	this.add = function(cmt){
