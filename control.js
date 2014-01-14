@@ -80,7 +80,7 @@ function control(that){
 
 	bar.onclick = function(e){
 		progress.style.width = e.offsetX + 'px';
-		video.currentTime =  video.duration * e.offsetX / video.offsetWidth;
+		video.currentTime = video.duration * e.offsetX / video.offsetWidth;
 		that.setCurrentTime(video.currentTime * 1000);
 	}
 	bar.onmousemove = function(e){
@@ -146,4 +146,12 @@ function control(that){
 		if(sec < 10) sec = '0' + sec;
 		return min + ':' + sec;
 	}
+
+	// stage.onmousemove = function(e){
+	// 	if(this.offsetHeight - e.offsetY < 44){
+	// 		control.style.display = 'block';
+	// 	}else{
+	// 		control.style.display = 'none';
+	// 	}
+	// }
 }

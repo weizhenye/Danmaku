@@ -14,7 +14,7 @@ function Danmaku(){
 		var	danmaku = document.createElement('div');
 		danmaku.id = 'danmaku';
 		this.video.parentNode.insertBefore(danmaku, this.video);
-		danmaku.style = this.video.style;
+		danmaku.style.position = this.video.style.position;
 		this.video.style.position = 'absolute';
 		danmaku.appendChild(this.video);
 
@@ -26,12 +26,17 @@ function Danmaku(){
 		this.stage.style.overflow = 'hidden';
 		danmaku.appendChild(this.stage);
 
-		opt.control(that);
-		this.load(opt.url);
+		if(typeof(opt.comments) == 'object'){
+			this.timeline = opt.comments.sort(function(a,b){
+				if(a.stime > b.stime) return 1;
+				if(a.stime < b.stime) return -1;
+				return 0;
+			});
+		}else if(typeof(opt.comments) == 'string') this.load(opt.comments);
 	}
 	this.load = function(url){
 		var	xhr = new XMLHttpRequest();
-		xhr.open('GET', url, true);
+		xhr.open('GET', url, false);
 		xhr.onreadystatechange = function (){
 			if (xhr.readyState == 4){
 				if(xhr.status == 200){
@@ -77,7 +82,7 @@ function Danmaku(){
 	this.stop = function(){
 		clearInterval(runTimer);
 		runTimer = 0;
-		clearTimeout(launchTimer);
+		clearInterval(launchTimer);
 	}
 	this.launch = function(data){
 		var	cmt = document.createElement('div');
@@ -92,6 +97,7 @@ function Danmaku(){
 		cmt.innerText = data.text;
 		cmt.style.fontSize = data.size + 'px';
 		cmt.style.color = data.color;
+		cmt.style.textShadow = '1px 1px 1px #000';
 		cmt.style.position = 'absolute';
 		this.stage.appendChild(cmt);
 		cmt.style.width = (cmt.offsetWidth + 1) + 'px';
@@ -125,6 +131,7 @@ function Danmaku(){
 			if(time <= this.timeline[middle].stime) right = middle - 1;
 			else left = middle + 1;
 		}
+		if(right < 0) right = 0;
 		return right;
 	}
 	this.add = function(cmt){
@@ -136,7 +143,6 @@ function Danmaku(){
 	}
 	this.getChannel = function(cmt){
 		var	channel = -1;
-
 		if(cmt.mode == 1){
 			function checkConflict(channel, cmt){
 				for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i){
@@ -170,7 +176,6 @@ function Danmaku(){
 				if(cmt.mode == 5) this.channelTop[i] = 1;
 			}
 		}
-
 		return channel;
 	}
 	this.freeChannel = function(cmt){
