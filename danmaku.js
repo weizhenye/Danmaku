@@ -37,15 +37,7 @@ Danmaku.prototype.init = function(opt) {
     this.media.addEventListener('pause', function() { that._pause(); });
     this.media.addEventListener('seeking', function() { that._seek(); });
   }
-  if (this.container) {
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientHeight;
-  }
   if (this.isVideo) {
-    if (!this.width || !this.height || !this.container) {
-      this.width = this.media.clientWidth;
-      this.height = this.media.clientHeight;
-    }
     if (!this.container) {
       this.container = document.createElement('div');
       this.initContainer = false;
@@ -54,11 +46,10 @@ Danmaku.prototype.init = function(opt) {
       this.media.parentNode.insertBefore(this.container, this.media);
       this.container.appendChild(this.media);
     }
-    this.stage.style.width = this.width + 'px';
-    this.stage.style.height = this.height + 'px';
   }
-  this.ttl = this.width / 160;
+  this.resize();
   this.container.appendChild(this.stage);
+  if (!this.isMedia) this._play();
   return this;
 };
 Danmaku.prototype.show = function() {
@@ -70,12 +61,13 @@ Danmaku.prototype.hide = function() {
   return this;
 };
 Danmaku.prototype.resize = function() {
-  if (this.isVideo && !this.initContainer) {
-    this.width = this.media.clientWidth;
-    this.height = this.media.clientHeight
-  } else {
+  if (this.initContainer) {
     this.width = this.container.clientWidth;
     this.height = this.container.clientWidth;
+  }
+  if (this.isVideo && (!this.initContainer || !this.width || !this.height)) {
+    this.width = this.media.clientWidth;
+    this.height = this.media.clientHeight;
   }
   this.stage.style.width = this.width + 'px';
   this.stage.style.height = this.height + 'px';
@@ -89,7 +81,7 @@ Danmaku.prototype.emit = function(cmt) {
     cmt.time = cmt.time || ct;
     this.comments.splice(binsearch(this.comments, ct) + 1, 0, cmt);
   } else {
-    cmt.time = new Date().getTime();
+    cmt.time = new Date().getTime() / 1000;
     this.comments.push(cmt);
   }
   return this;
@@ -97,7 +89,9 @@ Danmaku.prototype.emit = function(cmt) {
 Danmaku.prototype._play = function() {
   var that = this;
   function check() {
-    var ct = that.isMedia ? that.media.currentTime : new Date().getTime();
+    var ct = that.isMedia
+             ? that.media.currentTime
+             : new Date().getTime() / 1000;
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
       if (ct - cmt.time > that.ttl) {
@@ -163,7 +157,9 @@ Danmaku.prototype._pause = function() {
   this.requestID = 0;
 };
 Danmaku.prototype._seek = function() {
-  var ct = this.isMedia ? this.media.currentTime : new Date().getTime(),
+  var ct = this.isMedia
+           ? this.media.currentTime
+           : new Date().getTime() / 1000,
       lc = this.stage.lastChild;
   while (lc) {
     this.stage.removeChild(lc);
@@ -176,7 +172,9 @@ Danmaku.prototype._seek = function() {
 Danmaku.prototype._getChannel = function(cmt) {
   var that = this,
       abbr = '_rtl',
-      ct = this.isMedia ? this.media.currentTime : new Date().getTime();
+      ct = this.isMedia
+           ? this.media.currentTime
+           : new Date().getTime() / 1000;
   if (cmt.mode === 'lefttoright') abbr = '_ltr';
   if (cmt.mode === 'righttoleft') abbr = '_rtl';
   if (cmt.mode === 'top') abbr = '_top';
