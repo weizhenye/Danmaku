@@ -1,7 +1,7 @@
 ﻿Danmaku
 ======
 
-Danmaku is a JavaScript library to display flying comments on HTML5 video. It can also display to your container in real time without timeline or be used with HTML5 audio.
+Danmaku is a JavaScript library to display flying comments on HTML5 video. It can also display comments to your container in real time without timeline or be used with HTML5 audio.
 
 [Demo](https://weizhenye.github.io/Danmaku/)
 
@@ -24,7 +24,7 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 
 	// real time mode
 	danmaku.init({
-	  // the stage to display comments will append to container.
+	  // the stage to display comments will be appended to container.
 	  container: document.getElementById('myContainer')
 	});
 
