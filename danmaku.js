@@ -89,19 +89,15 @@ Danmaku.prototype.emit = function(cmt) {
 Danmaku.prototype._play = function() {
   var that = this;
   function check() {
-    var ct = that.isMedia
-             ? that.media.currentTime
-             : new Date().getTime() / 1000;
+    var ct = that.isMedia ?
+             that.media.currentTime :
+             new Date().getTime() / 1000;
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
       if (ct - cmt.time > that.ttl) {
         that.stage.removeChild(cmt.node);
         that.runline.splice(i, 1);
       }
-    }
-    while (that.position < that.comments.length &&
-           ct - that.comments[that.position].time > that.ttl) {
-      ++that.position;
     }
     var tempNodes = [],
         df = document.createDocumentFragment();
@@ -124,12 +120,8 @@ Danmaku.prototype._play = function() {
     }
     for (var i = tempNodes.length - 1; i >= 0; i--) {
       var cmt = tempNodes[i];
-      if (cmt.mode === 'lefttoright') {
-        cmt.x = -cmt.width;
-      }
-      if (cmt.mode === 'righttoleft') {
-        cmt.x = that.width;
-      }
+      if (cmt.mode === 'lefttoright') cmt.x = -cmt.width;
+      if (cmt.mode === 'righttoleft') cmt.x = that.width;
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
         cmt.x = (that.width - cmt.width) >> 1;
       }
@@ -138,15 +130,11 @@ Danmaku.prototype._play = function() {
     }
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
-      var elapsed = ((ct - cmt.time) / that.ttl) * (that.width + cmt.width);
-      if (cmt.mode === 'lefttoright') {
-        cmt.x = elapsed - cmt.width;
-        cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
-      }
-      if (cmt.mode === 'righttoleft') {
-        cmt.x = that.width - elapsed;
-        cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
-      }
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') continue;
+      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
+      if (cmt.mode === 'lefttoright') cmt.x = elapsed - cmt.width;
+      if (cmt.mode === 'righttoleft') cmt.x = that.width - elapsed;
+      cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
     }
     that.requestID = RAF(check);
   }
@@ -157,9 +145,9 @@ Danmaku.prototype._pause = function() {
   this.requestID = 0;
 };
 Danmaku.prototype._seek = function() {
-  var ct = this.isMedia
-           ? this.media.currentTime
-           : new Date().getTime() / 1000,
+  var ct = this.isMedia ?
+           this.media.currentTime :
+           new Date().getTime() / 1000,
       lc = this.stage.lastChild;
   while (lc) {
     this.stage.removeChild(lc);
@@ -172,9 +160,9 @@ Danmaku.prototype._seek = function() {
 Danmaku.prototype._getChannel = function(cmt) {
   var that = this,
       abbr = '_rtl',
-      ct = this.isMedia
-           ? this.media.currentTime
-           : new Date().getTime() / 1000;
+      ct = this.isMedia ?
+           this.media.currentTime :
+           new Date().getTime() / 1000;
   if (cmt.mode === 'lefttoright') abbr = '_ltr';
   if (cmt.mode === 'righttoleft') abbr = '_rtl';
   if (cmt.mode === 'top') abbr = '_top';
@@ -186,7 +174,7 @@ Danmaku.prototype._getChannel = function(cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       return ct - cr.time < that.ttl;
     } else {
-      var elapsed = (ct - cr.time) * (that.width + cr.width) / that.ttl,
+      var elapsed = (that.width + cr.width) * (ct - cr.time) / that.ttl,
           crTime = that.ttl + cr.time - ct,
           cmtTime = that.ttl * that.width / (that.width + cmt.width);
       return (crTime > cmtTime) || (cr.width > elapsed);
