@@ -288,7 +288,7 @@ function DanmakuFileNode(data) {
   buttons.className = 'file-buttons';
   title.textContent = data.title;
   title.title = data.title;
-  initBtn.textContent = 'Initialization';
+  initBtn.textContent = 'Initialize';
   reloadBtn.textContent = 'Reload';
   deleteBtn.textContent = 'Delete';
   buttons.appendChild(initBtn);
