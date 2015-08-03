@@ -1,0 +1,211 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+header {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  padding: 16px 0 0 0;
+}
+.wrapper {
+  width: 960px;
+  margin: auto;
+  text-align: center;
+}
+fieldset {
+  height: 40px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+legend {
+  text-align: left;
+}
+#media-mode {
+}
+#manager {
+  width: 318px;
+  height: 358px;
+  border: 1px solid #ccc;
+  float: right;
+  overflow: hidden;
+}
+#get-danmaku {
+  height: 44px;
+}
+#get-danmaku input {
+  width: 240px;
+  font-family: Arial;
+}
+#get-danmaku button {
+  width: 72px;
+}
+#danmaku-tab {
+  position: relative;
+}
+#danmaku-tab label {
+  font-size: 16px;
+  background-color: #ccc;
+  padding: 0 16px;
+  cursor: pointer;
+}
+#danmaku-tab label:hover {
+  background-color: #aaa;
+}
+#danmaku-tab [type=radio] {
+  display: none;
+}
+.tab-content {
+  width: 318px;
+  height: 294px;
+  text-align: left;
+  position: absolute;
+  overflow: hidden;
+}
+.tab-content li {
+  list-style: none;
+}
+.tab-content > ul {
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  /*transition: transform .5s ease, opacity .5s ease;*/
+}
+#danmaku-file > ul {
+  transform: translateX(-100%);
+}
+#danmaku-comments > ul {
+  transform: translateX(100%);
+}
+#danmaku-tab [type=radio]:checked ~ label {
+  background-color: #888;
+  z-index: 2;
+}
+#danmaku-tab [type=radio]:checked ~ label ~ .tab-content {
+  z-index: 1;
+  overflow-y: auto;
+}
+#danmaku-tab [type=radio]:checked ~ label ~ .tab-content > ul {
+  opacity: 1;
+  transform: translateX(0);
+}
+#danmaku-file li {
+  height: 16px;
+  overflow: hidden;
+  padding: 4px;
+}
+#danmaku-file li:hover {
+  height: auto;
+  background-color: #aaa;
+}
+.file-title {
+  height: 20px;
+  overflow: hidden;
+}
+.comment-time {
+  padding: 0 10px;
+  white-space: nowrap;
+}
+.comment-text {
+  white-space: nowrap;
+}
+#video-mode,
+#audio-mode {
+  background-color: #fff;
+  position: absolute;
+  float: left;
+}
+#audio-mode,
+#realtime-mode {
+  display: none;
+}
+#realtime-mode {
+  text-align: left;
+}
+#realtime-mode pre {
+  display: inline-block;
+}
+#server {
+  float: left;
+}
+#server:before {
+  content: 'Server';
+  display: block;
+  font-size: 40px;
+  font-weight: bold;
+  color: #5bc0de;
+}
+#client {
+  float: right;
+}
+#client:before {
+  content: 'Client';
+  display: block;
+  font-size: 40px;
+  font-weight: bold;
+  color: #5bc0de;
+}
+.danmaku-container {
+  width: 640px;
+  height: 360px;
+  position: relative;
+}
+.danmaku-container canvas {
+  position: absolute;
+  left: 0;
+}
+#drop-area {
+  width: 620px;
+  height: 340px;
+  text-align: center;
+  border: 10px dashed #ccc;
+  position: absolute;
+}
+#drop-area span {
+  font-size: 36px;
+}
+#drop-area input {
+  width: 620px;
+  height: 340px;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#message {
+  padding: 10px;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  opacity: 1;
+}
+.transition {
+  transition: opacity 4s cubic-bezier(1,0,1,1);
+}
+.error {
+  background-color: #ffb5a1;
+}
+.error:before {
+  content: 'Error: ';
+}
+.success {
+  background-color: #5cb85c;
+}
+.success:before {
+  content: 'Success: ';
+}
+video {
+  width: 640px;
+  height: 360px;
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+audio {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}

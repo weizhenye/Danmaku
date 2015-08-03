@@ -1,194 +1,278 @@
-function Danmaku(){
-	var	that = this,
-		runTimer = 0,
-		launchTimer = 0;
-	this.position = 0;
-	this.timeline = [];
-	this.runline = [];
-	this.channel = [];
-	this.channelTop = [];
-	this.channelBottom = [];
-	this.init = function(opt){
-		this.video = opt.video;
+(function(window) {
+'use strict';
 
-		var	danmaku = document.createElement('div');
-		danmaku.id = 'danmaku';
-		this.video.parentNode.insertBefore(danmaku, this.video);
-		danmaku.style.position = this.video.style.position;
-		this.video.style.position = 'absolute';
-		danmaku.appendChild(this.video);
-
-		this.stage = document.createElement('div');
-		this.stage.id = 'danmaku-stage';
-		this.stage.style.width = this.video.offsetWidth + 'px';
-		this.stage.style.height = this.video.offsetHeight + 'px';
-		this.stage.style.position = 'relative';
-		this.stage.style.overflow = 'hidden';
-		danmaku.appendChild(this.stage);
-
-		if(typeof(opt.comments) == 'object'){
-			this.timeline = opt.comments.sort(function(a,b){
-				if(a.stime > b.stime) return 1;
-				if(a.stime < b.stime) return -1;
-				return 0;
-			});
-		}else if(typeof(opt.comments) == 'string') this.load(opt.comments);
-	}
-	this.load = function(url){
-		var	xhr = new XMLHttpRequest();
-		xhr.open('GET', url, false);
-		xhr.onreadystatechange = function (){
-			if (xhr.readyState == 4){
-				if(xhr.status == 200){
-					that.timeline = JSON.parse(xhr.responseText);
-					that.timeline.sort(function(a,b){
-						if(a.stime > b.stime) return 1;
-						if(a.stime < b.stime) return -1;
-						return 0;
-					});
-				}else{
-					console.log(xhr.statusText);
-				}
-			}
-		};
-		xhr.send(null);
-	}
-	this.start = function(){
-		if(runTimer > 0) return;
-		var	lastTPos = new Date().getTime();
-		runTimer = setInterval(function(){
-			var	elapsed = new Date().getTime() - lastTPos;
-			lastTPos = new Date().getTime();
-			for(var	i = 0; i < that.runline.length; ++i){
-				var	cmt = that.runline[i];
-				if(cmt.mode == 1)
-					cmt.style.left = (cmt.ttl / cmt.dur) * (that.stage.offsetWidth + cmt.offsetWidth) - cmt.offsetWidth + 'px';
-				cmt.ttl -= elapsed;
-				if(cmt.ttl <= 0){
-					that.freeChannel(cmt);
-					that.stage.removeChild(cmt);
-					that.runline.splice(i,1);
-				}
-			}
-		},10);
-		launchTimer = setInterval(function(){
-			var	playhead = that.video.currentTime * 1000;
-			while(that.timeline[that.position].stime <= playhead){
-				that.launch(that.timeline[that.position]);
-				++that.position;
-			}
-		},10);
-	}
-	this.stop = function(){
-		clearInterval(runTimer);
-		runTimer = 0;
-		clearInterval(launchTimer);
-	}
-	this.launch = function(data){
-		var	cmt = document.createElement('div');
-		this.set(cmt, data);
-		this.runline.push(cmt);
-	}
-	this.set = function(cmt, data){
-		cmt.className = 'cmt';
-		cmt.id = 'cmt' + this.position;
-		cmt.mode = data.mode;
-		cmt.appendChild(document.createTextNode(data.text));
-		cmt.innerText = data.text;
-		cmt.style.fontSize = data.size + 'px';
-		cmt.style.color = data.color;
-		cmt.style.textShadow = '1px 1px 1px #000';
-		cmt.style.position = 'absolute';
-		this.stage.appendChild(cmt);
-		cmt.style.width = (cmt.offsetWidth + 1) + 'px';
-		cmt.style.height = (cmt.offsetHeight - 3) + 'px';
-		if(cmt.mode == 1)
-			cmt.style.left = this.stage.offsetWidth + 'px';
-		if(cmt.mode == 4 || cmt.mode == 5)
-			cmt.style.left = ((that.stage.offsetWidth - cmt.offsetWidth) / 2) + 'px';
-		cmt.channel = this.getChannel(cmt);
-		if(cmt.mode == 4)
-			cmt.style.top = (this.stage.offsetHeight - cmt.offsetHeight - cmt.channel % this.stage.offsetHeight) + 'px';
-		else
-			cmt.style.top = (cmt.channel % (this.stage.offsetHeight - cmt.offsetHeight)) + 'px';
-		cmt.ttl = 4000 * this.stage.offsetWidth / 640;
-		cmt.dur = 4000 * this.stage.offsetWidth / 640;
-	}
-	this.clear = function(){
-		for(var	i = 0; i < this.runline.length; ++i)
-			this.stage.removeChild(this.runline[i]);
-		this.runline = [];
-		this.channel = [];
-		this.channelTop = [];
-		this.channelBottom = [];
-	}
-	this.binSearch = function(time){
-		var	middle,
-			left = 0,
-			right = this.timeline.length;
-		while(left <= right){
-			middle = Math.floor((left + right) / 2);
-			if(time <= this.timeline[middle].stime) right = middle - 1;
-			else left = middle + 1;
-		}
-		if(right < 0) right = 0;
-		return right;
-	}
-	this.add = function(cmt){
-		this.timeline.splice(this.binSearch(cmt.stime) + 1, 0, cmt);
-	}
-	this.setCurrentTime = function(time){
-		this.clear();
-		this.position = this.binSearch(time);
-	}
-	this.getChannel = function(cmt){
-		var	channel = -1;
-		if(cmt.mode == 1){
-			function checkConflict(channel, cmt){
-				for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i){
-					var	rightPos = 0,
-						prevWidth = 0;
-					if(that.channel[i] !== undefined){
-						var	prevcmt = document.getElementById(that.channel[i]);
-						prevWidth = prevcmt.offsetWidth;
-						rightPos = prevcmt.style.left.match(/\d+/)[0] + prevWidth;
-					}
-					var	v1 = that.stage.offsetWidth + cmt.offsetWidth,
-						v2 = that.stage.offsetWidth + prevWidth;
-					if(rightPos / v2 > (that.stage.offsetWidth - rightPos) / Math.abs(v1-v2))
-						return -(i + 1);
-				}
-				return channel;
-			}
-			while(channel < 0) channel = checkConflict(-channel, cmt);
-			for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i) this.channel[i] = cmt.id;
-		}
-		if(cmt.mode == 4 || cmt.mode == 5){
-			function checkTBConflict(channel, cmt){
-				for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i)
-					if(cmt.mode == 5 && that.channelTop[i] || cmt.mode == 4 && that.channelBottom[i])
-						return -(i + 1);
-				return channel;
-			}
-			while(channel < 0) channel = checkTBConflict(-channel, cmt);
-			for(var	i = channel; i < channel + cmt.offsetHeight - 3; ++i){
-				if(cmt.mode == 4) this.channelBottom[i] = 1;
-				if(cmt.mode == 5) this.channelTop[i] = 1;
-			}
-		}
-		return channel;
-	}
-	this.freeChannel = function(cmt){
-		if(cmt.mode == 1){
-			for(var	i = cmt.channel; i < cmt.channel + cmt.offsetHeight - 3; ++i)
-				if(that.channel[i] == cmt.id)
-					that.channel[i] = undefined;
-		}
-		if(cmt.mode == 4 || cmt.mode == 5){
-			for(var	i = cmt.channel; i < cmt.channel + cmt.offsetHeight - 3; ++i){
-				if(cmt.mode == 4) that.channelBottom[i] = 0;
-				if(cmt.mode == 5) that.channelTop[i] = 0;
-			}
-		}
-	}
+function Danmaku() {
+  this.ttl = 4;
+  this.requestID = 0;
+  this.position = 0;
+  this.runline = [];
+  this.comments = [];
+  this._resetRange();
+  this.initContainer = true;
+  this.stage = document.createElement('div');
+  this.stage.className = 'Danmaku-stage';
+  this.stage.style.cssText = 'position:relative;overflow:hidden;' +
+                             'pointer-events:none;transform:translateZ(0);';
 }
+
+Danmaku.prototype.init = function(opt) {
+  var that = this;
+  if (!opt.video && !opt.container) {
+    console.error('Container required.');
+    return;
+  }
+  this.comments = JSON.parse(JSON.stringify(opt.comments || []));
+  this.comments.sort(function(a, b) {
+    return a.time - b.time;
+  });
+  for (var i = this.comments.length - 1; i >= 0; i--) {
+    formatMode(this.comments[i]);
+  }
+  this.container = opt.container;
+  this.media = opt.video || opt.audio;
+  this.isMedia = this.media ? true : false;
+  this.isVideo = opt.video ? true : false;
+  if (this.isMedia) {
+    this.media.addEventListener('play', function() { that._play(); });
+    this.media.addEventListener('pause', function() { that._pause(); });
+    this.media.addEventListener('seeking', function() { that._seek(); });
+  }
+  if (this.isVideo && !this.container) {
+    var isPlay = !this.media.paused;
+    this.container = document.createElement('div');
+    this.initContainer = false;
+    this.container.style.position = this.media.style.position;
+    this.media.style.position = 'absolute';
+    this.media.parentNode.insertBefore(this.container, this.media);
+    this.container.appendChild(this.media);
+    if (isPlay && this.media.paused) this.media.play();
+  }
+  this.resize();
+  this.container.appendChild(this.stage);
+  if (!this.isMedia || !this.media.paused) {
+    this._seek();
+    this._play();
+  }
+  return this;
+};
+Danmaku.prototype.show = function() {
+  this.stage.style.visibility = 'visible';
+  return this;
+};
+Danmaku.prototype.hide = function() {
+  this.stage.style.visibility = 'hidden';
+  return this;
+};
+Danmaku.prototype.resize = function() {
+  if (this.initContainer) {
+    this.width = this.container.offsetWidth;
+    this.height = this.container.offsetHeight;
+  }
+  if (this.isVideo && (!this.initContainer || !this.width || !this.height)) {
+    this.width = this.media.clientWidth;
+    this.height = this.media.clientHeight;
+  }
+  this.stage.style.width = this.width + 'px';
+  this.stage.style.height = this.height + 'px';
+  this.ttl = this.width / 160;
+  return this;
+};
+Danmaku.prototype.emit = function(cmt) {
+  formatMode(cmt);
+  if (this.isMedia) {
+    var ct = this.media.currentTime;
+    cmt.time = cmt.time || ct;
+    this.comments.splice(binsearch(this.comments, ct) + 1, 0, cmt);
+  } else {
+    cmt.time = new Date().getTime() / 1000;
+    this.comments.push(cmt);
+  }
+  return this;
+};
+Danmaku.prototype._play = function() {
+  var that = this;
+  function check() {
+    var ct = that.isMedia ?
+             that.media.currentTime :
+             new Date().getTime() / 1000;
+    for (var i = that.runline.length - 1; i >= 0; i--) {
+      var cmt = that.runline[i];
+      if (ct - cmt.time > that.ttl) {
+        that.stage.removeChild(cmt.node);
+        that.runline.splice(i, 1);
+      }
+    }
+    var tempNodes = [],
+        df = document.createDocumentFragment();
+    while (that.position < that.comments.length &&
+           that.comments[that.position].time < ct) {
+      var cmt = that.comments[that.position];
+      cmt.node = createCommentNode(cmt);
+      that.runline.push(cmt);
+      tempNodes.push(cmt);
+      df.appendChild(cmt.node);
+      ++that.position;
+    }
+    if (tempNodes.length) {
+      that.stage.appendChild(df);
+    }
+    for (var i = tempNodes.length - 1; i >= 0; i--) {
+      var cmt = tempNodes[i];
+      cmt.width = cmt.node.offsetWidth;
+      cmt.height = cmt.node.offsetHeight;
+    }
+    for (var i = tempNodes.length - 1; i >= 0; i--) {
+      var cmt = tempNodes[i];
+      if (cmt.mode === 'lefttoright') cmt.x = -cmt.width;
+      if (cmt.mode === 'righttoleft') cmt.x = that.width;
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        cmt.x = (that.width - cmt.width) >> 1;
+      }
+      cmt.y = that._getChannel(cmt);
+      cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
+    }
+    for (var i = that.runline.length - 1; i >= 0; i--) {
+      var cmt = that.runline[i];
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') continue;
+      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
+      if (cmt.mode === 'lefttoright') cmt.x = elapsed - cmt.width;
+      if (cmt.mode === 'righttoleft') cmt.x = that.width - elapsed;
+      cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
+    }
+    that.requestID = RAF(check);
+  }
+  this.requestID = RAF(check);
+};
+Danmaku.prototype._pause = function() {
+  CAF(this.requestID);
+  this.requestID = 0;
+};
+Danmaku.prototype._seek = function() {
+  var ct = this.isMedia ?
+           this.media.currentTime :
+           new Date().getTime() / 1000,
+      lc = this.stage.lastChild;
+  while (lc) {
+    this.stage.removeChild(lc);
+    lc = this.stage.lastChild;
+  }
+  this.runline = [];
+  this._resetRange();
+  this.position = binsearch(this.comments, ct);
+};
+Danmaku.prototype._getChannel = function(cmt) {
+  var that = this,
+      abbr = '_rtl',
+      ct = this.isMedia ?
+           this.media.currentTime :
+           new Date().getTime() / 1000;
+  if (cmt.mode === 'lefttoright') abbr = '_ltr';
+  if (cmt.mode === 'righttoleft') abbr = '_rtl';
+  if (cmt.mode === 'top') abbr = '_top';
+  if (cmt.mode === 'bottom') abbr = '_btm';
+  var crLen = this[abbr].length,
+      last = 0,
+      curr = 0;
+  var willCollide = function(cr, cmt) {
+    if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+      return ct - cr.time < that.ttl;
+    } else {
+      var elapsed = (that.width + cr.width) * (ct - cr.time) / that.ttl,
+          crTime = that.ttl + cr.time - ct,
+          cmtTime = that.ttl * that.width / (that.width + cmt.width);
+      return (crTime > cmtTime) || (cr.width > elapsed);
+    }
+  };
+  for (var i = 1; i < crLen; i++) {
+    var cr = this[abbr][i],
+        requiredRange;
+    if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+      requiredRange = cmt.height + cr.height;
+    } else requiredRange = cmt.height;
+    if (cr.range - this[abbr][last].range > requiredRange) {
+      curr = i;
+      break;
+    }
+    if (willCollide(cr, cmt)) last = i;
+  }
+  var channel = this[abbr][last].range,
+      crObj = {
+        range: channel + cmt.height,
+        time: cmt.time,
+        width: cmt.width,
+        height: cmt.height
+      };
+  this[abbr].splice(last + 1, curr - last - 1, crObj);
+
+  if (cmt.mode === 'bottom') {
+    return this.height - cmt.height - channel % this.height;
+  } else {
+    return channel % (this.height - cmt.height);
+  }
+};
+Danmaku.prototype._resetRange = function() {
+  this._ltr = new CollidableRange();
+  this._rtl = new CollidableRange();
+  this._top = new CollidableRange();
+  this._btm = new CollidableRange();
+};
+function CollidableRange() {
+  return [{
+    range: 0,
+    time: -9007199254740991,
+    width: 9007199254740991,
+    height: 0
+  }, {
+    range: 9007199254740991,
+    time: 9007199254740991,
+    width: 0,
+    height: 0
+  }];
+}
+var RAF = window.requestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          function(cb) { return setTimeout(cb, 50 / 3); };
+var CAF = window.cancelAnimationFrame ||
+          window.mozCancelAnimationFrame ||
+          window.webkitCancelAnimationFrame ||
+          function(id) { clearTimeout(id); };
+var binsearch = function(a, t) {
+  var m,
+      l = 0,
+      r = a.length;
+  while (l <= r) {
+    m = (l + r) >> 1;
+    if (t <= a[m].time) r = m - 1;
+    else l = m + 1;
+  }
+  if (r < 0) r = 0;
+  return r;
+};
+var formatMode = function(cmt) {
+  cmt.mode = (cmt.mode || 'rightToLeft').toLowerCase();
+  if (!/lefttoright|top|bottom/.test(cmt.mode)) cmt.mode = 'righttoleft';
+};
+var createCommentNode = function(cmt) {
+  var node = document.createElement('div');
+  node.appendChild(document.createTextNode(cmt.text));
+  node.style.cssText = 'position:absolute;white-space:nowrap;';
+  if (cmt.style) {
+    for (var key in cmt.style) {
+      node.style[key] = cmt.style[key];
+    }
+  }
+  return node;
+};
+var createTransformString = function(x, y) {
+  var vendors = ['', '-o-', '-ms-', '-moz-', '-webkit-'],
+      translateStr = 'transform:translate(' + x + 'px,' + y + 'px);',
+      transformStr = '';
+  for (var i = vendors.length - 1; i >= 0; i--) {
+    transformStr += vendors[i] + translateStr;
+  }
+  return transformStr;
+};
+window.Danmaku = Danmaku;
+
+})(window);
