@@ -21,7 +21,7 @@ Danmaku.prototype.init = function(opt) {
     console.error('Container required.');
     return;
   }
-  this.comments = opt.comments || [];
+  this.comments = JSON.parse(JSON.stringify(opt.comments || []));
   this.comments.sort(function(a, b) {
     return a.time - b.time;
   });
@@ -37,19 +37,22 @@ Danmaku.prototype.init = function(opt) {
     this.media.addEventListener('pause', function() { that._pause(); });
     this.media.addEventListener('seeking', function() { that._seek(); });
   }
-  if (this.isVideo) {
-    if (!this.container) {
-      this.container = document.createElement('div');
-      this.initContainer = false;
-      this.container.style.position = this.media.style.position;
-      this.media.style.position = 'absolute';
-      this.media.parentNode.insertBefore(this.container, this.media);
-      this.container.appendChild(this.media);
-    }
+  if (this.isVideo && !this.container) {
+    var isPlay = !this.media.paused;
+    this.container = document.createElement('div');
+    this.initContainer = false;
+    this.container.style.position = this.media.style.position;
+    this.media.style.position = 'absolute';
+    this.media.parentNode.insertBefore(this.container, this.media);
+    this.container.appendChild(this.media);
+    if (isPlay && this.media.paused) this.media.play();
   }
   this.resize();
   this.container.appendChild(this.stage);
-  if (!this.isMedia) this._play();
+  if (!this.isMedia || !this.media.paused) {
+    this._seek();
+    this._play();
+  }
   return this;
 };
 Danmaku.prototype.show = function() {
@@ -62,8 +65,8 @@ Danmaku.prototype.hide = function() {
 };
 Danmaku.prototype.resize = function() {
   if (this.initContainer) {
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientWidth;
+    this.width = this.container.offsetWidth;
+    this.height = this.container.offsetHeight;
   }
   if (this.isVideo && (!this.initContainer || !this.width || !this.height)) {
     this.width = this.media.clientWidth;
