@@ -73,6 +73,8 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	danmaku.show();
 
 ### Hide
+	// if you set `display: none;` to the container directly, you should also do
+	// danmaku.hide() otherwise the typesetting will be broken when it's showed.
 	danmaku.hide();
 
 ### Comments list

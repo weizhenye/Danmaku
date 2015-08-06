@@ -2,6 +2,7 @@
 'use strict';
 
 function Danmaku() {
+  this.isHide = false;
   this.ttl = 4;
   this.requestID = 0;
   this.position = 0;
@@ -56,11 +57,15 @@ Danmaku.prototype.init = function(opt) {
   return this;
 };
 Danmaku.prototype.show = function() {
-  this.stage.style.visibility = 'visible';
+  this.isHide = false;
+  this._seek();
+  this._play();
   return this;
 };
 Danmaku.prototype.hide = function() {
-  this.stage.style.visibility = 'hidden';
+  this._pause();
+  this._clear();
+  this.isHide = true;
   return this;
 };
 Danmaku.prototype.resize = function() {
@@ -90,6 +95,7 @@ Danmaku.prototype.emit = function(cmt) {
   return this;
 };
 Danmaku.prototype._play = function() {
+  if (this.isHide) return;
   var that = this;
   function check() {
     var ct = that.isMedia ?
@@ -144,21 +150,25 @@ Danmaku.prototype._play = function() {
   this.requestID = RAF(check);
 };
 Danmaku.prototype._pause = function() {
+  if (this.isHide) return;
   CAF(this.requestID);
   this.requestID = 0;
 };
 Danmaku.prototype._seek = function() {
   var ct = this.isMedia ?
            this.media.currentTime :
-           new Date().getTime() / 1000,
-      lc = this.stage.lastChild;
+           new Date().getTime() / 1000;
+  this._clear();
+  this._resetRange();
+  this.position = binsearch(this.comments, ct);
+};
+Danmaku.prototype._clear = function() {
+  var lc = this.stage.lastChild;
   while (lc) {
     this.stage.removeChild(lc);
     lc = this.stage.lastChild;
   }
   this.runline = [];
-  this._resetRange();
-  this.position = binsearch(this.comments, ct);
 };
 Danmaku.prototype._getChannel = function(cmt) {
   var that = this,
