@@ -2,6 +2,7 @@
 'use strict';
 
 function Danmaku() {
+  this.paused = true;
   this.isHide = false;
   this.ttl = 4;
   this.requestID = 0;
@@ -57,12 +58,14 @@ Danmaku.prototype.init = function(opt) {
   return this;
 };
 Danmaku.prototype.show = function() {
+  if (!this.isHide) return this;
   this.isHide = false;
   this._seek();
   this._play();
   return this;
 };
 Danmaku.prototype.hide = function() {
+  if (this.isHide) return this;
   this._pause();
   this._clear();
   this.isHide = true;
@@ -95,7 +98,8 @@ Danmaku.prototype.emit = function(cmt) {
   return this;
 };
 Danmaku.prototype._play = function() {
-  if (this.isHide) return;
+  if (this.isHide || !this.paused) return;
+  this.paused = false;
   var that = this;
   function check() {
     var ct = that.isMedia ?
@@ -150,7 +154,8 @@ Danmaku.prototype._play = function() {
   this.requestID = RAF(check);
 };
 Danmaku.prototype._pause = function() {
-  if (this.isHide) return;
+  if (this.isHide || this.paused) return;
+  this.paused = true;
   CAF(this.requestID);
   this.requestID = 0;
 };
