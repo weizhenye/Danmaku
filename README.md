@@ -25,7 +25,12 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	// real time mode
 	danmaku.init({
 	  // the stage to display comments will be appended to container.
-	  container: document.getElementById('myContainer')
+	  container: document.getElementById('myContainer'),
+
+	  // you can use DOM engine or canvas engine to render comments.
+	  // Canvas engine may more efficient than DOM however it costs more memory.
+	  // 'DOM' by default, available in all mode. 
+	  engine: 'DOM'
 	});
 
 	// using with HTML5 video
@@ -35,46 +40,69 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	  video: document.getElementById('myVideo'),
 
 	  // array of comment, you can find its format below.
-	  comments: []
+	  comments: [],
+
+	  engine: 'canvas'
 	});
 
 	// using with HTML5 audio
 	danmaku.init({
 	  audio: document.getElementById('myAudio'),
 	  container: document.getElementById('myContainer'),
-	  comments: []
+	  comments: [],
+	  engine: 'canvas'
 	});
 
 ### Emit a comment
 	var comment = {
 	  text: 'example',
 
-	  mode: 'rightToLeft', // 'rightToLeft' by default, available mode:
-	                       // 'leftToRight', 'rightToLeft', 'top', 'bottom'.
+	  // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
+	  mode: 'rtl',
 
-	  time: 233.3,         // specified in seconds, if not provided when using
-	                       // with media(video or audio), it will be set to
-	                       // media.currentTime. Not required in real time mode.
+	  // specified in seconds, if not provided when using with media(video or audio),
+	  // it will be set to `media.currentTime`. Not required in real time mode.
+	  time: 233.3,
 
-	  style: {             // each comment create a <div>, style will be set to 
-	  	                   // comment.style directly, just write with CSS rules.
+	  // when using DOM engine, Danmaku will create a <div> node for each comment,
+	  // these styles will be set to `node.style` directly, just write with CSS rules.
+	  style: {
 	    fontSize: '20px',
 	    color: '#ffffff',
 	    border: '1px solid #337ab7',
 	    textShadow: '-1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000'
+	  },
+
+	  // when using canvas engine, following properties are available by default
+	  // as a CanvasRenderingContext2D object.
+	  canvasStyle: {
+	    font: '10px sans-serif',
+	    textAlign: 'start',
+	    direction: 'inherit',
+	    fillStyle: '#000',
+	    strokeStyle: '#000',
+	    shadowBlur: 0,
+	    shadowColor: '#000',
+	    shadowOffsetX: 0,
+	    shadowOffsetY: 0,
+	    globalAlpha: 1.0
 	  }
 	};
 	danmaku.emit(comment);
 
+More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
+
 ### Resize
-	danmaku.resize(); // do it when you resize container or video.
+	// do it when you resize container or video.
+	danmaku.resize();
 
 ### Show
 	danmaku.show();
 
 ### Hide
-	// if you set `display: none;` to the container directly, you should also do
-	// danmaku.hide() otherwise the typesetting will be broken when it's showed.
+	// if you set `display: none;` to the container directly when using DOM engine,
+	// you should also do danmaku.hide() otherwise the typesetting will be broken
+	// when it's showed.
 	danmaku.hide();
 
 ### Comments list
