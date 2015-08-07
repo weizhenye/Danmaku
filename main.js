@@ -249,11 +249,13 @@ var formatTime = function(t) {
   return m + ':' + s;
 };
 var init = function(data) {
+  var canvasEngine = document.querySelector('#canvas-engine');
   if (mode === 'video') {
     if (videoReady) {
       videoDanmaku.init({
         video: document.querySelector('video'),
-        comments: data.comments
+        comments: data.comments,
+        engine: canvasEngine.checked ? 'canvas' : 'DOM'
       });
       showComment(data.comments);
       enableControls();
@@ -264,7 +266,8 @@ var init = function(data) {
       audioDanmaku.init({
         audio: document.querySelector('audio'),
         container: audioMode.querySelector('.danmaku-container'),
-        comments: data.comments
+        comments: data.comments,
+        engine: canvasEngine.checked ? 'canvas' : 'DOM'
       });
       showComment(data.comments);
       enableControls();

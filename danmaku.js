@@ -4,17 +4,13 @@
 function Danmaku() {
   this.paused = true;
   this.isHide = false;
+  this.initContainer = true;
   this.ttl = 4;
   this.requestID = 0;
   this.position = 0;
   this.runline = [];
   this.comments = [];
   this._resetRange();
-  this.initContainer = true;
-  this.stage = document.createElement('div');
-  this.stage.className = 'Danmaku-stage';
-  this.stage.style.cssText = 'position:relative;overflow:hidden;' +
-                             'pointer-events:none;transform:translateZ(0);';
 }
 
 Danmaku.prototype.init = function(opt) {
@@ -32,6 +28,8 @@ Danmaku.prototype.init = function(opt) {
   }
   this.container = opt.container;
   this.media = opt.video || opt.audio;
+  this.engine = (opt.engine || 'DOM').toLowerCase();
+  this.useCanvas = (this.engine === 'canvas');
   this.isMedia = this.media ? true : false;
   this.isVideo = opt.video ? true : false;
   if (this.isMedia) {
@@ -49,6 +47,16 @@ Danmaku.prototype.init = function(opt) {
     this.container.appendChild(this.media);
     if (isPlay && this.media.paused) this.media.play();
   }
+  if (this.useCanvas) {
+    this.stage = document.createElement('canvas');
+    this.stage.context = this.stage.getContext('2d');
+    this.stage.style.cssText = 'pointer-events:none;position:absolute;';
+  } else {
+    this.stage = document.createElement('div');
+    this.stage.style.cssText = 'position:relative;overflow:hidden;' +
+                               'pointer-events:none;transform:translateZ(0);';
+  }
+  this.stage.className = 'Danmaku-stage';
   this.resize();
   this.container.appendChild(this.stage);
   if (!this.isMedia || !this.media.paused) {
@@ -80,8 +88,13 @@ Danmaku.prototype.resize = function() {
     this.width = this.media.clientWidth;
     this.height = this.media.clientHeight;
   }
-  this.stage.style.width = this.width + 'px';
-  this.stage.style.height = this.height + 'px';
+  if (this.useCanvas) {
+    this.stage.width = this.width;
+    this.stage.height = this.height;
+  } else {
+    this.stage.style.width = this.width + 'px';
+    this.stage.style.height = this.height + 'px';
+  }
   this.ttl = this.width / 160;
   return this;
 };
@@ -101,7 +114,7 @@ Danmaku.prototype._play = function() {
   if (this.isHide || !this.paused) return;
   this.paused = false;
   var that = this;
-  function check() {
+  function domEngine() {
     var ct = that.isMedia ?
              that.media.currentTime :
              new Date().getTime() / 1000;
@@ -117,7 +130,7 @@ Danmaku.prototype._play = function() {
     while (that.position < that.comments.length &&
            that.comments[that.position].time < ct) {
       var cmt = that.comments[that.position];
-      cmt.node = createCommentNode(cmt);
+      cmt.node = cmt.node || createCommentNode(cmt);
       that.runline.push(cmt);
       tempNodes.push(cmt);
       df.appendChild(cmt.node);
@@ -128,30 +141,60 @@ Danmaku.prototype._play = function() {
     }
     for (var i = tempNodes.length - 1; i >= 0; i--) {
       var cmt = tempNodes[i];
-      cmt.width = cmt.node.offsetWidth;
-      cmt.height = cmt.node.offsetHeight;
+      cmt.width = cmt.width || cmt.node.offsetWidth;
+      cmt.height = cmt.height || cmt.node.offsetHeight;
     }
     for (var i = tempNodes.length - 1; i >= 0; i--) {
       var cmt = tempNodes[i];
-      if (cmt.mode === 'lefttoright') cmt.x = -cmt.width;
-      if (cmt.mode === 'righttoleft') cmt.x = that.width;
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
         cmt.x = (that.width - cmt.width) >> 1;
       }
-      cmt.y = that._getChannel(cmt);
+      cmt.y = that._getY(cmt);
       cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
     }
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
       if (cmt.mode === 'top' || cmt.mode === 'bottom') continue;
       var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
-      if (cmt.mode === 'lefttoright') cmt.x = elapsed - cmt.width;
-      if (cmt.mode === 'righttoleft') cmt.x = that.width - elapsed;
+      if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
+      if (cmt.mode === 'rtl') cmt.x = that.width - elapsed;
       cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
     }
-    that.requestID = RAF(check);
+    that.requestID = RAF(domEngine);
   }
-  this.requestID = RAF(check);
+  function canvasEngine() {
+    var ct = that.isMedia ?
+             that.media.currentTime :
+             new Date().getTime() / 1000;
+    that.stage.context.clearRect(0, 0, that.width, that.height);
+    for (var i = that.runline.length - 1; i >= 0; i--) {
+      var cmt = that.runline[i];
+      if (ct - cmt.time > that.ttl) {
+        cmt.canvas = null;
+        that.runline.splice(i, 1);
+      }
+    }
+    while (that.position < that.comments.length &&
+           that.comments[that.position].time < ct) {
+      var cmt = that.comments[that.position];
+      cmt.canvas = createCommentCanvas(cmt);
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        cmt.x = (that.width - cmt.width) >> 1;
+      }
+      cmt.y = that._getY(cmt);
+      that.runline.push(cmt);
+      ++that.position;
+    }
+    for (var i = that.runline.length - 1; i >= 0; i--) {
+      var cmt = that.runline[i];
+      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
+      if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
+      if (cmt.mode === 'rtl') cmt.x = (that.width - elapsed + .5) | 0;
+      that.stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
+    }
+    that.requestID = RAF(canvasEngine);
+  }
+  this.requestID = this.useCanvas ? RAF(canvasEngine) : RAF(domEngine);
 };
 Danmaku.prototype._pause = function() {
   if (this.isHide || this.paused) return;
@@ -168,24 +211,27 @@ Danmaku.prototype._seek = function() {
   this.position = binsearch(this.comments, ct);
 };
 Danmaku.prototype._clear = function() {
-  var lc = this.stage.lastChild;
-  while (lc) {
-    this.stage.removeChild(lc);
-    lc = this.stage.lastChild;
+  if (this.useCanvas) {
+    this.stage.context.clearRect(0, 0, this.width, this.height);
+    for (var i = this.runline.length - 1; i >= 0; i--) {
+      this.runline[i].canvas = null;
+    }
+  } else {
+    var lc = this.stage.lastChild;
+    while (lc) {
+      this.stage.removeChild(lc);
+      lc = this.stage.lastChild;
+    }
   }
   this.runline = [];
 };
-Danmaku.prototype._getChannel = function(cmt) {
+Danmaku.prototype._getY = function(cmt) {
   var that = this,
-      abbr = '_rtl',
       ct = this.isMedia ?
            this.media.currentTime :
-           new Date().getTime() / 1000;
-  if (cmt.mode === 'lefttoright') abbr = '_ltr';
-  if (cmt.mode === 'righttoleft') abbr = '_rtl';
-  if (cmt.mode === 'top') abbr = '_top';
-  if (cmt.mode === 'bottom') abbr = '_btm';
-  var crLen = this[abbr].length,
+           new Date().getTime() / 1000,
+      abbr = '_' + cmt.mode,
+      crLen = this[abbr].length,
       last = 0,
       curr = 0;
   var willCollide = function(cr, cmt) {
@@ -229,7 +275,7 @@ Danmaku.prototype._resetRange = function() {
   this._ltr = new CollidableRange();
   this._rtl = new CollidableRange();
   this._top = new CollidableRange();
-  this._btm = new CollidableRange();
+  this._bottom = new CollidableRange();
 };
 function CollidableRange() {
   return [{
@@ -265,8 +311,8 @@ var binsearch = function(a, t) {
   return r;
 };
 var formatMode = function(cmt) {
-  cmt.mode = (cmt.mode || 'rightToLeft').toLowerCase();
-  if (!/lefttoright|top|bottom/.test(cmt.mode)) cmt.mode = 'righttoleft';
+  cmt.mode = (cmt.mode || 'rtl').toLowerCase();
+  if (!/ltr|top|bottom/.test(cmt.mode)) cmt.mode = 'rtl';
 };
 var createCommentNode = function(cmt) {
   var node = document.createElement('div');
@@ -278,6 +324,25 @@ var createCommentNode = function(cmt) {
     }
   }
   return node;
+};
+var createCommentCanvas = function(cmt) {
+  var canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d');
+  var font = (cmt.canvasStyle && cmt.canvasStyle.font) || '10px sans-serif';
+  ctx.font = font;
+  canvas.width = cmt.width || ((ctx.measureText(cmt.text).width + .5) | 0);
+  canvas.height = cmt.height || ((font.match(/(\d+)px/)[1] * 1.2 + .5) | 0);
+  cmt.width = canvas.width;
+  cmt.height = canvas.height;
+  if (cmt.canvasStyle) {
+    for (var key in cmt.canvasStyle) {
+      ctx[key] = cmt.canvasStyle[key];
+    }
+  }
+  ctx.textBaseline = 'top';
+  ctx.strokeText(cmt.text, 0, 0);
+  ctx.fillText(cmt.text, 0, 0);
+  return canvas;
 };
 var createTransformString = function(x, y) {
   var vendors = ['', '-o-', '-ms-', '-moz-', '-webkit-'],
