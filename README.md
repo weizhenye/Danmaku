@@ -22,7 +22,8 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 ### Initialization
 	var danmaku = new Danmaku();
 
-	// real time mode
+Real time mode
+
 	danmaku.init({
 	  // the stage to display comments will be appended to container.
 	  container: document.getElementById('myContainer'),
@@ -33,19 +34,21 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	  engine: 'DOM'
 	});
 
-	// using with HTML5 video
+Using with HTML5 video
+
 	danmaku.init({
 	  // Danmaku will create a container automaticly and append video to the 
 	  // container if container isn't assigned.
 	  video: document.getElementById('myVideo'),
 
-	  // array of comment, you can find its format below.
+	  // Array of comment, you can find its format below.
 	  comments: [],
 
 	  engine: 'canvas'
 	});
 
-	// using with HTML5 audio
+Using with HTML5 audio
+
 	danmaku.init({
 	  audio: document.getElementById('myAudio'),
 	  container: document.getElementById('myContainer'),
@@ -60,11 +63,11 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	  // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
 	  mode: 'rtl',
 
-	  // specified in seconds, if not provided when using with media(video or audio),
+	  // Specified in seconds, if not provided when using with media(video or audio),
 	  // it will be set to `media.currentTime`. Not required in real time mode.
 	  time: 233.3,
 
-	  // when using DOM engine, Danmaku will create a <div> node for each comment,
+	  // When using DOM engine, Danmaku will create a <div> node for each comment,
 	  // these styles will be set to `node.style` directly, just write with CSS rules.
 	  style: {
 	    fontSize: '20px',
@@ -73,7 +76,7 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 	    textShadow: '-1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000'
 	  },
 
-	  // when using canvas engine, following properties are available by default
+	  // When using canvas engine, following properties are available by default
 	  // as a CanvasRenderingContext2D object.
 	  canvasStyle: {
 	    font: '10px sans-serif',
@@ -93,17 +96,20 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
 
 ### Resize
-	// do it when you resize container or video.
+Do it when you resize container or video.
+
 	danmaku.resize();
 
 ### Show
 	danmaku.show();
 
 ### Hide
-	// if you set `display: none;` to the container directly when using DOM engine,
-	// you should also do danmaku.hide() otherwise the typesetting will be broken
-	// when it's showed.
+If you set `display: none;` to the container directly when using DOM engine, you should also do danmaku.hide() otherwise the typesetting will be broken when it's showed.
+
 	danmaku.hide();
 
-### Comments list
-	danmaku.comments;
+### Speed
+There is a property `duration` for all comments, which means how long will a comment be shown to the stage. `duration` is calculated by `stage.width / danmaku.speed`, and `danmaku.speed` is a standard for all comments, because the actually speed for each comment is then calculated by `(comment.width + stage.width) / duration`. The default value is 144.
+
+	danmaku.speed = 144;
+
