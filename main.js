@@ -6,6 +6,8 @@ var videoReady = false,
 var danmakuResize = document.getElementById('danmaku-resize'),
     danmakuShow = document.getElementById('danmaku-show'),
     danmakuHide = document.getElementById('danmaku-hide'),
+    speed = document.getElementById('speed'),
+    speedNumber = document.getElementById('speed-number'),
     mediaMode = document.getElementById('media-mode'),
     videoMode = document.getElementById('video-mode'),
     audioMode = document.getElementById('audio-mode'),
@@ -75,6 +77,12 @@ danmakuShow.addEventListener('click', function() {
 danmakuHide.addEventListener('click', function() {
   if (mode === 'video') videoDanmaku.hide();
   if (mode === 'audio') audioDanmaku.hide();
+});
+speed.addEventListener('change', function() {
+  var s = this.value;
+  speedNumber.textContent = s;
+  videoDanmaku.speed = s;
+  audioDanmaku.speed = s;
 });
 var courl = (window.URL && window.URL.createObjectURL) ||
             (window.webkitURL && window.webkitURL.createObjectURL) ||

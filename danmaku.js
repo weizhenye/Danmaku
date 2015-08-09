@@ -5,7 +5,8 @@ function Danmaku() {
   this.paused = true;
   this.isHide = false;
   this.initContainer = true;
-  this.ttl = 4;
+  this.duration = 4;
+  this._speed = 144;
   this.requestID = 0;
   this.position = 0;
   this.runline = [];
@@ -95,7 +96,7 @@ Danmaku.prototype.resize = function() {
     this.stage.style.width = this.width + 'px';
     this.stage.style.height = this.height + 'px';
   }
-  this.ttl = this.width / 160;
+  this.duration = this.width / this._speed;
   return this;
 };
 Danmaku.prototype.emit = function(cmt) {
@@ -110,6 +111,15 @@ Danmaku.prototype.emit = function(cmt) {
   }
   return this;
 };
+Object.defineProperty(Danmaku.prototype, 'speed', {
+  get: function() {
+    return this._speed;
+  },
+  set: function(s) {
+    if (this.width) this.duration = this.width / s;
+    this._speed = s;
+  }
+});
 Danmaku.prototype._play = function() {
   if (this.isHide || !this.paused) return;
   this.paused = false;
@@ -120,7 +130,7 @@ Danmaku.prototype._play = function() {
              new Date().getTime() / 1000;
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
-      if (ct - cmt.time > that.ttl) {
+      if (ct - cmt.time > that.duration) {
         that.stage.removeChild(cmt.node);
         that.runline.splice(i, 1);
       }
@@ -155,7 +165,7 @@ Danmaku.prototype._play = function() {
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
       if (cmt.mode === 'top' || cmt.mode === 'bottom') continue;
-      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
+      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.duration;
       if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
       if (cmt.mode === 'rtl') cmt.x = that.width - elapsed;
       cmt.node.style.cssText += createTransformString(cmt.x, cmt.y);
@@ -169,7 +179,7 @@ Danmaku.prototype._play = function() {
     that.stage.context.clearRect(0, 0, that.width, that.height);
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
-      if (ct - cmt.time > that.ttl) {
+      if (ct - cmt.time > that.duration) {
         cmt.canvas = null;
         that.runline.splice(i, 1);
       }
@@ -187,7 +197,7 @@ Danmaku.prototype._play = function() {
     }
     for (var i = that.runline.length - 1; i >= 0; i--) {
       var cmt = that.runline[i];
-      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.ttl;
+      var elapsed = (that.width + cmt.width) * (ct - cmt.time) / that.duration;
       if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
       if (cmt.mode === 'rtl') cmt.x = (that.width - elapsed + .5) | 0;
       that.stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
@@ -236,11 +246,11 @@ Danmaku.prototype._getY = function(cmt) {
       curr = 0;
   var willCollide = function(cr, cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-      return ct - cr.time < that.ttl;
+      return ct - cr.time < that.duration;
     } else {
-      var elapsed = (that.width + cr.width) * (ct - cr.time) / that.ttl,
-          crTime = that.ttl + cr.time - ct,
-          cmtTime = that.ttl * that.width / (that.width + cmt.width);
+      var elapsed = (that.width + cr.width) * (ct - cr.time) / that.duration,
+          crTime = that.duration + cr.time - ct,
+          cmtTime = that.duration * that.width / (that.width + cmt.width);
       return (crTime > cmtTime) || (cr.width > elapsed);
     }
   };

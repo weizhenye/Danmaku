@@ -21,7 +21,9 @@ fieldset {
 legend {
   text-align: left;
 }
-#media-mode {
+#speed {
+  width: 50px;
+  height: 6px;
 }
 #manager {
   width: 318px;
