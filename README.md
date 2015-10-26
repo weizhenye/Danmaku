@@ -6,6 +6,13 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 [Demo](https://danmaku.js.org/)
 
 ## Usage
+
+You can install it by using [bower](http://bower.io/):
+
+	bower install danmaku
+
+Or download [danmaku.js](https://github.com/weizhenye/Danmaku/raw/master/danmaku.js) directly and include it in your html.
+
 	<div id="myContainer" style="width:640px;height:360px;"></div>
 
 	<script src="danmaku.js"></script>
