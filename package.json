@@ -1,0 +1,25 @@
+{
+  "name": "danmaku",
+  "version": "1.0.0",
+  "description": "A library to display flying comments on HTML5 video or your custom container.",
+  "main": "danmaku.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weizhenye/Danmaku.git"
+  },
+  "keywords": [
+    "danmaku",
+    "comments",
+    "video",
+    "audio"
+  ],
+  "author": "weizhenye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/weizhenye/Danmaku/issues"
+  },
+  "homepage": "https://danmaku.js.org/"
+}
