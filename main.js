@@ -173,15 +173,14 @@ getDanmaku.querySelector('button').addEventListener('click', function() {
 });
 var downloadInfo = function(url) {
   var params = url.match(/.*av(\d+)(?:\/index_(\d+))?/),
-      api = 'http://api.bilibili.com/view?type=json&appkey=12737ff7776f1ade&id=' + params[1] + (params[2] ? '&page=' + params[2] : ''),
-      yql = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url=%22' + encodeURIComponent(api) + '%22&format=json&callback=';
+      api = 'https://gulu.herokuapp.com/view?id=' + params[1] + (params[2] ? '&page=' + params[2] : '');
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', yql, 1);
+  xhr.open('GET', api, 1);
   xhr.send(null);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        var result = JSON.parse(xhr.responseText).query.results.json;
+        var result = JSON.parse(xhr.responseText);
         var data = {
           title: result.title,
           cid: result.cid
@@ -194,9 +193,9 @@ var downloadInfo = function(url) {
   };
 };
 var downloadDanmaku = function(data) {
-  var url = 'http://comment.bilibili.com/' + data.cid + '.xml';
+  var api = 'https://gulu.herokuapp.com/danmaku/' + data.cid;
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, 1);
+  xhr.open('GET', api, 1);
   xhr.send(null);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
