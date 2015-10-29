@@ -168,35 +168,20 @@ var spectrum = function(audio, canvas) {
 getDanmaku.querySelector('button').addEventListener('click', function() {
   var input = getDanmaku.querySelector('input');
   if (!input.value) return;
-  var api = 'http://bilibili.ap01.aws.af.cm/' + input.value;
+  downloadInfo(input.value);
   input.value = '';
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', api, 1);
-  xhr.send(null);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        var result = JSON.parse(xhr.responseText);
-        var data = {
-          title: result.title,
-          cid: result.cid
-        };
-        downloadDanmaku(data);
-      } else {
-        message('can\'t load the comments file.', 'error');
-      }
-    }
-  };
 });
 var downloadInfo = function(url) {
-  var api = 'http://bilibili.ap01.aws.af.cm/' + url;
+  var params = url.match(/.*av(\d+)(?:\/index_(\d+))?/),
+      api = 'http://api.bilibili.com/view?type=json&appkey=12737ff7776f1ade&id=' + params[1] + (params[2] ? '&page=' + params[2] : ''),
+      yql = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url=%22' + encodeURIComponent(api) + '%22&format=json&callback=';
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', api, 1);
+  xhr.open('GET', yql, 1);
   xhr.send(null);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        var result = JSON.parse(xhr.responseText);
+        var result = JSON.parse(xhr.responseText).query.results.json;
         var data = {
           title: result.title,
           cid: result.cid
@@ -343,4 +328,17 @@ var message = function(msg, type) {
     node.className = '';
     node.style.opacity = 1;
   });
+};
+document.onkeypress = function(e) {
+  var media;
+  if (mode === 'video') media = document.querySelector('video');
+  if (mode === 'audio') media = document.querySelector('audio');
+  if (!media) return;
+  var key = e.keyCode || e.which,
+      aen = document.activeElement.nodeName.toLowerCase();
+  if (aen === 'textarea' || aen === 'input') return;
+  if (key === 32) {
+    e.preventDefault();
+    media.paused ? media.play() : media.pause();
+  }
 };
