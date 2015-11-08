@@ -1,137 +1,129 @@
+var $ = function(s) {return document.querySelectorAll(s)};
 var videoReady = false,
     audioReady = false,
     videoDanmaku = new Danmaku(),
     audioDanmaku = new Danmaku(),
     mode = 'video';
-var danmakuResize = document.getElementById('danmaku-resize'),
-    danmakuShow = document.getElementById('danmaku-show'),
-    danmakuHide = document.getElementById('danmaku-hide'),
-    speed = document.getElementById('speed'),
-    speedNumber = document.getElementById('speed-number'),
-    mediaMode = document.getElementById('media-mode'),
-    videoMode = document.getElementById('video-mode'),
-    audioMode = document.getElementById('audio-mode'),
-    realtimeMode = document.getElementById('realtime-mode'),
-    getDanmaku = document.getElementById('get-danmaku'),
-    dropArea = document.getElementById('drop-area')
-    dropAreaSpan = dropArea.querySelector('span'),
-    fileInput = dropArea.querySelector('input'),
-    modeSelector = document.getElementById('mode-selector');
-modeSelector.addEventListener('change', function(e) {
-  var id = e.target.id;
-  if (id === 'input-video') {
-    mediaMode.style.display = 'block';
-    videoMode.style.display = 'block';
-    audioMode.style.display = 'none';
-    realtimeMode.style.display = 'none';
-    mode = 'video';
-    dropAreaSpan.textContent = 'Select or drag a video file here';
-  }
-  if (id === 'input-audio') {
-    mediaMode.style.display = 'block';
-    videoMode.style.display = 'none';
-    audioMode.style.display = 'block';
-    realtimeMode.style.display = 'none';
-    mode = 'audio';
-    dropAreaSpan.textContent = 'Select or drag a audio file here';
-  }
-  if (id === 'input-realtime') {
-    mediaMode.style.display = 'none';
-    realtimeMode.style.display = 'block';
-    mode = 'realtime';
-  }
-});
-danmakuResize.addEventListener('click', function() {
-  if (mode === 'video') {
-    var video = document.querySelector('video');
-    if (video.clientWidth === 640) {
-      video.style.width = '960px';
-      video.style.height = '540px';
-    } else {
-      video.style.width = '640px';
-      video.style.height = '360px';
-    }
-    videoDanmaku.resize();
-  }
-  if (mode === 'audio') {
-    var container = document.querySelector('.danmaku-container'),
-        canvas = container.querySelector('canvas');
-    if (container.clientWidth === 640) {
-      container.style.width = '960px';
-      container.style.height = '540px';
-      canvas.width = 960;
-      canvas.height = 540;
-    } else {
-      container.style.width = '640px';
-      container.style.height = '360px';
-      canvas.width = 640;
-      canvas.height = 360;
-    }
-    audioDanmaku.resize();
-  }
-});
-danmakuShow.addEventListener('click', function() {
-  if (mode === 'video') videoDanmaku.show();
-  if (mode === 'audio') audioDanmaku.show();
-});
-danmakuHide.addEventListener('click', function() {
-  if (mode === 'video') videoDanmaku.hide();
-  if (mode === 'audio') audioDanmaku.hide();
-});
-speed.addEventListener('change', function() {
-  var s = this.value;
-  speedNumber.textContent = s;
-  videoDanmaku.speed = s;
-  audioDanmaku.speed = s;
-});
 var courl = (window.URL && window.URL.createObjectURL) ||
             (window.webkitURL && window.webkitURL.createObjectURL) ||
             window.createObjectURL ||
             window.createBlobURL;
-dropArea.ondragleave = function() {
+var $mediaMode = $('#media-mode')[0],
+    $videoMode = $('#video-mode')[0],
+    $audioMode = $('#audio-mode')[0],
+    $realtimeMode = $('#realtime-mode')[0],
+    $dropText = $('#drop-text')[0];
+$('#mode-selector')[0].addEventListener('change', function(e) {
+  var id = e.target.id;
+  if (id === 'mode-video') {
+    $mediaMode.style.display = 'block';
+    $videoMode.style.display = 'block';
+    $audioMode.style.display = 'none';
+    $realtimeMode.style.display = 'none';
+    mode = 'video';
+    $dropText.textContent = 'Select or drag a video file here';
+  }
+  if (id === 'mode-audio') {
+    $mediaMode.style.display = 'block';
+    $videoMode.style.display = 'none';
+    $audioMode.style.display = 'block';
+    $realtimeMode.style.display = 'none';
+    mode = 'audio';
+    $dropText.textContent = 'Select or drag a audio file here';
+  }
+  if (id === 'mode-realtime') {
+    $mediaMode.style.display = 'none';
+    $realtimeMode.style.display = 'block';
+    mode = 'realtime';
+  }
+});
+$('#danmaku-resize')[0].addEventListener('click', function() {
+  if (mode === 'video') {
+    var $video = $('video')[0];
+    if ($video.clientWidth === 640) {
+      $video.style.width = '960px';
+      $video.style.height = '540px';
+    } else {
+      $video.style.width = '640px';
+      $video.style.height = '360px';
+    }
+    videoDanmaku.resize();
+  }
+  if (mode === 'audio') {
+    var $container = $('.danmaku-container')[0],
+        $canvas = $('.danmaku-container canvas')[0];
+    if ($container.clientWidth === 640) {
+      $container.style.width = '960px';
+      $container.style.height = '540px';
+      $canvas.width = 960;
+      $canvas.height = 540;
+    } else {
+      $container.style.width = '640px';
+      $container.style.height = '360px';
+      $canvas.width = 640;
+      $canvas.height = 360;
+    }
+    audioDanmaku.resize();
+  }
+});
+$('#danmaku-show')[0].addEventListener('click', function() {
+  if (mode === 'video') videoDanmaku.show();
+  if (mode === 'audio') audioDanmaku.show();
+});
+$('#danmaku-hide')[0].addEventListener('click', function() {
+  if (mode === 'video') videoDanmaku.hide();
+  if (mode === 'audio') audioDanmaku.hide();
+});
+$('#danmaku-speed')[0].addEventListener('change', function() {
+  var s = this.value;
+  $('#danmaku-speed-number')[0].textContent = s;
+  videoDanmaku.speed = s;
+  audioDanmaku.speed = s;
+});
+var $dropArea = $('#drop-area')[0];
+$dropArea.ondragleave = function() {
   this.style.borderColor = '#ccc';
 }
-dropArea.ondragover = function(e) {
-  e.stopPropagation();
+$dropArea.ondragover = function(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
   this.style.borderColor = '#888';
 };
-dropArea.ondrop = function(e) {
+$dropArea.ondrop = function(e) {
   e.stopPropagation();
   e.preventDefault();
   this.style.borderColor = '#ccc';
   loadMedia(e.dataTransfer.files[0]);
 };
-fileInput.onchange = function() {
+$('#drop-area input')[0].onchange = function() {
   loadMedia(this.files[0]);
 };
 var loadMedia = function(file) {
   if (mode === 'video') {
-    var video = document.createElement('video');
-    video.src = courl(file);
-    video.controls = true;
-    video.onloadedmetadata = function() {
-      videoMode.style.zIndex = 2;
-      videoMode.appendChild(video);
+    var $video = document.createElement('video');
+    $video.src = courl(file);
+    $video.controls = true;
+    $video.onloadedmetadata = function() {
+      $videoMode.style.zIndex = 2;
+      $videoMode.appendChild($video);
       videoReady = true;
     };
-    video.onerror = function(e) {
+    $video.onerror = function(e) {
       message('can\'t open this video.', 'error');
     };
   }
   if (mode === 'audio') {
-    var container = audioMode.querySelector('.danmaku-container');
-    var audio = document.createElement('audio');
-    audio.src = courl(file);
-    audio.controls = true;
-    audio.onloadedmetadata = function() {
-      audioMode.style.zIndex = 2;
-      container.appendChild(audio);
+    var $container = $('#audio-mode .danmaku-container')[0];
+    var $audio = document.createElement('audio');
+    $audio.src = courl(file);
+    $audio.controls = true;
+    $audio.onloadedmetadata = function() {
+      $audioMode.style.zIndex = 2;
+      $container.appendChild($audio);
       audioReady = true;
-      spectrum(audio, audioMode.querySelector('canvas'));
+      spectrum($audio, $('#audio-mode canvas')[0]);
     };
-    audio.onerror = function(e) {
+    $audio.onerror = function(e) {
       message('can\'t open this audio.', 'error');
     };
   }
@@ -147,8 +139,7 @@ var spectrum = function(audio, canvas) {
   analyser.getByteFrequencyData(dataArray);
   var source = actx.createMediaElementSource(audio);
   source.connect(analyser);
-  draw();
-  function draw() {
+  var draw = function() {
     rafid = requestAnimationFrame(draw);
     analyser.getByteFrequencyData(dataArray);
     cctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -163,13 +154,14 @@ var spectrum = function(audio, canvas) {
     }
     cctx.stroke();
     cctx.closePath();
-  }
-}
-getDanmaku.querySelector('button').addEventListener('click', function() {
-  var input = getDanmaku.querySelector('input');
-  if (!input.value) return;
-  downloadInfo(input.value);
-  input.value = '';
+  };
+  draw();
+};
+$('#get-bilibili button')[0].addEventListener('click', function() {
+  var $input = $('#get-bilibili input')[0];
+  if (!$input.value) return;
+  downloadInfo($input.value);
+  $input.value = '';
 });
 var downloadInfo = function(url) {
   var params = url.match(/.*av(\d+)(?:\/index_(\d+))?/),
@@ -215,23 +207,22 @@ var downloadDanmaku = function(data) {
   };
 };
 var showFile = function() {
-  var df = document.getElementById('danmaku-file');
-  while (df.lastChild) df.removeChild(df.lastChild);
+  var $mf = $('#manager-files')[0];
+  while ($mf.lastChild) $mf.removeChild($mf.lastChild);
   for (var key in localStorage) {
     if (!/cid\d+/.test(key)) continue;
     var data = JSON.parse(localStorage[key]);
-    df.appendChild(new DanmakuFileNode(data));
+    $mf.appendChild(new DanmakuFileNode(data));
   }
 };
 showFile();
 var showComment = function(comments) {
-  var df = document.createDocumentFragment(),
-      dc = document.getElementById('danmaku-comments');
+  var df = document.createDocumentFragment();
   for (var i = 0; i < comments.length; i++) {
     df.appendChild(new DanmakuCommentNode(comments[i]));
   }
-  dc.appendChild(df);
-  document.getElementById('comments').checked = true;
+  $('#manager-comments')[0].appendChild(df);
+  $('#comments')[0].checked = true;
 };
 var formatTime = function(t) {
   var m = Math.floor(t / 60),
@@ -241,13 +232,13 @@ var formatTime = function(t) {
   return m + ':' + s;
 };
 var init = function(data) {
-  var canvasEngine = document.querySelector('#canvas-engine');
+  var $canvasEngine = $('#canvas-engine')[0];
   if (mode === 'video') {
     if (videoReady) {
       videoDanmaku.init({
-        video: document.querySelector('video'),
+        video: $('video')[0],
         comments: data.comments,
-        engine: canvasEngine.checked ? 'canvas' : 'DOM'
+        engine: $canvasEngine.checked ? 'canvas' : 'DOM'
       });
       showComment(data.comments);
       enableControls();
@@ -256,10 +247,10 @@ var init = function(data) {
   if (mode === 'audio') {
     if (audioReady) {
       audioDanmaku.init({
-        audio: document.querySelector('audio'),
-        container: audioMode.querySelector('.danmaku-container'),
+        audio: $('audio')[0],
+        container: $audioMode.querySelector('.danmaku-container'),
         comments: data.comments,
-        engine: canvasEngine.checked ? 'canvas' : 'DOM'
+        engine: $canvasEngine.checked ? 'canvas' : 'DOM'
       });
       showComment(data.comments);
       enableControls();
@@ -267,13 +258,12 @@ var init = function(data) {
   }
 };
 var enableControls = function() {
-  danmakuResize.disabled = false;
-  danmakuShow.disabled = false;
-  danmakuHide.disabled = false;
+  $('#danmaku-resize')[0].disabled = false;
+  $('#danmaku-show')[0].disabled = false;
+  $('#danmaku-hide')[0].disabled = false;
 };
 function DanmakuFileNode(data) {
-  var ul = document.createElement('ul'),
-      li = document.createElement('li'),
+  var li = document.createElement('li'),
       title = document.createElement('div'),
       buttons = document.createElement('div'),
       initBtn = document.createElement('button'),
@@ -291,7 +281,6 @@ function DanmakuFileNode(data) {
   buttons.appendChild(deleteBtn);
   li.appendChild(title);
   li.appendChild(buttons);
-  ul.appendChild(li);
   initBtn.addEventListener('click', function() { init(data) });
   reloadBtn.addEventListener('click', function() {
     downloadDanmaku(data);
@@ -300,11 +289,10 @@ function DanmakuFileNode(data) {
     localStorage.removeItem('cid' + data.cid);
     showFile();
   });
-  return ul;
+  return li;
 }
 function DanmakuCommentNode(data) {
-  var ul = document.createElement('ul'),
-      li = document.createElement('li'),
+  var li = document.createElement('li'),
       time = document.createElement('span'),
       text = document.createElement('span');
   time.textContent = formatTime(data.time);
@@ -314,24 +302,23 @@ function DanmakuCommentNode(data) {
   text.title = data.text;
   li.appendChild(time);
   li.appendChild(text);
-  ul.appendChild(li);
-  return ul;
+  return li;
 }
 var message = function(msg, type) {
-  var node = document.getElementById('message');
-  node.textContent = msg;
-  node.className = type + ' transition';
-  node.style.opacity = 0;
-  node.addEventListener('transitionend', function() {
-    node.textContent = '';
-    node.className = '';
-    node.style.opacity = 1;
+  var $msg = $('#message')[0];
+  $msg.textContent = msg;
+  $msg.className = type + ' transition';
+  $msg.style.opacity = 0;
+  $msg.addEventListener('transitionend', function() {
+    $msg.textContent = '';
+    $msg.className = '';
+    $msg.style.opacity = 1;
   });
 };
 document.onkeypress = function(e) {
   var media;
-  if (mode === 'video') media = document.querySelector('video');
-  if (mode === 'audio') media = document.querySelector('audio');
+  if (mode === 'video') media = $('video')[0];
+  if (mode === 'audio') media = $('audio')[0];
   if (!media) return;
   var key = e.keyCode || e.which,
       aen = document.activeElement.nodeName.toLowerCase();

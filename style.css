@@ -1,102 +1,102 @@
-body {
+body, ul, h1, h2 {
   margin: 0;
   padding: 0;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 header {
-  font-size: 36px;
-  font-weight: bold;
+  background: #8fe0fa;
   text-align: center;
-  padding: 16px 0 0 0;
+  padding: 1em 0;
+}
+#site-title {
+  font-size: 3em;
+  font-weight: normal;
+}
+#site-subtitle {
+  font-size: 1em;
+  font-weight: normal;
+  padding-bottom: 1em;
 }
 .wrapper {
   width: 960px;
-  margin: auto;
   text-align: center;
+  margin: auto;
+  margin-top: 1em;
 }
 fieldset {
-  height: 40px;
-  margin-bottom: 20px;
+  height: 2.5em;
+  text-align: left;
   display: inline-block;
 }
-legend {
-  text-align: left;
-}
-#speed {
-  width: 50px;
-  height: 6px;
+#danmaku-speed {
+  width: 4em;
+  height: .5em;
 }
 #manager {
-  width: 318px;
-  height: 358px;
+  width: 320px;
+  height: 360px;
+  box-sizing: border-box;
   border: 1px solid #ccc;
   float: right;
   overflow: hidden;
 }
-#get-danmaku {
+#get-bilibili {
   height: 44px;
 }
-#get-danmaku input {
+#get-bilibili input {
   width: 240px;
   font-family: Arial;
 }
-#get-danmaku button {
+#get-bilibili button {
   width: 72px;
 }
-#danmaku-tab {
+#manager-tab {
+  width: 100%;
+  text-align: center;
   position: relative;
 }
-#danmaku-tab label {
-  font-size: 16px;
+#manager-tab > div {
+  width: 50%;
   background-color: #ccc;
-  padding: 0 16px;
+  display: inline-block;
+}
+#manager-tab label {
+  width: 100%;
+  display: inline-block;
   cursor: pointer;
 }
-#danmaku-tab label:hover {
+#manager-tab label:hover {
   background-color: #aaa;
 }
-#danmaku-tab [type=radio] {
+#manager-tab [type=radio] {
   display: none;
 }
 .tab-content {
-  width: 318px;
+  width: 100%;
   height: 294px;
   text-align: left;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: none;
   position: absolute;
-  overflow: hidden;
+  left: 0;
 }
 .tab-content li {
   list-style: none;
 }
-.tab-content > ul {
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  /*transition: transform .5s ease, opacity .5s ease;*/
-}
-#danmaku-file > ul {
-  transform: translateX(-100%);
-}
-#danmaku-comments > ul {
-  transform: translateX(100%);
-}
-#danmaku-tab [type=radio]:checked ~ label {
+#manager-tab [type=radio]:checked ~ label {
   background-color: #888;
-  z-index: 2;
 }
-#danmaku-tab [type=radio]:checked ~ label ~ .tab-content {
-  z-index: 1;
-  overflow-y: auto;
+#manager-tab [type=radio]:checked ~ label ~ .tab-content {
+  display: block;
 }
-#danmaku-tab [type=radio]:checked ~ label ~ .tab-content > ul {
-  opacity: 1;
-  transform: translateX(0);
-}
-#danmaku-file li {
-  height: 16px;
+#manager-files li {
+  height: 1em;
   overflow: hidden;
-  padding: 4px;
+  padding: .25em;
 }
-#danmaku-file li:hover {
+#manager-files li:hover {
   height: auto;
   background-color: #aaa;
 }
@@ -105,8 +105,7 @@ legend {
   overflow: hidden;
 }
 .comment-time {
-  padding: 0 10px;
-  white-space: nowrap;
+  padding: 0 .5em;
 }
 .comment-text {
   white-space: nowrap;
@@ -125,27 +124,26 @@ legend {
   text-align: left;
 }
 #realtime-mode pre {
+  border: 1px solid #8fe0fa;
   display: inline-block;
+}
+#realtime-mode pre:before {
+  display: block;
+  font-size: 3em;
+  font-weight: bold;
+  color: #8fe0fa;
 }
 #server {
   float: left;
 }
 #server:before {
   content: 'Server';
-  display: block;
-  font-size: 40px;
-  font-weight: bold;
-  color: #5bc0de;
 }
 #client {
   float: right;
 }
 #client:before {
   content: 'Client';
-  display: block;
-  font-size: 40px;
-  font-weight: bold;
-  color: #5bc0de;
 }
 .danmaku-container {
   width: 640px;
@@ -157,17 +155,15 @@ legend {
   left: 0;
 }
 #drop-area {
-  width: 620px;
-  height: 340px;
+  width: 640px;
+  height: 360px;
   text-align: center;
+  box-sizing: border-box;
   border: 10px dashed #ccc;
   position: absolute;
 }
-#drop-area span {
-  font-size: 36px;
-}
 #drop-area input {
-  width: 620px;
+  width: 100%;
   height: 340px;
   opacity: 0;
   cursor: pointer;
@@ -175,24 +171,31 @@ legend {
   top: 0;
   left: 0;
 }
+#drop-text {
+  width: 100%;
+  font-size: 2em;
+  line-height: 1;
+  position: absolute;
+  top: 154px;
+}
 #message {
-  padding: 10px;
+  padding: .5em;
   position: fixed;
-  right: 10px;
-  bottom: 10px;
+  right: .5em;
+  bottom: .5em;
   opacity: 1;
 }
 .transition {
   transition: opacity 4s cubic-bezier(1,0,1,1);
 }
 .error {
-  background-color: #ffb5a1;
+  background-color: #d5515f;
 }
 .error:before {
   content: 'Error: ';
 }
 .success {
-  background-color: #5cb85c;
+  background-color: #48b551;
 }
 .success:before {
   content: 'Success: ';
