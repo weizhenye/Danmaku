@@ -1,4 +1,12 @@
-(function(window) {
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.Danmaku = factory();
+  }
+}(this, function() {
 'use strict';
 
 function Danmaku() {
@@ -363,6 +371,6 @@ var createTransformString = function(x, y) {
   }
   return transformStr;
 };
-window.Danmaku = Danmaku;
 
-})(window);
+return Danmaku;
+}));
