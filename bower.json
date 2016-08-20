@@ -1,19 +1,25 @@
 {
   "name": "danmaku",
-  "description": "A library to display flying comments on HTML5 video or your custom container.",
-  "main": "danmaku.js",
-  "authors": [
-    "weizhenye"
-  ],
+  "description": "Display danmaku (flying comments) on HTML5 video.",
+  "main": "./dist/danmaku.js",
+  "authors": "Zhenye Wei",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weizhenye/Danmaku.git"
+  },
   "keywords": [
     "danmaku",
-    "comments",
+    "comment",
+    "弹幕",
     "video",
-    "audio"
+    "audio",
+    "live"
   ],
   "moduleType": [
-    "globals"
+    "globals",
+    "amd",
+    "node"
   ],
   "homepage": "https://danmaku.js.org/",
   "ignore": [

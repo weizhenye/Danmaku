@@ -1,26 +1,109 @@
-﻿Danmaku
-======
+# Danmaku
+
+[![Build status](https://img.shields.io/travis/weizhenye/Danmaku.svg)](https://travis-ci.org/weizhenye/Danmaku)
+[![Coverage](https://img.shields.io/coveralls/weizhenye/Danmaku/master.svg)](https://coveralls.io/github/weizhenye/Danmaku?branch=master)
+[![Dependencies](https://img.shields.io/david/weizhenye/Danmaku.svg)](https://david-dm.org/weizhenye/Danmaku)
+[![NPM version](https://img.shields.io/npm/v/danmaku.svg)](https://www.npmjs.com/package/danmaku)
+[![License](https://img.shields.io/npm/l/danmaku.svg)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
+
+[![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
 
 Danmaku is a JavaScript library to display flying comments on HTML5 video. It can also display comments to your container in real time without timeline or be used with HTML5 audio.
 
 [Demo](https://danmaku.js.org/)
 
-## Usage
+## Installation
 
-You can install it by using [bower](http://bower.io/):
+You can install it by using npm or bower:
+```
+npm install danmaku
+```
 ```
 bower install danmaku
 ```
-Or download [danmaku.js](https://github.com/weizhenye/Danmaku/raw/master/danmaku.js) directly and include it in your html.
+You can also download [danmaku.min.js](https://github.com/weizhenye/Danmaku/raw/master/dist/danmaku.min.js) directly and include it in your HTML.
+
+## Usage
+
+### Video mode
 
 ```html
-<div id="myContainer" style="width:640px;height:360px;"></div>
+<video id="my-video" src="./example.mp4"></video>
 
-<script src="danmaku.js"></script>
+<script src="./dist/danmaku.min.js"></script>
 <script>
   var danmaku = new Danmaku();
   danmaku.init({
-    container: document.getElementById('myContainer')
+    video: document.getElementById('my-video'),
+    comments: []
+  });
+</script>
+```
+
+### Audio mode
+
+```html
+<div id="my-container" style="width:640px;height:360px;"></div>
+<audio id="my-audio" src="./example.mp3"></audio>
+
+<script src="./dist/danmaku.min.js"></script>
+<script>
+  var danmaku = new Danmaku();
+  danmaku.init({
+    container: document.getElementById('my-container'),
+    audio: document.getElementById('my-audio'),
+    comments: []
+  });
+</script>
+```
+
+### Live mode
+
+To display comments in real time, you need to set up server and use something like [Socket.IO](http://socket.io/). Danmaku is just receiving comments data and display them to container.
+
+Here is a simple example using with Socket.IO and Node.js.
+
+Server:
+```js
+const app = require('http').createServer(handler);
+const io = require('socket.io')(app);
+app.listen(80);
+function handler(req, res) {
+  // your handler...
+}
+io.on('connection', socket => {
+  socket.on('danmaku', comment => {
+    socket.broadcast.emit('danmaku', comment);
+  });
+});
+```
+Client:
+```html
+<div id="my-container" style="width:640px;height:360px;"></div>
+<button id="send-button">Send</button>
+
+<script src="./socket.io.js"></script>
+<script src="./dist/danmaku.min.js"></script>
+<script>
+  var danmaku = new Danmaku();
+  danmaku.init({
+    container: document.getElementById('my-container')
+  });
+  var socket = io();
+  socket.on('danmaku', function(comment) {
+    danmaku.emit(comment);
+  });
+  var btn = document.getElementById('send-button');
+  btn.addEventListener('click', function() {
+    var comment = {
+      text: 'bla bla',
+      style: {
+        fontSize: '20px',
+        color: '#ffffff'
+      },
+    };
+    danmaku.emit(comment);
+    socket.emit('danmaku', comment);
   });
 </script>
 ```
@@ -31,59 +114,45 @@ Or download [danmaku.js](https://github.com/weizhenye/Danmaku/raw/master/danmaku
 
 ```js
 var danmaku = new Danmaku();
-```
-
-Real time mode
-
-```js
 danmaku.init({
-  // the stage to display comments will be appended to container.
-  container: document.getElementById('myContainer'),
+  // The stage to display comments will be appended to container.
+  container: document.getElementById('my-container'),
 
-  // you can use DOM engine or canvas engine to render comments.
+  // Danmaku will create a container automatically and append video to the
+  // container if container isn't assigned.
+  video: document.getElementById('my-video'),
+
+  // You should always assign a container when using audio mode.
+  audio: document.getElementById('my-audio'),
+
+  // Array of comment, you can find its format in `danmaku.emit` API.
+  comments: [],
+
+  // You can use DOM engine or canvas engine to render comments.
   // Canvas engine may more efficient than DOM however it costs more memory.
   // 'DOM' by default, available in all mode.
-  engine: 'DOM'
+  engine: 'DOM',
+
+  // You can set speed later by using `danmaku.speed` API.
+  speed: 144
 });
 ```
-
-Using with HTML5 video
-
+Or just put options here:
 ```js
-danmaku.init({
-  // Danmaku will create a container automaticly and append video to the
-  // container if container isn't assigned.
-  video: document.getElementById('myVideo'),
-
-  // Array of comment, you can find its format below.
-  comments: [],
-
-  engine: 'canvas'
-});
-```
-
-Using with HTML5 audio
-
-```js
-danmaku.init({
-  audio: document.getElementById('myAudio'),
-  container: document.getElementById('myContainer'),
-  comments: [],
-  engine: 'canvas'
-});
+var danmaku = new Danmaku({/* options */});
 ```
 
 ### Emit a comment
 
 ```js
-var comment = {
+danmaku.emit({
   text: 'example',
 
   // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
   mode: 'rtl',
 
   // Specified in seconds, if not provided when using with media(video or audio),
-  // it will be set to `media.currentTime`. Not required in real time mode.
+  // it will be set to `media.currentTime`. Not required in live mode.
   time: 233.3,
 
   // When using DOM engine, Danmaku will create a <div> node for each comment,
@@ -109,8 +178,7 @@ var comment = {
     shadowOffsetY: 0,
     globalAlpha: 1.0
   }
-};
-danmaku.emit(comment);
+});
 ```
 
 More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
