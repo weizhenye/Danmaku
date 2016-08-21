@@ -4,7 +4,7 @@ import binsearch from '../util/binsearch.js';
 export default function(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
     cmt.mode = formatMode(cmt.mode);
-    if (this._isMedia) {
+    if (this._hasMedia) {
       var ct = this.media.currentTime;
       cmt.time = cmt.time || ct;
       this.comments.splice(binsearch(this.comments, 'time', ct) + 1, 0, cmt);

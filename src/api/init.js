@@ -30,14 +30,14 @@ export default function(Danmaku) {
     for (var i = this.comments.length - 1; i >= 0; i--) {
       this.comments[i].mode = formatMode(this.comments[i].mode);
     }
-    this.runline = [];
+    this.runningList = [];
     this.position = 0;
 
     this.paused = true;
     this.media = opt.video || opt.audio;
-    this._isMedia = !!this.media;
-    this._isVideo = !!opt.video;
-    if (this._isVideo && !this.container) {
+    this._hasMedia = !!this.media;
+    this._hasVideo = !!opt.video;
+    if (this._hasVideo && !this.container) {
       this._hasInitContainer = false;
       var isPlay = !this.media.paused;
       this.container = document.createElement('div');
@@ -49,7 +49,7 @@ export default function(Danmaku) {
         this.media.play();
       }
     }
-    if (this._isMedia) {
+    if (this._hasMedia) {
       this.media.addEventListener('play', play.bind(this));
       this.media.addEventListener('pause', pause.bind(this));
       this.media.addEventListener('seeking', seek.bind(this));
@@ -67,7 +67,7 @@ export default function(Danmaku) {
 
     this.resize();
     this.container.appendChild(this.stage);
-    if (!this._isMedia || !this.media.paused) {
+    if (!this._hasMedia || !this.media.paused) {
       seek.call(this);
       play.call(this);
     }

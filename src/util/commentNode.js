@@ -1,6 +1,6 @@
 export default function(cmt) {
   var node = document.createElement('div');
-  node.appendChild(document.createTextNode(cmt.text));
+  node.textContent = cmt.text;
   node.style.cssText = 'position:absolute;white-space:nowrap;';
   if (cmt.style) {
     for (var key in cmt.style) {

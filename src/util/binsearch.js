@@ -10,8 +10,5 @@ export default function(a, k, t) {
       l = m + 1;
     }
   }
-  if (r < 0) {
-    r = 0;
-  }
-  return r;
+  return Math.max(0, r);
 }

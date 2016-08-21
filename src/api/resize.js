@@ -4,7 +4,7 @@ export default function(Danmaku) {
       this.width = this.container.offsetWidth;
       this.height = this.container.offsetHeight;
     }
-    if (this._isVideo &&
+    if (this._hasVideo &&
         (!this._hasInitContainer || !this.width || !this.height)) {
       this.width = this.media.clientWidth;
       this.height = this.media.clientHeight;
