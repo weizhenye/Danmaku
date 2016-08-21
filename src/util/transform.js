@@ -1,9 +1,16 @@
-export default function(x, y) {
-  var vendors = ['', '-o-', '-ms-', '-moz-', '-webkit-'];
-  var translateStr = 'transform:translate(' + x + 'px,' + y + 'px);';
-  var transformStr = '';
-  for (var i = vendors.length - 1; i >= 0; i--) {
-    transformStr += vendors[i] + translateStr;
+export var transform = (function() {
+  var properties = [
+    'oTransform', // Opera 11.5
+    'msTransform', // IE 9
+    'mozTransform',
+    'webkitTransform',
+    'transform'
+  ];
+  var style = document.createElement('div').style;
+  for (var i = properties.length - 1; i >= 0; i--) {
+    if (properties[i] in style) {
+      return properties[i];
+    }
   }
-  return transformStr;
-}
+  return 'transform';
+}());

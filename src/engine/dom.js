@@ -1,6 +1,6 @@
 import allocate from '../internal/allocate.js';
 import createCommentNode from '../util/commentNode.js';
-import createTransform from '../util/transform.js';
+import {transform} from '../util/transform.js';
 
 /* eslint no-invalid-this: 0 */
 export default function domEngine() {
@@ -39,7 +39,7 @@ export default function domEngine() {
       cmt.x = (this.width - cmt.width) >> 1;
     }
     cmt.y = allocate.call(this, cmt);
-    cmt.node.style.cssText += createTransform(cmt.x, cmt.y);
+    cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
   }
   for (i = this.runline.length - 1; i >= 0; i--) {
     cmt = this.runline[i];
@@ -54,6 +54,6 @@ export default function domEngine() {
     if (cmt.mode === 'rtl') {
       cmt.x = this.width - elapsed;
     }
-    cmt.node.style.cssText += createTransform(cmt.x, cmt.y);
+    cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
   }
 }
