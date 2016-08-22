@@ -11,7 +11,7 @@
     "build": "npm run bundle && npm run minify",
     "preversion": "npm test",
     "version": "npm run build && git add -A ./dist",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
