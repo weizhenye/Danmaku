@@ -5,10 +5,13 @@
   "main": "./dist/danmaku.js",
   "scripts": {
     "lint": "eslint ./src",
+    "test": "npm run lint",
     "bundle": "rollup ./src/index.js -f umd -n Danmaku -o ./dist/danmaku.js",
     "minify": "uglifyjs ./dist/danmaku.js -o ./dist/danmaku.min.js",
     "build": "npm run bundle && npm run minify",
-    "test": "npm run lint"
+    "preversion": "npm test",
+    "version": "npm run build && git add -A ./dist",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
