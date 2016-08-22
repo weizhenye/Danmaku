@@ -1,6 +1,6 @@
 {
   "name": "danmaku",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Display danmaku (flying comments) on HTML5 video.",
   "main": "./dist/danmaku.js",
   "scripts": {
