@@ -7,7 +7,7 @@
 /* eslint no-invalid-this: 0 */
 function allocate(cmt) {
   var that = this;
-  var ct = this._isMedia ? this.media.currentTime : Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   var abbr = '_' + cmt.mode;
   var crLen = this[abbr].length;
   var last = 0;
@@ -52,7 +52,7 @@ function allocate(cmt) {
 
 function createCommentNode(cmt) {
   var node = document.createElement('div');
-  node.appendChild(document.createTextNode(cmt.text));
+  node.textContent = cmt.text;
   node.style.cssText = 'position:absolute;white-space:nowrap;';
   if (cmt.style) {
     for (var key in cmt.style) {
@@ -62,57 +62,67 @@ function createCommentNode(cmt) {
   return node;
 }
 
-function createTransform(x, y) {
-  var vendors = ['', '-o-', '-ms-', '-moz-', '-webkit-'];
-  var translateStr = 'transform:translate(' + x + 'px,' + y + 'px);';
-  var transformStr = '';
-  for (var i = vendors.length - 1; i >= 0; i--) {
-    transformStr += vendors[i] + translateStr;
+var transform = (function() {
+  var properties = [
+    'oTransform', // Opera 11.5
+    'msTransform', // IE 9
+    'mozTransform',
+    'webkitTransform',
+    'transform'
+  ];
+  var style = document.createElement('div').style;
+  for (var i = properties.length - 1; i >= 0; i--) {
+    if (properties[i] in style) {
+      return properties[i];
+    }
   }
-  return transformStr;
-}
+  return 'transform';
+}());
 
 /* eslint no-invalid-this: 0 */
 function domEngine() {
-  var ct = this._isMedia ? this.media.currentTime : Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   var cmt = null;
   var i = 0;
-  for (i = this.runline.length - 1; i >= 0; i--) {
-    cmt = this.runline[i];
+  for (i = this.runningList.length - 1; i >= 0; i--) {
+    cmt = this.runningList[i];
     if (ct - cmt.time > this.duration) {
       this.stage.removeChild(cmt.node);
-      this.runline.splice(i, 1);
+      if (!this._hasMedia) {
+        cmt.node = null;
+      }
+      this.runningList.splice(i, 1);
     }
   }
-  var tempNodes = [];
+  var pendingList = [];
   var df = document.createDocumentFragment();
   while (this.position < this.comments.length &&
          this.comments[this.position].time < ct) {
     cmt = this.comments[this.position];
     cmt.node = cmt.node || createCommentNode(cmt);
-    this.runline.push(cmt);
-    tempNodes.push(cmt);
+    this.runningList.push(cmt);
+    pendingList.push(cmt);
     df.appendChild(cmt.node);
     ++this.position;
   }
-  if (tempNodes.length) {
+  if (pendingList.length) {
     this.stage.appendChild(df);
   }
-  for (i = tempNodes.length - 1; i >= 0; i--) {
-    cmt = tempNodes[i];
+  for (i = pendingList.length - 1; i >= 0; i--) {
+    cmt = pendingList[i];
     cmt.width = cmt.width || cmt.node.offsetWidth;
     cmt.height = cmt.height || cmt.node.offsetHeight;
   }
-  for (i = tempNodes.length - 1; i >= 0; i--) {
-    cmt = tempNodes[i];
+  for (i = pendingList.length - 1; i >= 0; i--) {
+    cmt = pendingList[i];
+    cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       cmt.x = (this.width - cmt.width) >> 1;
+      cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
     }
-    cmt.y = allocate.call(this, cmt);
-    cmt.node.style.cssText += createTransform(cmt.x, cmt.y);
   }
-  for (i = this.runline.length - 1; i >= 0; i--) {
-    cmt = this.runline[i];
+  for (i = this.runningList.length - 1; i >= 0; i--) {
+    cmt = this.runningList[i];
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       continue;
     }
@@ -124,7 +134,7 @@ function domEngine() {
     if (cmt.mode === 'rtl') {
       cmt.x = this.width - elapsed;
     }
-    cmt.node.style.cssText += createTransform(cmt.x, cmt.y);
+    cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
   }
 }
 
@@ -151,29 +161,30 @@ function createCommentCanvas(cmt) {
 /* eslint no-invalid-this: 0 */
 function canvasEngine() {
   this.stage.context.clearRect(0, 0, this.width, this.height);
-  var ct = this._isMedia ? this.media.currentTime : Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   var cmt = null;
   var i = 0;
-  for (i = this.runline.length - 1; i >= 0; i--) {
-    cmt = this.runline[i];
+  for (i = this.runningList.length - 1; i >= 0; i--) {
+    cmt = this.runningList[i];
     if (ct - cmt.time > this.duration) {
       cmt.canvas = null;
-      this.runline.splice(i, 1);
+      this.runningList.splice(i, 1);
     }
   }
   while (this.position < this.comments.length &&
          this.comments[this.position].time < ct) {
     cmt = this.comments[this.position];
     cmt.canvas = createCommentCanvas(cmt);
+    cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       cmt.x = (this.width - cmt.width) >> 1;
     }
-    cmt.y = allocate.call(this, cmt);
-    this.runline.push(cmt);
+    this.runningList.push(cmt);
     ++this.position;
   }
-  for (i = this.runline.length - 1; i >= 0; i--) {
-    cmt = this.runline[i];
+  var len = this.runningList.length;
+  for (i = 0; i < len; i++) {
+    cmt = this.runningList[i];
     var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
     if (cmt.mode === 'ltr') {
       cmt.x = (elapsed - cmt.width + .5) | 0;
@@ -230,8 +241,8 @@ function pause() {
 function clear() {
   if (this._useCanvas) {
     this.stage.context.clearRect(0, 0, this.width, this.height);
-    for (var i = this.runline.length - 1; i >= 0; i--) {
-      this.runline[i].canvas = null;
+    for (var i = this.runningList.length - 1; i >= 0; i--) {
+      this.runningList[i].canvas = null;
     }
   } else {
     var lc = this.stage.lastChild;
@@ -240,7 +251,7 @@ function clear() {
       lc = this.stage.lastChild;
     }
   }
-  this.runline = [];
+  this.runningList = [];
   return this;
 }
 
@@ -271,7 +282,7 @@ function binsearch(a, k, t) {
   var m = 0;
   var l = 0;
   var r = a.length;
-  while (l <= r) {
+  while (l < r) {
     m = (l + r) >> 1;
     if (t <= a[m][k]) {
       r = m - 1;
@@ -279,15 +290,12 @@ function binsearch(a, k, t) {
       l = m + 1;
     }
   }
-  if (r < 0) {
-    r = 0;
-  }
-  return r;
+  return Math.max(0, r);
 }
 
 /* eslint no-invalid-this: 0 */
 function seek() {
-  var ct = this._isMedia ? this.media.currentTime : Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   clear.call(this);
   resetRange.call(this);
   this.position = binsearch(this.comments, 'time', ct);
@@ -327,14 +335,14 @@ function initMixin(Danmaku) {
     for (var i = this.comments.length - 1; i >= 0; i--) {
       this.comments[i].mode = formatMode(this.comments[i].mode);
     }
-    this.runline = [];
+    this.runningList = [];
     this.position = 0;
 
     this.paused = true;
     this.media = opt.video || opt.audio;
-    this._isMedia = !!this.media;
-    this._isVideo = !!opt.video;
-    if (this._isVideo && !this.container) {
+    this._hasMedia = !!this.media;
+    this._hasVideo = !!opt.video;
+    if (this._hasVideo && !this.container) {
       this._hasInitContainer = false;
       var isPlay = !this.media.paused;
       this.container = document.createElement('div');
@@ -346,7 +354,7 @@ function initMixin(Danmaku) {
         this.media.play();
       }
     }
-    if (this._isMedia) {
+    if (this._hasMedia) {
       this.media.addEventListener('play', play.bind(this));
       this.media.addEventListener('pause', pause.bind(this));
       this.media.addEventListener('seeking', seek.bind(this));
@@ -364,7 +372,7 @@ function initMixin(Danmaku) {
 
     this.resize();
     this.container.appendChild(this.stage);
-    if (!this._isMedia || !this.media.paused) {
+    if (!this._hasMedia || !this.media.paused) {
       seek.call(this);
       play.call(this);
     }
@@ -377,7 +385,7 @@ function initMixin(Danmaku) {
 function emitMixin(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
     cmt.mode = formatMode(cmt.mode);
-    if (this._isMedia) {
+    if (this._hasMedia) {
       var ct = this.media.currentTime;
       cmt.time = cmt.time || ct;
       this.comments.splice(binsearch(this.comments, 'time', ct) + 1, 0, cmt);
@@ -419,7 +427,7 @@ function resizeMixin(Danmaku) {
       this.width = this.container.offsetWidth;
       this.height = this.container.offsetHeight;
     }
-    if (this._isVideo &&
+    if (this._hasVideo &&
         (!this._hasInitContainer || !this.width || !this.height)) {
       this.width = this.media.clientWidth;
       this.height = this.media.clientHeight;
