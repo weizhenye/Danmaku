@@ -13,6 +13,7 @@ export default function(Danmaku) {
     if (!opt.video && !opt.container) {
       throw new Error('Danmaku requires container when initializing.');
     }
+    this._hasInitContainer = !!opt.container;
     this.container = opt.container;
     this.visible = true;
 
@@ -37,8 +38,7 @@ export default function(Danmaku) {
     this.media = opt.video || opt.audio;
     this._hasMedia = !!this.media;
     this._hasVideo = !!opt.video;
-    if (this._hasVideo && !this.container) {
-      this._hasInitContainer = false;
+    if (this._hasVideo && !this._hasInitContainer) {
       var isPlay = !this.media.paused;
       this.container = document.createElement('div');
       this.container.style.position = this.media.style.position;
