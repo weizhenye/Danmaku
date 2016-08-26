@@ -4,30 +4,56 @@
   (global.Danmaku = factory());
 }(this, (function () { 'use strict';
 
+function collidableRange() {
+  var max = 9007199254740991;
+  return [{
+    range: 0,
+    time: -max,
+    width: max,
+    height: 0
+  }, {
+    range: max,
+    time: max,
+    width: 0,
+    height: 0
+  }];
+}
+
+var space = {};
+
+function resetSpace() {
+  space.ltr = collidableRange();
+  space.rtl = collidableRange();
+  space.top = collidableRange();
+  space.bottom = collidableRange();
+}
+
+resetSpace();
+
 /* eslint no-invalid-this: 0 */
 function allocate(cmt) {
   var that = this;
   var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
-  var abbr = '_' + cmt.mode;
-  var crLen = this[abbr].length;
-  var last = 0;
-  var curr = 0;
   function willCollide(cr, cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       return ct - cr.time < that.duration;
     }
     var elapsed = (that.width + cr.width) * (ct - cr.time) / that.duration;
-    var crTime = that.duration + cr.time - ct;
-    var cmtTime = that.duration * that.width / (that.width + cmt.width);
-    return (crTime > cmtTime) || (cr.width > elapsed);
+    var crLeftTime = that.duration + cr.time - ct;
+    var cmtArrivalTime = that.duration * that.width / (that.width + cmt.width);
+    return (crLeftTime > cmtArrivalTime) || (cr.width > elapsed);
   }
+  var crs = space[cmt.mode];
+  var crLen = crs.length;
+  var last = 0;
+  var curr = 0;
   for (var i = 1; i < crLen; i++) {
-    var cr = this[abbr][i];
+    var cr = crs[i];
     var requiredRange = cmt.height;
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       requiredRange += cr.height;
     }
-    if (cr.range - this[abbr][last].range > requiredRange) {
+    if (cr.range - crs[last].range > requiredRange) {
       curr = i;
       break;
     }
@@ -35,14 +61,14 @@ function allocate(cmt) {
       last = i;
     }
   }
-  var channel = this[abbr][last].range;
+  var channel = crs[last].range;
   var crObj = {
     range: channel + cmt.height,
     time: cmt.time,
     width: cmt.width,
     height: cmt.height
   };
-  this[abbr].splice(last + 1, curr - last - 1, crObj);
+  crs.splice(last + 1, curr - last - 1, crObj);
 
   if (cmt.mode === 'bottom') {
     return this.height - cmt.height - channel % this.height;
@@ -128,14 +154,54 @@ function domEngine() {
     }
     var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
     elapsed |= 0;
-    if (cmt.mode === 'ltr') {
-      cmt.x = elapsed - cmt.width;
-    }
-    if (cmt.mode === 'rtl') {
-      cmt.x = this.width - elapsed;
-    }
+    if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
+    if (cmt.mode === 'rtl') cmt.x = this.width - elapsed;
     cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
   }
+}
+
+var containerFontSize = 16;
+
+var rootFontSize = 16;
+
+function computeFontSize(el) {
+  var fs = window
+    .getComputedStyle(el, null)
+    .getPropertyValue('font-size')
+    .match(/(.+)px/)[1] * 1;
+  if (el.tagName === 'HTML') {
+    rootFontSize = fs;
+  } else {
+    containerFontSize = fs;
+  }
+}
+
+var canvasHeightCache = {};
+
+function canvasHeight(font) {
+  if (canvasHeightCache[font]) {
+    return canvasHeightCache[font];
+  }
+  var height = 12.31;
+  // eslint-disable-next-line max-len
+  var regex = /^(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
+  var p = font.match(regex);
+  if (p) {
+    var fs = p[1] * 1 || 10;
+    var fsu = p[2];
+    var lh = p[3] * 1 || 1.231;
+    var lhu = p[4];
+    if (fsu === '%') fs *= containerFontSize / 100;
+    if (fsu === 'em') fs *= containerFontSize;
+    if (fsu === 'rem') fs *= rootFontSize;
+    if (lhu === 'px') height = lh;
+    if (lhu === '%') height = fs * lh / 100;
+    if (lhu === 'em') height = fs * lh;
+    if (lhu === 'rem') height = rootFontSize * lh;
+    if (lhu === undefined) height = fs * lh;
+  }
+  canvasHeightCache[font] = height;
+  return height;
 }
 
 function createCommentCanvas(cmt) {
@@ -144,7 +210,7 @@ function createCommentCanvas(cmt) {
   var font = (cmt.canvasStyle && cmt.canvasStyle.font) || '10px sans-serif';
   ctx.font = font;
   canvas.width = cmt.width || ((ctx.measureText(cmt.text).width + .5) | 0);
-  canvas.height = cmt.height || ((font.match(/(\d+)px/)[1] * 1.2 + .5) | 0);
+  canvas.height = cmt.height || ((canvasHeight(font) + .5) | 0);
   cmt.width = canvas.width;
   cmt.height = canvas.height;
   if (cmt.canvasStyle) {
@@ -152,8 +218,10 @@ function createCommentCanvas(cmt) {
       ctx[key] = cmt.canvasStyle[key];
     }
   }
-  ctx.textBaseline = 'top';
-  ctx.strokeText(cmt.text, 0, 0);
+  ctx.textBaseline = 'hanging';
+  if (cmt.canvasStyle && cmt.canvasStyle.strokeStyle) {
+    ctx.strokeText(cmt.text, 0, 0);
+  }
   ctx.fillText(cmt.text, 0, 0);
   return canvas;
 }
@@ -186,12 +254,8 @@ function canvasEngine() {
   for (i = 0; i < len; i++) {
     cmt = this.runningList[i];
     var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
-    if (cmt.mode === 'ltr') {
-      cmt.x = (elapsed - cmt.width + .5) | 0;
-    }
-    if (cmt.mode === 'rtl') {
-      cmt.x = (this.width - elapsed + .5) | 0;
-    }
+    if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
+    if (cmt.mode === 'rtl') cmt.x = (this.width - elapsed + .5) | 0;
     this.stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
   }
 }
@@ -255,29 +319,6 @@ function clear() {
   return this;
 }
 
-function collidableRange() {
-  var max = 9007199254740991;
-  return [{
-    range: 0,
-    time: -max,
-    width: max,
-    height: 0
-  }, {
-    range: max,
-    time: max,
-    width: 0,
-    height: 0
-  }];
-}
-
-/* eslint no-invalid-this: 0 */
-function resetRange() {
-  this._ltr = collidableRange();
-  this._rtl = collidableRange();
-  this._top = collidableRange();
-  this._bottom = collidableRange();
-}
-
 function binsearch(a, k, t) {
   var m = 0;
   var l = 0;
@@ -297,7 +338,7 @@ function binsearch(a, k, t) {
 function seek() {
   var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   clear.call(this);
-  resetRange.call(this);
+  resetSpace();
   this.position = binsearch(this.comments, 'time', ct);
   return this;
 }
@@ -372,11 +413,14 @@ function initMixin(Danmaku) {
 
     this.resize();
     this.container.appendChild(this.stage);
+
+    computeFontSize(document.getElementsByTagName('html')[0]);
+    computeFontSize(this.container);
+
     if (!this._hasMedia || !this.media.paused) {
       seek.call(this);
       play.call(this);
     }
-    resetRange.call(this);
     this._isInited = true;
     return this;
   };
