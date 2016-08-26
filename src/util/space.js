@@ -13,10 +13,13 @@ function collidableRange() {
   }];
 }
 
-/* eslint no-invalid-this: 0 */
-export default function() {
-  this._ltr = collidableRange();
-  this._rtl = collidableRange();
-  this._top = collidableRange();
-  this._bottom = collidableRange();
+export var space = {};
+
+export function resetSpace() {
+  space.ltr = collidableRange();
+  space.rtl = collidableRange();
+  space.top = collidableRange();
+  space.bottom = collidableRange();
 }
+
+resetSpace();

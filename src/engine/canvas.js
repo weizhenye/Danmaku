@@ -29,12 +29,8 @@ export default function() {
   for (i = 0; i < len; i++) {
     cmt = this.runningList[i];
     var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
-    if (cmt.mode === 'ltr') {
-      cmt.x = (elapsed - cmt.width + .5) | 0;
-    }
-    if (cmt.mode === 'rtl') {
-      cmt.x = (this.width - elapsed + .5) | 0;
-    }
+    if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
+    if (cmt.mode === 'rtl') cmt.x = (this.width - elapsed + .5) | 0;
     this.stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
   }
 }

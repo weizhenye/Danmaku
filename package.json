@@ -7,7 +7,7 @@
     "lint": "eslint ./src",
     "test": "npm run lint",
     "bundle": "rollup ./src/index.js -f umd -n Danmaku -o ./dist/danmaku.js",
-    "minify": "uglifyjs ./dist/danmaku.js -o ./dist/danmaku.min.js",
+    "minify": "uglifyjs ./dist/danmaku.js -m -o ./dist/danmaku.min.js",
     "build": "npm run bundle && npm run minify",
     "preversion": "npm test",
     "version": "npm run build && git add -A ./dist",

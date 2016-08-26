@@ -128,12 +128,12 @@ danmaku.init({
   // Array of comment, you can find its format in `danmaku.emit` API.
   comments: [],
 
-  // You can use DOM engine or canvas engine to render comments.
+  // You can use 'DOM' engine or 'canvas' engine to render comments.
   // Canvas engine may more efficient than DOM however it costs more memory.
   // 'DOM' by default, available in all mode.
-  engine: 'DOM',
+  engine: 'canvas',
 
-  // You can set speed later by using `danmaku.speed` API.
+  // You can also set speed by using `danmaku.speed` API.
   speed: 144
 });
 ```
@@ -176,12 +176,18 @@ danmaku.emit({
     shadowColor: '#000',
     shadowOffsetX: 0,
     shadowOffsetY: 0,
+    filter: 'none',
     globalAlpha: 1.0
   }
 });
 ```
 
 More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
+
+Tips:
+* You may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
+* `canvasStyle.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
+* `canvasStyle.filter` is supported in Chrome 52 and Firefox 49.
 
 ### Resize
 Do it when you resize container or video.

@@ -1,7 +1,7 @@
 import play from '../internal/play.js';
 import pause from '../internal/pause.js';
 import seek from '../internal/seek.js';
-import resetRange from '../internal/resetRange.js';
+import {computeFontSize} from '../util/fontSize.js';
 import formatMode from '../util/formatMode.js';
 
 export default function(Danmaku) {
@@ -67,11 +67,14 @@ export default function(Danmaku) {
 
     this.resize();
     this.container.appendChild(this.stage);
+
+    computeFontSize(document.getElementsByTagName('html')[0]);
+    computeFontSize(this.container);
+
     if (!this._hasMedia || !this.media.paused) {
       seek.call(this);
       play.call(this);
     }
-    resetRange.call(this);
     this._isInited = true;
     return this;
   };
