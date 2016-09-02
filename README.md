@@ -91,7 +91,7 @@ Client:
   });
   var socket = io();
   socket.on('danmaku', function(comment) {
-    danmaku.emit(comment);
+    danmaku.emit(comment)
   });
   var btn = document.getElementById('send-button');
   btn.addEventListener('click', function() {
@@ -185,9 +185,11 @@ danmaku.emit({
 More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
 
 Tips:
-* You may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
+* With DOM engine, you may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
+* With canvas engine, line height is `1.2` by default, you can set it with `canvasStyle.font`.
 * `canvasStyle.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
-* `canvasStyle.filter` is supported in Chrome 52 and Firefox 49.
+* `canvasStyle.textBaseline` is set to `hanging`, you're not able to change it.
+* [`canvasStyle.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
 
 ### Resize
 Do it when you resize container or video.
