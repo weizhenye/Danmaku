@@ -5,6 +5,7 @@
   "main": "./dist/danmaku.js",
   "scripts": {
     "lint": "eslint src test",
+    "sauce": "karma start karma.sauce.js",
     "test": "npm run lint && karma start",
     "bundle": "rollup src/index.js -f umd -n Danmaku -o dist/danmaku.js",
     "minify": "uglifyjs dist/danmaku.js -m -o dist/danmaku.min.js",
@@ -39,6 +40,7 @@
     "karma-coverage": "^1.1.1",
     "karma-mocha": "^1.1.1",
     "karma-rollup-plugin": "^0.2.2",
+    "karma-sauce-launcher": "^1.0.0",
     "mocha": "^3.0.2",
     "rollup": "^0.34.13",
     "uglify-js": "^2.7.3"

@@ -14,3 +14,4 @@ before_install:
 after_success:
   - npm install coveralls
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - npm run sauce
