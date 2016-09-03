@@ -1,8 +1,10 @@
 import {assert} from 'chai';
 import canvasHeight from '../../src/util/canvasHeight.js';
+import {containerFontSize, rootFontSize} from '../../src/util/fontSize.js';
 
 describe('canvas height', function() {
   var ch = canvasHeight;
+  var LH = 1.2;
 
   it('should default line-height as 1.2', function() {
     assert.equal(12, ch('10px sans-serif'));
@@ -13,10 +15,10 @@ describe('canvas height', function() {
   });
 
   it('should support font-size units', function() {
-    assert.equal(19.2, ch('1em sans-serif'));
-    assert.equal(19.2, ch('1rem sans-serif'));
-    assert.equal(19.2, ch('100% sans-serif'));
-    assert.equal(19.2, ch('16px sans-serif'));
+    assert.equal(rootFontSize * LH, ch('1rem sans-serif'));
+    assert.equal(containerFontSize * LH, ch('1em sans-serif'));
+    assert.equal(containerFontSize * LH, ch('100% sans-serif'));
+    assert.equal(16 * LH, ch('16px sans-serif'));
   });
 
   it('should support line-height units', function() {

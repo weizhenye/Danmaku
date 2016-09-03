@@ -10,7 +10,7 @@ export default function(Danmaku) {
       return this;
     }
 
-    if (!opt.video && !opt.container) {
+    if (!opt || (!opt.video && !opt.container)) {
       throw new Error('Danmaku requires container when initializing.');
     }
     this._hasInitContainer = !!opt.container;

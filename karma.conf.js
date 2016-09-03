@@ -2,7 +2,7 @@ module.exports = function(config) {
   config.set({
     singleRun: true,
     frameworks: ['mocha'],
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     files: [
       'node_modules/chai/chai.js',
       'test/test.js'
