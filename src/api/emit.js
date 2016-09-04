@@ -4,12 +4,14 @@ import binsearch from '../util/binsearch.js';
 export default function(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
     cmt.mode = formatMode(cmt.mode);
+    cmt._utc = Date.now() / 1000;
     if (this._hasMedia) {
-      var ct = this.media.currentTime;
-      cmt.time = cmt.time || ct;
-      this.comments.splice(binsearch(this.comments, 'time', ct) + 1, 0, cmt);
+      if (cmt.time === undefined) {
+        cmt.time = this.media.currentTime;
+      }
+      var position = binsearch(this.comments, 'time', cmt.time) + 1;
+      this.comments.splice(position, 0, cmt);
     } else {
-      cmt.time = Date.now() / 1000;
       this.comments.push(cmt);
     }
     return this;

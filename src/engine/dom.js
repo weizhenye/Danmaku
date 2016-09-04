@@ -4,12 +4,16 @@ import {transform} from '../util/transform.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {
-  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
+  var dn = Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : dn;
+  var pbr = this._hasMedia ? this.media.playbackRate : 1;
   var cmt = null;
+  var cmtt = 0;
   var i = 0;
   for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
-    if (ct - cmt.time > this.duration) {
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (ct - cmtt > this.duration) {
       this.stage.removeChild(cmt.node);
       if (!this._hasMedia) {
         cmt.node = null;
@@ -19,9 +23,13 @@ export default function() {
   }
   var pendingList = [];
   var df = document.createDocumentFragment();
-  while (this.position < this.comments.length &&
-         this.comments[this.position].time < ct) {
+  while (this.position < this.comments.length) {
     cmt = this.comments[this.position];
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (cmtt >= ct) {
+      break;
+    }
+    cmt._utc = Date.now() / 1000;
     cmt.node = cmt.node || createCommentNode(cmt);
     this.runningList.push(cmt);
     pendingList.push(cmt);
@@ -49,7 +57,8 @@ export default function() {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       continue;
     }
-    var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
+    var totalWidth = this.width + cmt.width;
+    var elapsed = totalWidth * (dn - cmt._utc) * pbr / this.duration;
     elapsed |= 0;
     if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
     if (cmt.mode === 'rtl') cmt.x = this.width - elapsed;
