@@ -3,17 +3,6 @@ import Danmaku from '../../src/index.js';
 
 /* istanbul ignore next */
 describe('Initialization', function() {
-  beforeEach(function() {
-    var $container = document.createElement('div');
-    $container.id = 'test-container';
-    $container.style.cssText = 'width:640px;height:360px;';
-    document.body.appendChild($container);
-  });
-
-  afterEach(function() {
-    document.body.removeChild(document.getElementById('test-container'));
-  });
-
   it('should support set options in constructor', function() {
     var danmaku = new Danmaku();
     assert.equal(false, danmaku._isInited);

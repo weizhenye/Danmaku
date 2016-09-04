@@ -4,7 +4,10 @@ export default function(Danmaku) {
       return this._speed;
     },
     set: function(s) {
-      if (s <= 0) {
+      if (typeof s !== 'number' ||
+          isNaN(s) ||
+          !isFinite(s) ||
+          s <= 0) {
         return this._speed;
       }
       this._speed = s;

@@ -71,6 +71,7 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: 3,
     captureTimeout: 300000,
+    logLevel: config.LOG_ERROR,
     frameworks: ['mocha'],
     browsers: Object.keys(customLaunchers),
     customLaunchers: customLaunchers,

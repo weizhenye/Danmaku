@@ -7,6 +7,9 @@ export default function(Danmaku) {
       return this;
     }
     this.visible = true;
+    if (this._hasMedia && this.media.paused) {
+      return this;
+    }
     seek.call(this);
     play.call(this);
     return this;

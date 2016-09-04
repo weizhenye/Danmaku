@@ -7,13 +7,13 @@ export default function() {
   if (!this.visible || !this.paused) {
     return this;
   }
+  this.paused = false;
   var that = this;
   var engine = this._useCanvas ? canvasEngine : domEngine;
   function frame() {
     engine.call(that);
     that._requestID = raf(frame);
   }
-  this.paused = false;
   this._requestID = raf(frame);
   return this;
 }
