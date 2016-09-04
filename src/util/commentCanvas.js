@@ -14,7 +14,7 @@ export default function(cmt) {
       ctx[key] = cmt.canvasStyle[key];
     }
   }
-  ctx.textBaseline = 'hanging';
+  ctx.textBaseline = 'top';
   if (cmt.canvasStyle && cmt.canvasStyle.strokeStyle) {
     ctx.strokeText(cmt.text, 0, 0);
   }
