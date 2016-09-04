@@ -5,6 +5,7 @@ import {
   computeFontSize
 } from '../../src/util/fontSize.js';
 
+/* istanbul ignore next */
 describe('font size', function() {
   it('should default containerFontSize as 16', function() {
     assert.equal(16, containerFontSize);

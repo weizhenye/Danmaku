@@ -1,6 +1,7 @@
 import {assert} from 'chai';
 import Danmaku from '../../src/index.js';
 
+/* istanbul ignore next */
 describe('Initialization', function() {
   beforeEach(function() {
     var $container = document.createElement('div');
@@ -79,16 +80,23 @@ describe('Initialization', function() {
     document.body.removeChild(danmaku.container);
   });
 
-  it('should keep video playing when it\'s playing', function() {
+  it('should keep video playing status', function() {
     var $video = document.createElement('video');
     document.body.appendChild($video);
     $video.play();
 
     var danmaku = new Danmaku();
-    danmaku.init({
-      video: $video
-    });
-    assert.equal(false, $video.paused);
+    if ($video.paused) {
+      danmaku.init({
+        video: $video
+      });
+      assert.equal(true, $video.paused);
+    } else {
+      danmaku.init({
+        video: $video
+      });
+      assert.equal(false, $video.paused);
+    }
 
     document.body.removeChild(danmaku.container);
   });

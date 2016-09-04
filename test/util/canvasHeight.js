@@ -2,6 +2,7 @@ import {assert} from 'chai';
 import canvasHeight from '../../src/util/canvasHeight.js';
 import {containerFontSize, rootFontSize} from '../../src/util/fontSize.js';
 
+/* istanbul ignore next */
 describe('canvas height', function() {
   var ch = canvasHeight;
   var LH = 1.2;

@@ -1,26 +1,29 @@
 const customLaunchers = {
   'SL-Chrome': {
     base: 'SauceLabs',
-    browserName: 'Chrome',
+    browserName: 'chrome',
     platform: 'Windows 10'
   },
   'SL-Firefox': {
     base: 'SauceLabs',
-    browserName: 'Firefox'
+    browserName: 'firefox'
   },
   'SL-Safari': {
     base: 'SauceLabs',
-    browserName: 'Safari',
+    browserName: 'safari',
     platform: 'OS X 10.11'
   },
-  'SL-Opera': {
+  'SL-Opera-12': {
     base: 'SauceLabs',
-    browserName: 'Oprea'
+    browserName: 'opera',
+    platform: 'Windows 7',
+    version: '12.12'
   },
-  'SL-Opera-11.5': {
+  'SL-Opera-11': {
     base: 'SauceLabs',
-    browserName: 'Oprea',
-    version: '11.5'
+    browserName: 'opera',
+    platform: 'Windows 7',
+    version: '11.64'
   },
   'SL-Edge': {
     base: 'SauceLabs',
@@ -28,17 +31,17 @@ const customLaunchers = {
   },
   'SL-IE-11': {
     base: 'SauceLabs',
-    browserName: 'Internet Explorer',
+    browserName: 'internet explorer',
     version: '11'
   },
   'SL-IE-10': {
     base: 'SauceLabs',
-    browserName: 'Internet Explorer',
+    browserName: 'internet explorer',
     version: '10'
   },
   'SL-IE-9': {
     base: 'SauceLabs',
-    browserName: 'Internet Explorer',
+    browserName: 'internet explorer',
     version: '9'
   },
   'SL_iOS_Safari_9': {
