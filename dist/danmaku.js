@@ -34,14 +34,16 @@ resetSpace();
 function allocate(cmt) {
   var that = this;
   var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
+  var pbr = this._hasMedia ? this.media.playbackRate : 1;
   function willCollide(cr, cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       return ct - cr.time < that.duration;
     }
-    var elapsed = (that.width + cr.width) * (ct - cr.time) / that.duration;
+    var crTotalWidth = that.width + cr.width;
+    var crElapsed = crTotalWidth * (ct - cr.time) * pbr / that.duration;
     var crLeftTime = that.duration + cr.time - ct;
     var cmtArrivalTime = that.duration * that.width / (that.width + cmt.width);
-    return (crLeftTime > cmtArrivalTime) || (cr.width > elapsed);
+    return (crLeftTime > cmtArrivalTime) || (cr.width > crElapsed);
   }
   var crs = space[cmt.mode];
   var crLen = crs.length;
@@ -64,7 +66,7 @@ function allocate(cmt) {
   var channel = crs[last].range;
   var crObj = {
     range: channel + cmt.height,
-    time: cmt.time,
+    time: this._hasMedia ? cmt.time : cmt._utc,
     width: cmt.width,
     height: cmt.height
   };
@@ -107,12 +109,16 @@ var transform = (function() {
 
 /* eslint no-invalid-this: 0 */
 function domEngine() {
-  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
+  var dn = Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : dn;
+  var pbr = this._hasMedia ? this.media.playbackRate : 1;
   var cmt = null;
+  var cmtt = 0;
   var i = 0;
   for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
-    if (ct - cmt.time > this.duration) {
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (ct - cmtt > this.duration) {
       this.stage.removeChild(cmt.node);
       if (!this._hasMedia) {
         cmt.node = null;
@@ -122,9 +128,13 @@ function domEngine() {
   }
   var pendingList = [];
   var df = document.createDocumentFragment();
-  while (this.position < this.comments.length &&
-         this.comments[this.position].time < ct) {
+  while (this.position < this.comments.length) {
     cmt = this.comments[this.position];
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (cmtt >= ct) {
+      break;
+    }
+    cmt._utc = Date.now() / 1000;
     cmt.node = cmt.node || createCommentNode(cmt);
     this.runningList.push(cmt);
     pendingList.push(cmt);
@@ -152,7 +162,8 @@ function domEngine() {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       continue;
     }
-    var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
+    var totalWidth = this.width + cmt.width;
+    var elapsed = totalWidth * (dn - cmt._utc) * pbr / this.duration;
     elapsed |= 0;
     if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
     if (cmt.mode === 'rtl') cmt.x = this.width - elapsed;
@@ -182,14 +193,14 @@ function canvasHeight(font) {
   if (canvasHeightCache[font]) {
     return canvasHeightCache[font];
   }
-  var height = 12.31;
+  var height = 12;
   // eslint-disable-next-line max-len
   var regex = /^(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
   var p = font.match(regex);
   if (p) {
     var fs = p[1] * 1 || 10;
     var fsu = p[2];
-    var lh = p[3] * 1 || 1.231;
+    var lh = p[3] * 1 || 1.2;
     var lhu = p[4];
     if (fsu === '%') fs *= containerFontSize / 100;
     if (fsu === 'em') fs *= containerFontSize;
@@ -229,19 +240,27 @@ function createCommentCanvas(cmt) {
 /* eslint no-invalid-this: 0 */
 function canvasEngine() {
   this.stage.context.clearRect(0, 0, this.width, this.height);
-  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
+  var dn = Date.now() / 1000;
+  var ct = this._hasMedia ? this.media.currentTime : dn;
+  var pbr = this._hasMedia ? this.media.playbackRate : 1;
   var cmt = null;
+  var cmtt = 0;
   var i = 0;
   for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
-    if (ct - cmt.time > this.duration) {
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (ct - cmtt > this.duration) {
       cmt.canvas = null;
       this.runningList.splice(i, 1);
     }
   }
-  while (this.position < this.comments.length &&
-         this.comments[this.position].time < ct) {
+  while (this.position < this.comments.length) {
     cmt = this.comments[this.position];
+    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    if (cmtt >= ct) {
+      break;
+    }
+    cmt._utc = Date.now() / 1000;
     cmt.canvas = createCommentCanvas(cmt);
     cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
@@ -253,7 +272,8 @@ function canvasEngine() {
   var len = this.runningList.length;
   for (i = 0; i < len; i++) {
     cmt = this.runningList[i];
-    var elapsed = (this.width + cmt.width) * (ct - cmt.time) / this.duration;
+    var totalWidth = this.width + cmt.width;
+    var elapsed = totalWidth * (dn - cmt._utc) * pbr / this.duration;
     if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
     if (cmt.mode === 'rtl') cmt.x = (this.width - elapsed + .5) | 0;
     this.stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
@@ -356,7 +376,7 @@ function initMixin(Danmaku) {
       return this;
     }
 
-    if (!opt.video && !opt.container) {
+    if (!opt || (!opt.video && !opt.container)) {
       throw new Error('Danmaku requires container when initializing.');
     }
     this._hasInitContainer = !!opt.container;
@@ -429,12 +449,14 @@ function initMixin(Danmaku) {
 function emitMixin(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
     cmt.mode = formatMode(cmt.mode);
+    cmt._utc = Date.now() / 1000;
     if (this._hasMedia) {
-      var ct = this.media.currentTime;
-      cmt.time = cmt.time || ct;
-      this.comments.splice(binsearch(this.comments, 'time', ct) + 1, 0, cmt);
+      if (cmt.time === undefined) {
+        cmt.time = this.media.currentTime;
+      }
+      var position = binsearch(this.comments, 'time', cmt.time) + 1;
+      this.comments.splice(position, 0, cmt);
     } else {
-      cmt.time = Date.now() / 1000;
       this.comments.push(cmt);
     }
     return this;
