@@ -8,6 +8,7 @@ describe('show and hide API', function() {
   beforeEach(function() {
     var $video = document.createElement('video');
     $video.id = 'test-video';
+    $video.src = 'https://media.w3.org/2010/05/video/movie_5.mp4';
     document.body.appendChild($video);
 
     danmaku = new Danmaku({
@@ -34,11 +35,27 @@ describe('show and hide API', function() {
     danmaku.hide();
     assert.equal(true, danmaku.paused);
     danmaku.show();
-    assert.equal(false, danmaku.paused);
+    assert.equal($video.paused, danmaku.paused);
     $video.pause();
     danmaku.hide();
     assert.equal(true, danmaku.paused);
     danmaku.show();
+    assert.equal($video.paused, danmaku.paused);
+  });
+
+  it('should just return when called many times', function() {
+    var $video = document.getElementById('test-video');
+    danmaku.hide();
     assert.equal(true, danmaku.paused);
+    assert.equal(false, danmaku.visible);
+    danmaku.hide();
+    assert.equal(true, danmaku.paused);
+    assert.equal(false, danmaku.visible);
+    danmaku.show();
+    assert.equal($video.paused, danmaku.paused);
+    assert.equal(true, danmaku.visible);
+    danmaku.show();
+    assert.equal($video.paused, danmaku.paused);
+    assert.equal(true, danmaku.visible);
   });
 });

@@ -71,21 +71,15 @@ describe('Initialization', function() {
 
   it('should keep video playing status', function() {
     var $video = document.createElement('video');
+    $video.src = 'https://media.w3.org/2010/05/video/movie_5.mp4';
     document.body.appendChild($video);
     $video.play();
 
-    var danmaku = new Danmaku();
-    if ($video.paused) {
-      danmaku.init({
-        video: $video
-      });
-      assert.equal(true, $video.paused);
-    } else {
-      danmaku.init({
-        video: $video
-      });
-      assert.equal(false, $video.paused);
-    }
+    var paused = $video.paused;
+    var danmaku = new Danmaku({
+      video: $video
+    });
+    assert.equal(paused, $video.paused);
 
     document.body.removeChild(danmaku.container);
   });
@@ -100,6 +94,14 @@ describe('Initialization', function() {
     });
     assert.throws(function() {
       danmaku.init({
+        audio: document.createElement('audio')
+      });
+    });
+    assert.throws(function() {
+      danmaku = new Danmaku({});
+    });
+    assert.throws(function() {
+      danmaku = new Danmaku({
         audio: document.createElement('audio')
       });
     });
@@ -168,5 +170,15 @@ describe('Initialization', function() {
       container: document.getElementById('test-container')
     });
     assert.equal(144, danmaku.speed);
+  });
+
+  it('should default the stage to container size', function() {
+    var danmaku = new Danmaku({
+      container: document.getElementById('test-container')
+    });
+    assert.equal(640, danmaku.width);
+    assert.equal(360, danmaku.height);
+    assert.equal('640px', danmaku.stage.style.width);
+    assert.equal('360px', danmaku.stage.style.height);
   });
 });

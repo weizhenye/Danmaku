@@ -1,5 +1,12 @@
+/*
+ * For video and audio can't autoplay on some mobile browsers,
+ * tests which need to interact with media will be skiped.
+ */
+
 import './index.js';
+import './api/emit.js';
 import './api/init.js';
+import './api/resize.js';
 import './api/show-hide.js';
 import './api/speed.js';
 import './util/canvasHeight.js';
