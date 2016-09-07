@@ -229,7 +229,7 @@ function createCommentCanvas(cmt) {
       ctx[key] = cmt.canvasStyle[key];
     }
   }
-  ctx.textBaseline = 'hanging';
+  ctx.textBaseline = 'top';
   if (cmt.canvasStyle && cmt.canvasStyle.strokeStyle) {
     ctx.strokeText(cmt.text, 0, 0);
   }
@@ -299,13 +299,13 @@ function play() {
   if (!this.visible || !this.paused) {
     return this;
   }
+  this.paused = false;
   var that = this;
   var engine = this._useCanvas ? canvasEngine : domEngine;
   function frame() {
     engine.call(that);
     that._requestID = raf(frame);
   }
-  this.paused = false;
   this._requestID = raf(frame);
   return this;
 }
@@ -448,6 +448,10 @@ function initMixin(Danmaku) {
 
 function emitMixin(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
+    if (!cmt || Object.prototype.toString.call(cmt) !== '[object Object]') {
+      return this;
+    }
+    cmt.text = (cmt.text || '').toString();
     cmt.mode = formatMode(cmt.mode);
     cmt._utc = Date.now() / 1000;
     if (this._hasMedia) {
@@ -469,6 +473,9 @@ function showMixin(Danmaku) {
       return this;
     }
     this.visible = true;
+    if (this._hasMedia && this.media.paused) {
+      return this;
+    }
     seek.call(this);
     play.call(this);
     return this;
@@ -516,7 +523,10 @@ function speedMixin(Danmaku) {
       return this._speed;
     },
     set: function(s) {
-      if (s <= 0) {
+      if (typeof s !== 'number' ||
+          isNaN(s) ||
+          !isFinite(s) ||
+          s <= 0) {
         return this._speed;
       }
       this._speed = s;
