@@ -1,6 +1,10 @@
 /*
  * For video and audio can't autoplay on some mobile browsers,
  * tests which need to interact with media will be skiped.
+ *
+ * As I tested manually, all tests pass in IE9.
+ * But IE9 in Sauce Labs don't support media methods.
+ * https://github.com/videojs/video.js/issues/290
  */
 
 import './index.js';

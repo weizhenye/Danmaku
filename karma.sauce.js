@@ -69,7 +69,7 @@ const customLaunchers = {
 module.exports = function(config) {
   config.set({
     singleRun: true,
-    concurrency: 1,
+    concurrency: 5,
     captureTimeout: 300000,
     frameworks: ['mocha'],
     browsers: Object.keys(customLaunchers),

@@ -71,8 +71,12 @@ describe('Initialization', function() {
 
   it('should keep video playing status', function() {
     var $video = document.createElement('video');
-    $video.src = 'https://media.w3.org/2010/05/video/movie_5.mp4';
     document.body.appendChild($video);
+    try {
+      $video.canPlayType('video/mp4');
+    } catch (err) {
+      return;
+    }
     $video.play();
 
     var paused = $video.paused;
