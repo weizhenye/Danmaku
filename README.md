@@ -15,10 +15,10 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 ## Installation
 
 You can install it by using npm or bower:
-```
+```bash
 npm install danmaku
 ```
-```
+```bash
 bower install danmaku
 ```
 You can also download [danmaku.min.js](https://github.com/weizhenye/Danmaku/raw/master/dist/danmaku.min.js) directly and include it in your HTML.
@@ -169,8 +169,11 @@ danmaku.emit({
   canvasStyle: {
     font: '10px sans-serif',
     textAlign: 'start',
+    // Note that 'bottom' is the default
+    textBaseline: 'bottom',
     direction: 'inherit',
     fillStyle: '#000',
+    // If strokeStyle isn't assigned, there will be no stroke.
     strokeStyle: '#000',
     shadowBlur: 0,
     shadowColor: '#000',
@@ -188,7 +191,7 @@ Tips:
 * With DOM engine, you may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
 * With canvas engine, line height is `1.2` by default, you can set it with `canvasStyle.font`.
 * `canvasStyle.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
-* `canvasStyle.textBaseline` is set to `top`, you're not able to change it.
+* There is a hitbox for each comment, which height is determined by its line height. When `canvasStyle.textBaseline` is `top` or `hanging`, the baseline is set to top of the hitbox; when it's `middle`, baseline is middle of the hitbox; otherwise baseline is bottom of the hitbox. So if you set `canvasStyle.textBaseline` to `alphabetic` or `hanging`, the comment's head or foot may out of the hitbox and be invisible.
 * [`canvasStyle.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
 
 ### Resize
