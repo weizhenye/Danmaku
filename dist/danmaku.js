@@ -224,16 +224,28 @@ function createCommentCanvas(cmt) {
   canvas.height = cmt.height || ((canvasHeight(font) + .5) | 0);
   cmt.width = canvas.width;
   cmt.height = canvas.height;
+  ctx.textBaseline = 'bottom';
+  var baseline = cmt.height;
   if (cmt.canvasStyle) {
     for (var key in cmt.canvasStyle) {
       ctx[key] = cmt.canvasStyle[key];
     }
+    switch (cmt.canvasStyle.textBaseline) {
+      case 'top':
+      case 'hanging':
+        baseline = 0;
+        break;
+      case 'middle':
+        baseline = cmt.height >> 1;
+        break;
+      default:
+        baseline = cmt.height;
+    }
+    if (cmt.canvasStyle.strokeStyle) {
+      ctx.strokeText(cmt.text, 0, baseline);
+    }
   }
-  ctx.textBaseline = 'top';
-  if (cmt.canvasStyle && cmt.canvasStyle.strokeStyle) {
-    ctx.strokeText(cmt.text, 0, 0);
-  }
-  ctx.fillText(cmt.text, 0, 0);
+  ctx.fillText(cmt.text, 0, baseline);
   return canvas;
 }
 
@@ -300,6 +312,12 @@ function play() {
     return this;
   }
   this.paused = false;
+  if (this._hasMedia) {
+    for (var i = this.runningList.length - 1; i >= 0; i--) {
+      var cmt = this.runningList[i];
+      cmt._utc = Date.now() / 1000 - (this.media.currentTime - cmt.time);
+    }
+  }
   var that = this;
   var engine = this._useCanvas ? canvasEngine : domEngine;
   function frame() {
@@ -339,27 +357,33 @@ function clear() {
   return this;
 }
 
-function binsearch(a, k, t) {
-  var m = 0;
-  var l = 0;
-  var r = a.length;
-  while (l < r) {
-    m = (l + r) >> 1;
-    if (t <= a[m][k]) {
-      r = m - 1;
+function binsearch(arr, prop, key) {
+  var mid = 0;
+  var left = 0;
+  var right = arr.length;
+  while (left < right - 1) {
+    mid = (left + right) >> 1;
+    if (key >= arr[mid][prop]) {
+      left = mid;
     } else {
-      l = m + 1;
+      right = mid;
     }
   }
-  return Math.max(0, r);
+  if (arr[left] && key < arr[left][prop]) {
+    return left;
+  }
+  return right;
 }
 
 /* eslint no-invalid-this: 0 */
 function seek() {
-  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
+  if (!this._hasMedia) {
+    return this;
+  }
   clear.call(this);
   resetSpace();
-  this.position = binsearch(this.comments, 'time', ct);
+  var position = binsearch(this.comments, 'time', this.media.currentTime);
+  this.position = Math.max(0, position - 1);
   return this;
 }
 
@@ -455,10 +479,13 @@ function emitMixin(Danmaku) {
     cmt.mode = formatMode(cmt.mode);
     cmt._utc = Date.now() / 1000;
     if (this._hasMedia) {
+      var position = 0;
       if (cmt.time === undefined) {
         cmt.time = this.media.currentTime;
+        position = this.position;
+      } else {
+        position = binsearch(this.comments, 'time', cmt.time);
       }
-      var position = binsearch(this.comments, 'time', cmt.time) + 1;
       this.comments.splice(position, 0, cmt);
     } else {
       this.comments.push(cmt);
