@@ -1,14 +1,17 @@
-export default function(a, k, t) {
-  var m = 0;
-  var l = 0;
-  var r = a.length;
-  while (l < r) {
-    m = (l + r) >> 1;
-    if (t <= a[m][k]) {
-      r = m - 1;
+export default function(arr, prop, key) {
+  var mid = 0;
+  var left = 0;
+  var right = arr.length;
+  while (left < right - 1) {
+    mid = (left + right) >> 1;
+    if (key >= arr[mid][prop]) {
+      left = mid;
     } else {
-      l = m + 1;
+      right = mid;
     }
   }
-  return Math.max(0, r);
+  if (arr[left] && key < arr[left][prop]) {
+    return left;
+  }
+  return right;
 }

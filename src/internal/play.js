@@ -8,6 +8,12 @@ export default function() {
     return this;
   }
   this.paused = false;
+  if (this._hasMedia) {
+    for (var i = this.runningList.length - 1; i >= 0; i--) {
+      var cmt = this.runningList[i];
+      cmt._utc = Date.now() / 1000 - (this.media.currentTime - cmt.time);
+    }
+  }
   var that = this;
   var engine = this._useCanvas ? canvasEngine : domEngine;
   function frame() {
