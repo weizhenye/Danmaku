@@ -1,4 +1,3 @@
-import {assert} from 'chai';
 import formatMode from '../../src/util/formatMode.js';
 
 /* istanbul ignore next */

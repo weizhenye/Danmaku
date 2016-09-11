@@ -71,21 +71,17 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: 5,
     captureTimeout: 300000,
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai'],
     browsers: Object.keys(customLaunchers),
     customLaunchers: customLaunchers,
     files: [
-      'node_modules/chai/chai.js',
       'test/test.js'
     ],
     preprocessors: {
       'test/test.js': ['rollup']
     },
     rollupPreprocessor: {
-      format: 'iife',
-      globals: {
-        chai: 'chai'
-      }
+      format: 'iife'
     },
     reporters: ['progress', 'saucelabs'],
     sauceLabs: {

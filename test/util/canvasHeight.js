@@ -1,4 +1,3 @@
-import {assert} from 'chai';
 import canvasHeight from '../../src/util/canvasHeight.js';
 import {containerFontSize, rootFontSize} from '../../src/util/fontSize.js';
 

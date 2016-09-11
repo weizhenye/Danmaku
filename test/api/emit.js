@@ -1,4 +1,3 @@
-import {assert} from 'chai';
 import Danmaku from '../../src/index.js';
 
 /* istanbul ignore next */
