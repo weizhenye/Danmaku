@@ -3,15 +3,15 @@ import createCommentCanvas from '../../src/util/commentCanvas.js';
 /* istanbul ignore next */
 describe('comment canvas', function() {
   it('should create a <canvas> with canvasStyle', function() {
-    const comment = {
+    var comment = {
       text: '戦場ヶ原、蕩れ',
       canvasStyle: {
         font: '20px sans-serif',
         strokeStyle: '#a97aba'
       }
     };
-    const canvas = createCommentCanvas(comment);
-    const ctx = canvas.getContext('2d');
+    var canvas = createCommentCanvas(comment);
+    var ctx = canvas.getContext('2d');
     assert.equal('CANVAS', canvas.tagName);
     assert.equal(comment.width, canvas.width);
     assert.equal(comment.height, canvas.height);
@@ -20,9 +20,9 @@ describe('comment canvas', function() {
   });
 
   it('should support to set textBaseline', function() {
-    let comment = {text: 'ドキドキ'};
-    let canvas = createCommentCanvas(comment);
-    let ctx = canvas.getContext('2d');
+    var comment = {text: 'ドキドキ'};
+    var canvas = createCommentCanvas(comment);
+    var ctx = canvas.getContext('2d');
     assert.equal('bottom', ctx.textBaseline);
 
     comment = {text: '', canvasStyle: {textBaseline: 'top'}};
@@ -42,12 +42,12 @@ describe('comment canvas', function() {
   });
 
   it('should use cached size value', function() {
-    const comment = {
+    var comment = {
       text: 'ワクワク',
       width: 128,
       height: 32
     };
-    const canvas = createCommentCanvas(comment);
+    var canvas = createCommentCanvas(comment);
     assert.equal(comment.width, canvas.width);
     assert.equal(comment.height, canvas.height);
   });

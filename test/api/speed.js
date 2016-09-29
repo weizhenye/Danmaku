@@ -21,4 +21,16 @@ describe('speed API', function() {
     danmaku.speed = 'string';
     assert.equal(42, danmaku.speed);
   });
+
+  it('should not calculate duration with zero width container', function() {
+    var $zwc = document.getElementById('test-container');
+    $zwc.style.cssText = 'width:0;height:0;';
+
+    var danmaku = new Danmaku({
+      container: $zwc
+    });
+    var dur = danmaku.duration;
+    danmaku.speed = 72;
+    assert.equal(dur, danmaku.duration);
+  });
 });

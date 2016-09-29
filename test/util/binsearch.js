@@ -3,11 +3,11 @@ import binsearch from '../../src/util/binsearch.js';
 /* istanbul ignore next */
 describe('binsearch', function() {
   it('should find correct position for given value', function() {
-    const arr = [
+    var arr = [
       {time: 1},
       {time: 3},
       {time: 5},
-      {time: 7},
+      {time: 7}
     ];
     assert.equal(0, binsearch(arr, 'time', 0));
     assert.equal(1, binsearch(arr, 'time', 1));
