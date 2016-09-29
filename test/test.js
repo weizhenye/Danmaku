@@ -13,7 +13,10 @@ import './api/init.js';
 import './api/resize.js';
 import './api/show-hide.js';
 import './api/speed.js';
+import './util/binsearch.js';
 import './util/canvasHeight.js';
+import './util/commentCanvas.js';
+import './util/commentNode.js';
 import './util/fontSize.js';
 import './util/formatMode.js';
 
