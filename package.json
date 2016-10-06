@@ -2,11 +2,11 @@
   "name": "danmaku",
   "version": "1.1.6",
   "description": "Display danmaku (flying comments) on HTML5 video.",
-  "main": "./dist/danmaku.js",
-  "jsnext:main": "./src/index.js",
+  "main": "dist/danmaku.js",
+  "jsnext:main": "src/index.js",
   "files": [
-    "./dist",
-    "./src"
+    "dist",
+    "src"
   ],
   "scripts": {
     "lint": "eslint src test",
@@ -16,7 +16,7 @@
     "minify": "uglifyjs dist/danmaku.js -m -o dist/danmaku.min.js",
     "build": "npm run bundle && npm run minify",
     "preversion": "npm test",
-    "version": "npm run build && git add -A ./dist",
+    "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
@@ -39,7 +39,7 @@
   "homepage": "https://danmaku.js.org/",
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^3.6.1",
+    "eslint": "^3.7.1",
     "karma": "^1.3.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
