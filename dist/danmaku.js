@@ -31,7 +31,7 @@ function resetSpace() {
 resetSpace();
 
 /* eslint no-invalid-this: 0 */
-function allocate(cmt) {
+var allocate = function(cmt) {
   var that = this;
   var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
   var pbr = this._hasMedia ? this.media.playbackRate : 1;
@@ -78,7 +78,7 @@ function allocate(cmt) {
   return channel % (this.height - cmt.height);
 }
 
-function createCommentNode(cmt) {
+var createCommentNode = function(cmt) {
   var node = document.createElement('div');
   node.textContent = cmt.text;
   node.style.cssText = 'position:absolute;white-space:nowrap;';
@@ -100,15 +100,17 @@ var transform = (function() {
   ];
   var style = document.createElement('div').style;
   for (var i = properties.length - 1; i >= 0; i--) {
+    /* istanbul ignore else */
     if (properties[i] in style) {
       return properties[i];
     }
   }
+  /* istanbul ignore next */
   return 'transform';
 }());
 
 /* eslint no-invalid-this: 0 */
-function domEngine() {
+var domEngine = function() {
   var dn = Date.now() / 1000;
   var ct = this._hasMedia ? this.media.currentTime : dn;
   var pbr = this._hasMedia ? this.media.playbackRate : 1;
@@ -189,7 +191,7 @@ function computeFontSize(el) {
 
 var canvasHeightCache = {};
 
-function canvasHeight(font) {
+var canvasHeight = function(font) {
   if (canvasHeightCache[font]) {
     return canvasHeightCache[font];
   }
@@ -215,15 +217,15 @@ function canvasHeight(font) {
   return height;
 }
 
-function createCommentCanvas(cmt) {
+var createCommentCanvas = function(cmt) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   var font = (cmt.canvasStyle && cmt.canvasStyle.font) || '10px sans-serif';
   ctx.font = font;
-  canvas.width = cmt.width || ((ctx.measureText(cmt.text).width + .5) | 0);
-  canvas.height = cmt.height || ((canvasHeight(font) + .5) | 0);
-  cmt.width = canvas.width;
-  cmt.height = canvas.height;
+  cmt.width = cmt.width || Math.max((ctx.measureText(cmt.text).width | 0), 1);
+  cmt.height = cmt.height || (canvasHeight(font) | 0);
+  canvas.width = cmt.width;
+  canvas.height = cmt.height;
   ctx.textBaseline = 'bottom';
   var baseline = cmt.height;
   if (cmt.canvasStyle) {
@@ -250,7 +252,7 @@ function createCommentCanvas(cmt) {
 }
 
 /* eslint no-invalid-this: 0 */
-function canvasEngine() {
+var canvasEngine = function() {
   this.stage.context.clearRect(0, 0, this.width, this.height);
   var dn = Date.now() / 1000;
   var ct = this._hasMedia ? this.media.currentTime : dn;
@@ -292,6 +294,7 @@ function canvasEngine() {
   }
 }
 
+/* istanbul ignore next */
 var raf =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -300,6 +303,7 @@ var raf =
     return setTimeout(cb, 50 / 3);
   };
 
+/* istanbul ignore next */
 var caf =
   window.cancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
@@ -307,7 +311,7 @@ var caf =
   clearTimeout;
 
 /* eslint no-invalid-this: 0 */
-function play() {
+var play = function() {
   if (!this.visible || !this.paused) {
     return this;
   }
@@ -329,7 +333,7 @@ function play() {
 }
 
 /* eslint no-invalid-this: 0 */
-function pause() {
+var pause = function() {
   if (!this.visible || this.paused) {
     return this;
   }
@@ -340,7 +344,7 @@ function pause() {
 }
 
 /* eslint no-invalid-this: 0 */
-function clear() {
+var clear = function() {
   if (this._useCanvas) {
     this.stage.context.clearRect(0, 0, this.width, this.height);
     for (var i = this.runningList.length - 1; i >= 0; i--) {
@@ -357,7 +361,7 @@ function clear() {
   return this;
 }
 
-function binsearch(arr, prop, key) {
+var binsearch = function(arr, prop, key) {
   var mid = 0;
   var left = 0;
   var right = arr.length;
@@ -376,7 +380,7 @@ function binsearch(arr, prop, key) {
 }
 
 /* eslint no-invalid-this: 0 */
-function seek() {
+var seek = function() {
   if (!this._hasMedia) {
     return this;
   }
@@ -387,14 +391,14 @@ function seek() {
   return this;
 }
 
-function formatMode(mode) {
+var formatMode = function(mode) {
   if (!/^(ltr|top|bottom)$/i.test(mode)) {
     return 'rtl';
   }
   return mode.toLowerCase();
 }
 
-function initMixin(Danmaku) {
+var initMixin = function(Danmaku) {
   Danmaku.prototype.init = function(opt) {
     if (this._isInited) {
       return this;
@@ -470,7 +474,7 @@ function initMixin(Danmaku) {
   };
 }
 
-function emitMixin(Danmaku) {
+var emitMixin = function(Danmaku) {
   Danmaku.prototype.emit = function(cmt) {
     if (!cmt || Object.prototype.toString.call(cmt) !== '[object Object]') {
       return this;
@@ -494,7 +498,7 @@ function emitMixin(Danmaku) {
   };
 }
 
-function showMixin(Danmaku) {
+var showMixin = function(Danmaku) {
   Danmaku.prototype.show = function() {
     if (this.visible) {
       return this;
@@ -509,7 +513,7 @@ function showMixin(Danmaku) {
   };
 }
 
-function hideMixin(Danmaku) {
+var hideMixin = function(Danmaku) {
   Danmaku.prototype.hide = function() {
     if (!this.visible) {
       return this;
@@ -521,7 +525,7 @@ function hideMixin(Danmaku) {
   };
 }
 
-function resizeMixin(Danmaku) {
+var resizeMixin = function(Danmaku) {
   Danmaku.prototype.resize = function() {
     if (this._hasInitContainer) {
       this.width = this.container.offsetWidth;
@@ -544,7 +548,7 @@ function resizeMixin(Danmaku) {
   };
 }
 
-function speedMixin(Danmaku) {
+var speedMixin = function(Danmaku) {
   Object.defineProperty(Danmaku.prototype, 'speed', {
     get: function() {
       return this._speed;
