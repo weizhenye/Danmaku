@@ -17,6 +17,7 @@ function BilibiliParser(xmlDoc, engine) {
       comment.time = values[0] * 1;
       var color = parseInt(values[3]).toString(16);
       while (color.length < 6) color = '0' + color;
+      if (values[2] === '0') values[2] = '25';
       var style = {
         color: '#' + color,
         fontSize: values[2] + 'px',
