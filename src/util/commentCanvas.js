@@ -5,10 +5,10 @@ export default function(cmt) {
   var ctx = canvas.getContext('2d');
   var font = (cmt.canvasStyle && cmt.canvasStyle.font) || '10px sans-serif';
   ctx.font = font;
-  canvas.width = cmt.width || ((ctx.measureText(cmt.text).width + .5) | 0);
-  canvas.height = cmt.height || ((canvasHeight(font) + .5) | 0);
-  cmt.width = canvas.width;
-  cmt.height = canvas.height;
+  cmt.width = cmt.width || Math.max((ctx.measureText(cmt.text).width | 0), 1);
+  cmt.height = cmt.height || (canvasHeight(font) | 0);
+  canvas.width = cmt.width;
+  canvas.height = cmt.height;
   ctx.textBaseline = 'bottom';
   var baseline = cmt.height;
   if (cmt.canvasStyle) {
