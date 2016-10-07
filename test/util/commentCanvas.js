@@ -51,4 +51,22 @@ describe('comment canvas', function() {
     assert.equal(comment.width, canvas.width);
     assert.equal(comment.height, canvas.height);
   });
+
+  it('should deal with lineWidth', function() {
+    var canvas1 = createCommentCanvas({
+      text: '忍',
+      canvasStyle: {
+        lineWidth: Infinity
+      }
+    });
+    var canvas2 = createCommentCanvas({
+      text: '忍',
+      canvasStyle: {
+        strokeStyle: '#fd879d',
+        lineWidth: 8
+      }
+    });
+    assert.equal(canvas2.width, canvas1.width + 16);
+    assert.equal(canvas2.height, canvas1.height + 16);
+  });
 });

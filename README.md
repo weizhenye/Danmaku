@@ -167,6 +167,7 @@ danmaku.emit({
   // When using canvas engine, following properties are available by default
   // as a CanvasRenderingContext2D object.
   canvasStyle: {
+    // In Chrome, minimum font-size is 12px
     font: '10px sans-serif',
     textAlign: 'start',
     // Note that 'bottom' is the default
@@ -175,6 +176,8 @@ danmaku.emit({
     fillStyle: '#000',
     // If strokeStyle isn't assigned, there will be no stroke.
     strokeStyle: '#000',
+    // It will be effect like strokeWidth.
+    lineWidth: 1.0,
     shadowBlur: 0,
     shadowColor: '#000',
     shadowOffsetX: 0,
