@@ -55,7 +55,7 @@ var allocate = function(cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       requiredRange += cr.height;
     }
-    if (cr.range - crs[last].range > requiredRange) {
+    if (cr.range - cr.height - crs[last].range > requiredRange) {
       curr = i;
       break;
     }
@@ -220,34 +220,39 @@ var canvasHeight = function(font) {
 var createCommentCanvas = function(cmt) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
-  var font = (cmt.canvasStyle && cmt.canvasStyle.font) || '10px sans-serif';
-  ctx.font = font;
-  cmt.width = cmt.width || Math.max((ctx.measureText(cmt.text).width | 0), 1);
-  cmt.height = cmt.height || (canvasHeight(font) | 0);
+  var style = cmt.canvasStyle || {};
+  style.font = style.font || '10px sans-serif';
+  style.textBaseline = style.textBaseline || 'bottom';
+  var strokeWidth = style.lineWidth * 1;
+  strokeWidth = (strokeWidth > 0 && strokeWidth !== Infinity)
+    ? Math.ceil(strokeWidth)
+    : !!style.strokeStyle * 1;
+  ctx.font = style.font;
+  cmt.width = cmt.width ||
+    Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
+  cmt.height = cmt.height ||
+    Math.ceil(canvasHeight(style.font)) + strokeWidth * 2;
   canvas.width = cmt.width;
   canvas.height = cmt.height;
-  ctx.textBaseline = 'bottom';
-  var baseline = cmt.height;
-  if (cmt.canvasStyle) {
-    for (var key in cmt.canvasStyle) {
-      ctx[key] = cmt.canvasStyle[key];
-    }
-    switch (cmt.canvasStyle.textBaseline) {
-      case 'top':
-      case 'hanging':
-        baseline = 0;
-        break;
-      case 'middle':
-        baseline = cmt.height >> 1;
-        break;
-      default:
-        baseline = cmt.height;
-    }
-    if (cmt.canvasStyle.strokeStyle) {
-      ctx.strokeText(cmt.text, 0, baseline);
-    }
+  for (var key in style) {
+    ctx[key] = style[key];
   }
-  ctx.fillText(cmt.text, 0, baseline);
+  var baseline = 0;
+  switch (style.textBaseline) {
+    case 'top':
+    case 'hanging':
+      baseline = strokeWidth;
+      break;
+    case 'middle':
+      baseline = cmt.height >> 1;
+      break;
+    default:
+      baseline = cmt.height - strokeWidth;
+  }
+  if (style.strokeStyle) {
+    ctx.strokeText(cmt.text, strokeWidth, baseline);
+  }
+  ctx.fillText(cmt.text, strokeWidth, baseline);
   return canvas;
 }
 
