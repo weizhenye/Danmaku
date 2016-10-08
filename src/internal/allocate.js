@@ -25,7 +25,7 @@ export default function(cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       requiredRange += cr.height;
     }
-    if (cr.range - crs[last].range > requiredRange) {
+    if (cr.range - cr.height - crs[last].range > requiredRange) {
       curr = i;
       break;
     }
