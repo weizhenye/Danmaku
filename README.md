@@ -5,6 +5,7 @@
 [![Dependencies](https://img.shields.io/david/weizhenye/Danmaku.svg)](https://david-dm.org/weizhenye/Danmaku)
 [![NPM version](https://img.shields.io/npm/v/danmaku.svg)](https://www.npmjs.com/package/danmaku)
 [![License](https://img.shields.io/npm/l/danmaku.svg)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
+[![File size](https://badge-size.herokuapp.com/weizhenye/Danmaku/master/dist/danmaku.min.js?compression=gzip&color=blue&label=min+gzip)](https://unpkg.com/danmaku/dist/danmaku.min.js)
 
 [![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
 
