@@ -49,10 +49,10 @@ const customLaunchers = {
     browserName: 'iPhone',
     version: '9.3'
   },
-  'SL_iOS_Safari_7': {
+  'SL_iOS_Safari_8': {
     base: 'SauceLabs',
     browserName: 'iPhone',
-    version: '7'
+    version: '8.4'
   },
   'SL_Android_5': {
     base: 'SauceLabs',
@@ -83,7 +83,7 @@ module.exports = function(config) {
     rollupPreprocessor: {
       format: 'iife'
     },
-    reporters: ['progress', 'saucelabs'],
+    reporters: ['dots', 'saucelabs'],
     sauceLabs: {
       testName: 'Danmaku test',
       recordScreenshots: false
