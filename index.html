@@ -116,6 +116,11 @@ io.on('connection', function(socket) {
 <script src="//rawgit.com/weizhenye/Danmaku/master/dist/danmaku.min.js"></script>
 <script src="parser/bilibili.js"></script>
 <script src="main.js"></script>
+<script src="https://unpkg.com/perf-monitor"></script>
+<script>
+perfMonitor.startFPSMonitor();
+perfMonitor.startMemMonitor();
+</script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
