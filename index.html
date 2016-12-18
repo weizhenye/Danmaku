@@ -8,13 +8,13 @@
   <meta name="description" content="A high performance JavaScript danmaku engine">
   <meta name="keywords" content="Danmaku, danmu, 弹幕, JavaScript, demo">
   <meta name="author" content="weizhenye">
-  <title>Danmaku - A high performance JavaScript danmaku engine</title>
+  <title>Danmaku - A high-performance JavaScript danmaku engine</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <h1 id="site-title">Danmaku</h1>
-  <h2 id="site-subtitle">A high performance JavaScript danmaku engine</h2>
+  <h2 id="site-subtitle">A high-performance JavaScript danmaku engine</h2>
   <iframe src="https://ghbtns.com/github-btn.html?user=weizhenye&repo=Danmaku&type=star&count=true&size=large" frameborder="0" scrolling="0" width="120px" height="30px"></iframe>
 </header>
 <div class="wrapper">
@@ -28,12 +28,6 @@
     <label for="mode-realtime">Real time</label>
   </fieldset>
   <fieldset>
-    <legend>Controls</legend>
-    <button id="danmaku-resize" autocomplete="off" disabled>Resize</button>
-    <button id="danmaku-show" autocomplete="off" disabled>Show</button>
-    <button id="danmaku-hide" autocomplete="off" disabled>Hide</button>
-  </fieldset>
-  <fieldset>
     <legend>Engine</legend>
     <input type="radio" name="engine" id="dom-engine" autocomplete="off" checked>
     <label for="dom-engine">DOM</label>
@@ -41,9 +35,24 @@
     <label for="canvas-engine">canvas</label>
   </fieldset>
   <fieldset>
+    <legend>Initialize</legend>
+    <button id="danmaku-init" autocomplete="off">Load sample video</button>
+  </fieldset>
+  <fieldset>
+    <legend>Controls</legend>
+    <button id="danmaku-resize" autocomplete="off" disabled>Resize</button>
+    <button id="danmaku-show" autocomplete="off" disabled>Show</button>
+    <button id="danmaku-hide" autocomplete="off" disabled>Hide</button>
+  </fieldset>
+  <fieldset>
     <legend>Speed</legend>
     <input id="danmaku-speed" type="range" min="96" max="192" autocomplete="off">
     <span id="danmaku-speed-number">144</span>
+  </fieldset>
+  <fieldset>
+    <legend>Emit</legend>
+    <input id="danmaku-emit" type="text" placeholder="bla bla" autocomplete="off">
+    <button id="danmaku-send" autocomplete="off" disabled>Emit</button>
   </fieldset>
 </div>
 <div class="wrapper">
@@ -77,43 +86,13 @@
     </div>
   </div>
   <div id="realtime-mode">
-    <div>Here is a simple example using with <a href="http://socket.io/" target="_blank">Socket.IO</a> and <a href="https://nodejs.org/" target="_blank">Node.js</a>.</div>
-    <pre id="server">
-var app = require('http').createServer(handler);
-var io = require('socket.io')(app);
-app.listen(80);
-function handler(req, res) {
-  // your handler...
-}
-io.on('connection', function(socket) {
-  socket.on('danmaku', function(comment) {
-    socket.broadcast.emit('danmaku', comment);
-  });
-});</pre><pre id="client">
-&lt;script src="socket.io.js"&gt;&lt;/script&gt;
-&lt;script src="danmaku.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  var danmaku = new Danmaku();
-  danmaku.init({
-    container: document.querySelector('#container')
-  });
-  var socket = io();
-  socket.on('danmaku', function(comment) {
-    danmaku.emit(comment);
-  });
-  var btn = document.querySelector('#send-button');
-  btn.onclick = function() {
-    var comment = {
-      // generate the object with its format
-    };
-    danmaku.emit(comment);
-    socket.emit('danmaku', comment);
-  };
-&lt;/script&gt;</pre>
+    <div>You can open this page with another browser to test real time danmaku.</div>
+    <div id="realtime-container"></div>
   </div>
 </div>
 <div id="message"></div>
-<script src="//rawgit.com/weizhenye/Danmaku/master/dist/danmaku.min.js"></script>
+<script src="https://unpkg.com/socket.io-client/dist/socket.io.min.js"></script>
+<script src="https://unpkg.com/danmaku/dist/danmaku.min.js"></script>
 <script src="parser/bilibili.js"></script>
 <script src="main.js"></script>
 <script src="https://unpkg.com/perf-monitor"></script>

@@ -123,15 +123,9 @@ fieldset {
 #realtime-mode {
   text-align: left;
 }
-#realtime-mode pre {
-  border: 1px solid #8fe0fa;
-  display: inline-block;
-}
-#realtime-mode pre:before {
-  display: block;
-  font-size: 3em;
-  font-weight: bold;
-  color: #8fe0fa;
+#realtime-mode div {
+  margin: auto;
+  text-align: center;
 }
 #server {
   float: left;
@@ -153,6 +147,12 @@ fieldset {
 .danmaku-container canvas {
   position: absolute;
   left: 0;
+}
+#realtime-container {
+  width: 640px;
+  height: 360px;
+  border: 1px solid #000;
+  box-sizing: border-box;
 }
 #drop-area {
   width: 640px;
@@ -181,7 +181,7 @@ fieldset {
 #message {
   padding: .5em;
   position: fixed;
-  right: .5em;
+  left: .5em;
   bottom: .5em;
   opacity: 1;
 }

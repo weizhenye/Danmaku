@@ -1,13 +1,13 @@
+var SERVER_ORIGIN = 'https://gulu.herokuapp.com';
+var SAMPLE_VIDEO = 'https://media.w3.org/2010/05/video/movie_300.mp4';
 var $ = function(s) {return document.querySelectorAll(s)};
+var socket = io(SERVER_ORIGIN + '/live');
 var videoReady = false,
     audioReady = false,
     videoDanmaku = new Danmaku(),
     audioDanmaku = new Danmaku(),
+    realtimeDanmaku = new Danmaku(),
     mode = 'video';
-var courl = (window.URL && window.URL.createObjectURL) ||
-            (window.webkitURL && window.webkitURL.createObjectURL) ||
-            window.createObjectURL ||
-            window.createBlobURL;
 var $mediaMode = $('#media-mode')[0],
     $videoMode = $('#video-mode')[0],
     $audioMode = $('#audio-mode')[0],
@@ -35,7 +35,14 @@ $('#mode-selector')[0].addEventListener('change', function(e) {
     $mediaMode.style.display = 'none';
     $realtimeMode.style.display = 'block';
     mode = 'realtime';
+    if (!realtimeDanmaku._isInited) {
+      init();
+    }
   }
+});
+$('#danmaku-init')[0].addEventListener('click', function() {
+  loadMedia('video', SAMPLE_VIDEO);
+  this.disabled = true;
 });
 $('#danmaku-resize')[0].addEventListener('click', function() {
   if (mode === 'video') {
@@ -65,20 +72,46 @@ $('#danmaku-resize')[0].addEventListener('click', function() {
     }
     audioDanmaku.resize();
   }
+  if (mode === 'realtime') {
+    var $container = $('#realtime-container')[0];
+    if ($container.offsetWidth === 640) {
+      $container.style.width = '960px';
+      $container.style.height = '540px';
+    } else {
+      $container.style.width = '640px';
+      $container.style.height = '360px';
+    }
+    realtimeDanmaku.resize();
+  }
 });
 $('#danmaku-show')[0].addEventListener('click', function() {
   if (mode === 'video') videoDanmaku.show();
   if (mode === 'audio') audioDanmaku.show();
+  if (mode === 'realtime') realtimeDanmaku.show();
 });
 $('#danmaku-hide')[0].addEventListener('click', function() {
   if (mode === 'video') videoDanmaku.hide();
   if (mode === 'audio') audioDanmaku.hide();
+  if (mode === 'realtime') realtimeDanmaku.hide();
 });
 $('#danmaku-speed')[0].addEventListener('change', function() {
-  var s = this.value;
+  var s = this.value * 1;
   $('#danmaku-speed-number')[0].textContent = s;
   videoDanmaku.speed = s;
   audioDanmaku.speed = s;
+  realtimeDanmaku.speed = s;
+});
+$('#danmaku-send')[0].addEventListener('click', function() {
+  var text = $('#danmaku-emit')[0].value;
+  var comment = {text: text};
+  $('#danmaku-emit')[0].value = '';
+  if (!text) return;
+  if (mode === 'video') videoDanmaku.emit(comment);
+  if (mode === 'audio') audioDanmaku.emit(comment);
+  if (mode === 'realtime') {
+    realtimeDanmaku.emit(comment);
+    socket.emit('danmaku', comment);
+  }
 });
 var $dropArea = $('#drop-area')[0];
 $dropArea.ondragleave = function() {
@@ -93,15 +126,15 @@ $dropArea.ondrop = function(e) {
   e.stopPropagation();
   e.preventDefault();
   this.style.borderColor = '#ccc';
-  loadMedia(e.dataTransfer.files[0]);
+  loadMedia(mode, window.URL.createObjectURL(e.dataTransfer.files[0]));
 };
 $('#drop-area input')[0].onchange = function() {
-  loadMedia(this.files[0]);
+  loadMedia(mode, window.URL.createObjectURL(e.dataTransfer.files[0]));
 };
-var loadMedia = function(file) {
+var loadMedia = function(mode, url) {
   if (mode === 'video') {
     var $video = document.createElement('video');
-    $video.src = courl(file);
+    $video.src = url;
     $video.controls = true;
     $video.onloadedmetadata = function() {
       $videoMode.style.zIndex = 2;
@@ -115,7 +148,7 @@ var loadMedia = function(file) {
   if (mode === 'audio') {
     var $container = $('#audio-mode .danmaku-container')[0];
     var $audio = document.createElement('audio');
-    $audio.src = courl(file);
+    $audio.src = url;
     $audio.controls = true;
     $audio.onloadedmetadata = function() {
       $audioMode.style.zIndex = 2;
@@ -165,7 +198,7 @@ $('#get-bilibili button')[0].addEventListener('click', function() {
 });
 var downloadInfo = function(url) {
   var params = url.match(/.*av(\d+)(?:\/index_(\d+))?/),
-      api = 'https://gulu.herokuapp.com/view?id=' + params[1] + (params[2] ? '&page=' + params[2] : '');
+      api = SERVER_ORIGIN + '/view?id=' + params[1] + (params[2] ? '&page=' + params[2] : '');
   var xhr = new XMLHttpRequest();
   xhr.open('GET', api, 1);
   xhr.send(null);
@@ -185,7 +218,7 @@ var downloadInfo = function(url) {
   };
 };
 var downloadDanmaku = function(data) {
-  var api = 'https://gulu.herokuapp.com/danmaku/' + data.cid;
+  var api = SERVER_ORIGIN + '/danmaku/' + data.cid;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', api, 1);
   xhr.send(null);
@@ -256,11 +289,22 @@ var init = function(data) {
       enableControls();
     } else message('require audio.', 'error');
   }
+  if (mode === 'realtime') {
+    realtimeDanmaku.init({
+      container: $('#realtime-container')[0],
+      engine: $('#canvas-engine')[0].checked ? 'canvas' : 'DOM'
+    });
+    socket.on('danmaku', function(data) {
+      realtimeDanmaku.emit(data);
+    });
+    enableControls();
+  }
 };
 var enableControls = function() {
   $('#danmaku-resize')[0].disabled = false;
   $('#danmaku-show')[0].disabled = false;
   $('#danmaku-hide')[0].disabled = false;
+  $('#danmaku-send')[0].disabled = false;
 };
 function DanmakuFileNode(data) {
   var li = document.createElement('li'),
