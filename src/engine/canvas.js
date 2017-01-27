@@ -14,6 +14,7 @@ export default function() {
     cmt = this.runningList[i];
     cmtt = this._hasMedia ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
+      // avoid caching canvas to reduce memory usage
       cmt.canvas = null;
       this.runningList.splice(i, 1);
     }

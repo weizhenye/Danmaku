@@ -67,6 +67,7 @@ To display comments in real time, you need to set up server and use something li
 Here is a simple example using with Socket.IO and Node.js.
 
 Server:
+
 ```js
 const app = require('http').createServer(handler);
 const io = require('socket.io')(app);
@@ -80,7 +81,9 @@ io.on('connection', socket => {
   });
 });
 ```
+
 Client:
+
 ```html
 <div id="my-container" style="width:640px;height:360px;"></div>
 <button id="send-button">Send</button>
@@ -201,6 +204,7 @@ Tips:
 * [`canvasStyle.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
 
 ### Resize
+
 Do it when you resize container or video.
 
 ```js
@@ -214,13 +218,23 @@ danmaku.show();
 ```
 
 ### Hide
+
 If you set `display: none;` to the container directly when using DOM engine, you should also do danmaku.hide() otherwise the typesetting will be broken when it's showed.
 
 ```js
 danmaku.hide();
 ```
 
+### Clear
+
+Clear current stage.
+
+```js
+danmaku.clear();
+```
+
 ### Speed
+
 There is a property `duration` for all comments, which means how long will a comment be shown to the stage. `duration` is calculated by `stage.width / danmaku.speed`, and `danmaku.speed` is a standard for all comments, because the actually speed for each comment is then calculated by `(comment.width + stage.width) / duration`. The default value is 144.
 
 ```js

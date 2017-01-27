@@ -1,5 +1,6 @@
 import initMixin from './api/init.js';
 import emitMixin from './api/emit.js';
+import clearMixin from './api/clear.js';
 import showMixin from './api/show.js';
 import hideMixin from './api/hide.js';
 import resizeMixin from './api/resize.js';
@@ -12,6 +13,7 @@ function Danmaku(opt) {
 
 initMixin(Danmaku);
 emitMixin(Danmaku);
+clearMixin(Danmaku);
 showMixin(Danmaku);
 hideMixin(Danmaku);
 resizeMixin(Danmaku);
