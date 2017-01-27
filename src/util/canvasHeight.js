@@ -1,6 +1,6 @@
 import {rootFontSize, containerFontSize} from './fontSize.js';
 
-var canvasHeightCache = {};
+var canvasHeightCache = Object.create(null);
 
 export default function(font) {
   if (canvasHeightCache[font]) {

@@ -2,10 +2,11 @@ import formatMode from '../util/formatMode.js';
 import binsearch from '../util/binsearch.js';
 
 export default function(Danmaku) {
-  Danmaku.prototype.emit = function(cmt) {
-    if (!cmt || Object.prototype.toString.call(cmt) !== '[object Object]') {
+  Danmaku.prototype.emit = function(obj) {
+    if (!obj || Object.prototype.toString.call(obj) !== '[object Object]') {
       return this;
     }
+    var cmt = JSON.parse(JSON.stringify(obj));
     cmt.text = (cmt.text || '').toString();
     cmt.mode = formatMode(cmt.mode);
     cmt._utc = Date.now() / 1000;
