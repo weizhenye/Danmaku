@@ -8,10 +8,16 @@ describe('comment node', function() {
     assert.equal('DIV', node.tagName);
     assert.equal(comment.text, node.textContent);
     assert.equal('absolute', node.style.position);
-    assert.equal('nowrap', node.style.whiteSpace);
 
     comment.style = {fontSize: '20px'};
     node = createCommentNode(comment);
     assert.equal(comment.style.fontSize, node.style.fontSize);
+  });
+
+  it('shoud be able to support HTML', function() {
+    var comment = {text: '<span>Fly Me To The Moon</span>', html: true};
+    var node = createCommentNode(comment);
+    assert.equal('SPAN', node.lastChild.tagName);
+    assert.equal('Fly Me To The Moon', node.lastChild.textContent);
   });
 });

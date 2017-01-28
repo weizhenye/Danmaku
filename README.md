@@ -154,6 +154,11 @@ var danmaku = new Danmaku({/* options */});
 danmaku.emit({
   text: 'example',
 
+  // When using DOM engine, `text` can be parsed as HTML if `html` is `true`.
+  // You should never pass in users' inputs directly to avoid XSS.
+  // `false` by default.
+  html: false,
+
   // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
   mode: 'rtl',
 
