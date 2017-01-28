@@ -58,12 +58,12 @@ export default function(Danmaku) {
     if (this._useCanvas) {
       this.stage = document.createElement('canvas');
       this.stage.context = this.stage.getContext('2d');
-      this.stage.style.cssText = 'pointer-events:none;position:absolute;';
     } else {
       this.stage = document.createElement('div');
-      this.stage.style.cssText = 'position:relative;overflow:hidden;' +
-        'pointer-events:none;transform:translateZ(0);';
+      this.stage.style.cssText =
+        'overflow:hidden;white-space:nowrap;transform:translateZ(0);';
     }
+    this.stage.style.cssText += 'position:relative;pointer-events:none;';
 
     this.resize();
     this.container.appendChild(this.stage);
