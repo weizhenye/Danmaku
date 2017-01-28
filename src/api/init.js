@@ -1,5 +1,5 @@
+import {bindEvents} from '../internal/events.js';
 import play from '../internal/play.js';
-import pause from '../internal/pause.js';
 import seek from '../internal/seek.js';
 import {computeFontSize} from '../util/fontSize.js';
 import formatMode from '../util/formatMode.js';
@@ -50,9 +50,7 @@ export default function(Danmaku) {
       }
     }
     if (this._hasMedia) {
-      this.media.addEventListener('play', play.bind(this));
-      this.media.addEventListener('pause', pause.bind(this));
-      this.media.addEventListener('seeking', seek.bind(this));
+      bindEvents.call(this);
     }
 
     if (this._useCanvas) {

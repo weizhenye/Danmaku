@@ -245,3 +245,11 @@ There is a property `duration` for all comments, which means how long will a com
 ```js
 danmaku.speed = 144;
 ```
+
+### Destroy
+
+Destroy `danmaku` instance and release memory.
+
+```js
+danmaku.destroy();
+```
