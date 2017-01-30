@@ -10,8 +10,9 @@
   ],
   "scripts": {
     "lint": "eslint src test",
+    "unit": "karma start",
     "sauce": "karma start karma.sauce.js",
-    "test": "npm run lint && karma start",
+    "test": "npm run lint && npm run unit",
     "bundle": "rollup src/index.js -f umd -n Danmaku -o dist/danmaku.js",
     "minify": "uglifyjs dist/danmaku.js -m -o dist/danmaku.min.js",
     "build": "npm run bundle && npm run minify",

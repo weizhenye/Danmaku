@@ -44,25 +44,25 @@ const customLaunchers = {
     browserName: 'internet explorer',
     version: '9'
   },
-  'SL_iOS_Safari_9': {
+  'SL-iOS-Safari-9': {
     base: 'SauceLabs',
     browserName: 'iPhone',
     version: '9.3'
   },
-  'SL_iOS_Safari_8': {
+  'SL-iOS-Safari-8': {
     base: 'SauceLabs',
     browserName: 'iPhone',
     version: '8.4'
   },
-  'SL_Android_5': {
+  'SL-Android-5': {
     base: 'SauceLabs',
     browserName: 'Android',
     version: '5.1'
   },
-  'SL_Android_4': {
+  'SL-Android-4': {
     base: 'SauceLabs',
     browserName: 'Android',
-    version: '4'
+    version: '4.4'
   }
 };
 
