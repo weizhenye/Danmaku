@@ -2,8 +2,14 @@ import Danmaku from '../../src/index.js';
 
 /* istanbul ignore next */
 describe('speed API', function() {
+  var danmaku = null;
+
+  afterEach(function() {
+    danmaku.destroy();
+  });
+
   it('should set and get speed correctly', function() {
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
 
@@ -20,17 +26,19 @@ describe('speed API', function() {
     assert.equal(42, danmaku.speed);
     danmaku.speed = 'string';
     assert.equal(42, danmaku.speed);
+    danmaku.destroy();
   });
 
   it('should not calculate duration with zero width container', function() {
     var $zwc = document.getElementById('test-container');
     $zwc.style.cssText = 'width:0;height:0;';
 
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: $zwc
     });
     var dur = danmaku.duration;
     danmaku.speed = 72;
     assert.equal(dur, danmaku.duration);
+    danmaku.destroy();
   });
 });

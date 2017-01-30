@@ -7,7 +7,7 @@ export var transform = (function() {
     'transform'
   ];
   var style = document.createElement('div').style;
-  for (var i = properties.length - 1; i >= 0; i--) {
+  for (var i = 0; i < properties.length; i++) {
     /* istanbul ignore else */
     if (properties[i] in style) {
       return properties[i];

@@ -10,7 +10,12 @@ export default function(Danmaku) {
       return this;
     }
 
-    if (!opt || (!opt.video && !opt.container)) {
+    if (
+      !opt || (
+        !opt.container &&
+        (!opt.video || (opt.video && !opt.video.parentNode))
+      )
+    ) {
       throw new Error('Danmaku requires container when initializing.');
     }
     this._hasInitContainer = !!opt.container;
@@ -28,7 +33,7 @@ export default function(Danmaku) {
     this.comments.sort(function(a, b) {
       return a.time - b.time;
     });
-    for (var i = this.comments.length - 1; i >= 0; i--) {
+    for (var i = 0; i < this.comments.length; i++) {
       this.comments[i].mode = formatMode(this.comments[i].mode);
     }
     this.runningList = [];
@@ -45,6 +50,7 @@ export default function(Danmaku) {
       this.media.style.position = 'absolute';
       this.media.parentNode.insertBefore(this.container, this.media);
       this.container.appendChild(this.media);
+      // In Webkit/Blink, making a change to video element will pause the video.
       if (isPlay && this.media.paused) {
         this.media.play();
       }

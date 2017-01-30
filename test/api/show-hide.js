@@ -17,6 +17,7 @@ describe('show and hide API', function() {
 
   afterEach(function() {
     document.body.removeChild(document.getElementById('test-video'));
+    danmaku.destroy();
   });
 
   it('should be able to show or hide comments', function() {

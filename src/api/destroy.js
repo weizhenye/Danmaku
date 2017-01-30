@@ -19,6 +19,7 @@ export default function(Danmaku) {
       this.media.style.position = this.container.style.position;
       this.container.parentNode.appendChild(this.media);
       this.container.parentNode.removeChild(this.container);
+      /* istanbul ignore next  */
       if (isPlay && this.media.paused) {
         this.media.play();
       }

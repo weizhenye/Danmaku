@@ -11,15 +11,17 @@ export default function(cmt) {
     }
     var crTotalWidth = that.width + cr.width;
     var crElapsed = crTotalWidth * (ct - cr.time) * pbr / that.duration;
+    if (cr.width > crElapsed) {
+      return true;
+    }
     var crLeftTime = that.duration + cr.time - ct;
     var cmtArrivalTime = that.duration * that.width / (that.width + cmt.width);
-    return (crLeftTime > cmtArrivalTime) || (cr.width > crElapsed);
+    return crLeftTime > cmtArrivalTime;
   }
   var crs = space[cmt.mode];
-  var crLen = crs.length;
   var last = 0;
   var curr = 0;
-  for (var i = 1; i < crLen; i++) {
+  for (var i = 1; i < crs.length; i++) {
     var cr = crs[i];
     var requiredRange = cmt.height;
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {

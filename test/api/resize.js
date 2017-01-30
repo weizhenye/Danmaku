@@ -2,9 +2,15 @@ import Danmaku from '../../src/index.js';
 
 /* istanbul ignore next */
 describe('resize API', function() {
+  var danmaku = null;
+
+  afterEach(function() {
+    danmaku.destroy();
+  });
+
   it('should resize to container size (DOM engine)', function() {
     var $container = document.getElementById('test-container');
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: $container,
       engine: 'DOM'
     });
@@ -19,7 +25,7 @@ describe('resize API', function() {
 
   it('should resize to container size (canvas engine)', function() {
     var $container = document.getElementById('test-container');
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: $container,
       engine: 'canvas'
     });
@@ -38,7 +44,7 @@ describe('resize API', function() {
 
     $video.style.width = '1280px';
     $video.style.height = '720px';
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       video: $video
     });
     danmaku.resize();
@@ -46,7 +52,5 @@ describe('resize API', function() {
     assert.equal(720, danmaku.height);
     assert.equal('1280px', danmaku.stage.style.width);
     assert.equal('720px', danmaku.stage.style.height);
-
-    document.body.removeChild(danmaku.container);
   });
 });

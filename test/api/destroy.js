@@ -37,6 +37,7 @@ describe('destroy API', function() {
     setTimeout(function() {
       danmaku.destroy();
       assert.equal(document.body, $video.parentNode);
+      document.body.removeChild($video);
       done();
     }, 100);
   });

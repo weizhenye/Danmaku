@@ -10,11 +10,12 @@ export default function() {
   var cmt = null;
   var cmtt = 0;
   var i = 0;
-  for (i = this.runningList.length - 1; i >= 0; i--) {
+  for (i = 0; i < this.runningList.length; i++) {
     cmt = this.runningList[i];
     cmtt = this._hasMedia ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
       this.stage.removeChild(cmt.node);
+      /* istanbul ignore else */
       if (!this._hasMedia) {
         cmt.node = null;
       }
@@ -39,12 +40,12 @@ export default function() {
   if (pendingList.length) {
     this.stage.appendChild(df);
   }
-  for (i = pendingList.length - 1; i >= 0; i--) {
+  for (i = 0; i < pendingList.length; i++) {
     cmt = pendingList[i];
     cmt.width = cmt.width || cmt.node.offsetWidth;
     cmt.height = cmt.height || cmt.node.offsetHeight;
   }
-  for (i = pendingList.length - 1; i >= 0; i--) {
+  for (i = 0; i < pendingList.length; i++) {
     cmt = pendingList[i];
     cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
@@ -52,7 +53,7 @@ export default function() {
       cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
     }
   }
-  for (i = this.runningList.length - 1; i >= 0; i--) {
+  for (i = 0; i < this.runningList.length; i++) {
     cmt = this.runningList[i];
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       continue;

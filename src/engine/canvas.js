@@ -10,7 +10,7 @@ export default function() {
   var cmt = null;
   var cmtt = 0;
   var i = 0;
-  for (i = this.runningList.length - 1; i >= 0; i--) {
+  for (i = 0; i < this.runningList.length; i++) {
     cmt = this.runningList[i];
     cmtt = this._hasMedia ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
@@ -34,8 +34,7 @@ export default function() {
     this.runningList.push(cmt);
     ++this.position;
   }
-  var len = this.runningList.length;
-  for (i = 0; i < len; i++) {
+  for (i = 0; i < this.runningList.length; i++) {
     cmt = this.runningList[i];
     var totalWidth = this.width + cmt.width;
     var elapsed = totalWidth * (dn - cmt._utc) * pbr / this.duration;

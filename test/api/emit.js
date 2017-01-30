@@ -2,9 +2,15 @@ import Danmaku from '../../src/index.js';
 
 /* istanbul ignore next */
 describe('emit API', function() {
+  var danmaku = null;
+
+  afterEach(function() {
+    danmaku.destroy();
+  });
+
   it('should deal with comment\'s properties', function() {
     var comment = {text: 'Panzer Vor'};
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     danmaku.emit(comment);
@@ -15,7 +21,7 @@ describe('emit API', function() {
   });
 
   it('should insert comment to correct position', function() {
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       video: document.createElement('video'),
       comments: [
@@ -29,7 +35,7 @@ describe('emit API', function() {
   });
 
   it('should default comment time to media currentTime', function() {
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       video: document.createElement('video')
     });
@@ -39,7 +45,7 @@ describe('emit API', function() {
   });
 
   it('should not emit if comment is not valid', function() {
-    var danmaku = new Danmaku({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     danmaku.emit();

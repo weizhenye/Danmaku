@@ -10,6 +10,7 @@
 import './index.js';
 import './api/emit.js';
 import './api/init.js';
+import './api/clear.js';
 import './api/destroy.js';
 import './api/resize.js';
 import './api/show-hide.js';
