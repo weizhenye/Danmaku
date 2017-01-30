@@ -71,6 +71,7 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: 5,
     captureTimeout: 300000,
+    browserNoActivityTimeout: 120000,
     frameworks: ['mocha', 'chai'],
     browsers: Object.keys(customLaunchers),
     customLaunchers: customLaunchers,
