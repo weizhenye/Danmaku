@@ -24,7 +24,7 @@ describe('canvas height', function() {
   it('should support line-height units', function() {
     assert.equal(16, ch('16px/1 sans-serif'));
     assert.equal(16, ch('16px/1em sans-serif'));
-    assert.equal(16, ch('16px/1rem sans-serif'));
+    assert.equal(rootFontSize, ch('16px/1rem sans-serif'));
     assert.equal(16, ch('16px/100% sans-serif'));
     assert.equal(16, ch('16px/16px sans-serif'));
   });

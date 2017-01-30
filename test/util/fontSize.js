@@ -6,14 +6,6 @@ import {
 
 /* istanbul ignore next */
 describe('font size', function() {
-  it('should default containerFontSize as 16', function() {
-    assert.equal(16, containerFontSize);
-  });
-
-  it('should default rootFontSize as 16', function() {
-    assert.equal(16, rootFontSize);
-  });
-
   it('should compute containerFontSize by container node', function() {
     var $container = document.createElement('div');
     document.body.appendChild($container);
