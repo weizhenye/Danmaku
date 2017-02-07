@@ -77,7 +77,7 @@ describe('Danmaku behavior', function() {
       assert.equal(0, danmaku.runningList.length);
       assert.equal(false, danmaku.stage.hasChildNodes());
       done();
-    }, 100);
+    }, 500);
   });
 
   it('should remove comments which is out of stage (canvas)', function(done) {
@@ -91,14 +91,14 @@ describe('Danmaku behavior', function() {
     setTimeout(function() {
       assert.equal(0, danmaku.runningList.length);
       done();
-    }, 100);
+    }, 500);
   });
 
   it('should sync timeline with media (DOM engine)', function(done) {
     // eslint-disable-next-line
     this.timeout(61000);
     setTimeout(function() {
-      console.log('Take too long time, pass this test case.');
+      console.log('Take too long time, skip.');
       done();
     }, 60000);
 
@@ -142,6 +142,10 @@ describe('Danmaku behavior', function() {
         ]
       });
       $video.play();
+      if ($video.paused) {
+        console.log('This browsers can\'t play video by script, skip.');
+        done();
+      }
     });
   });
 
@@ -149,7 +153,7 @@ describe('Danmaku behavior', function() {
     // eslint-disable-next-line
     this.timeout(61000);
     setTimeout(function() {
-      console.log('Take too long time, pass this test case.');
+      console.log('Take too long time, skip.');
       done();
     }, 60000);
 
@@ -185,6 +189,10 @@ describe('Danmaku behavior', function() {
         ]
       });
       $video.play();
+      if ($video.paused) {
+        console.log('This browsers can\'t play video by script, skip.');
+        done();
+      }
     });
   });
 });
