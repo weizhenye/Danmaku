@@ -10,7 +10,7 @@ export default function() {
   var cmt = null;
   var cmtt = 0;
   var i = 0;
-  for (i = 0; i < this.runningList.length; i++) {
+  for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
     cmtt = this._hasMedia ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
