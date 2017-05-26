@@ -1,6 +1,5 @@
 import createCommentCanvas from '../../src/util/commentCanvas.js';
 
-/* istanbul ignore next */
 describe('comment canvas', function() {
   it('should create a <canvas> with canvasStyle', function() {
     var comment = {

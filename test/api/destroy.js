@@ -1,6 +1,5 @@
 import Danmaku from '../../src/index.js';
 
-/* istanbul ignore next */
 describe('destroy API', function() {
   it('should release memory', function(done) {
     var danmaku = new Danmaku({

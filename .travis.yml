@@ -20,7 +20,7 @@ before_install:
 after_success:
   - |
     if [ $TRAVIS_PULL_REQUEST = "false" ]; then
-      npm install coveralls
-      cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      npm install codecov
+      cat ./coverage/lcov.info | ./node_modules/.bin/codecov
       npm run sauce
     fi

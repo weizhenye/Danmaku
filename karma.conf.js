@@ -7,10 +7,15 @@ module.exports = function(config) {
       'test/test.js'
     ],
     preprocessors: {
-      'test/test.js': ['rollup', 'coverage']
+      'test/test.js': ['rollup']
     },
     rollupPreprocessor: {
-      format: 'iife'
+      format: 'iife',
+      plugins: [
+        require('rollup-plugin-istanbul')({
+          exclude: ['test/**/*.js']
+        })
+      ]
     },
     reporters: ['progress', 'coverage'],
     coverageReporter: {

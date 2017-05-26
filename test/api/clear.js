@@ -1,6 +1,5 @@
 import Danmaku from '../../src/index.js';
 
-/* istanbul ignore next */
 describe('clear API', function() {
   var danmaku = null;
 

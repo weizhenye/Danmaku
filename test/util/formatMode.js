@@ -1,6 +1,5 @@
 import formatMode from '../../src/util/formatMode.js';
 
-/* istanbul ignore next */
 describe('format mode', function() {
   var fm = formatMode;
 

@@ -1,6 +1,5 @@
 import createCommentNode from '../../src/util/commentNode.js';
 
-/* istanbul ignore next */
 describe('comment node', function() {
   it('should create a <div> node with style', function() {
     var comment = {text: 'Fly Me To The Moon'};

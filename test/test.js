@@ -22,7 +22,6 @@ import './util/commentNode.js';
 import './util/fontSize.js';
 import './util/formatMode.js';
 
-/* istanbul ignore next */
 beforeEach(function() {
   var $container = document.createElement('div');
   $container.id = 'test-container';
@@ -30,7 +29,6 @@ beforeEach(function() {
   document.body.appendChild($container);
 });
 
-/* istanbul ignore next */
 afterEach(function() {
   document.body.removeChild(document.getElementById('test-container'));
 });

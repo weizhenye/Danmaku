@@ -1,6 +1,5 @@
 import binsearch from '../../src/util/binsearch.js';
 
-/* istanbul ignore next */
 describe('binsearch', function() {
   it('should find correct position for given value', function() {
     var arr = [
