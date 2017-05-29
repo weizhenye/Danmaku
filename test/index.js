@@ -3,6 +3,15 @@ import Danmaku from '../src/index.js';
 // eslint-disable-next-line max-len
 var VIDEO_SRC = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAELltZGF0AAACcgYF//9u3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE0OCByMjYzOCA3NTk5MjEwIC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAxNSAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTAgcmVmPTE2IGRlYmxvY2s9MTowOjAgYW5hbHlzZT0weDE6MHgxMzEgbWU9dW1oIHN1Ym1lPTEwIHBzeT0xIHBzeV9yZD0xLjAwOjAuMDAgbWl4ZWRfcmVmPTEgbWVfcmFuZ2U9MjQgY2hyb21hX21lPTEgdHJlbGxpcz0yIDh4OGRjdD0wIGNxbT0wIGRlYWR6b25lPTIxLDExIGZhc3RfcHNraXA9MSBjaHJvbWFfcXBfb2Zmc2V0PS0yIHRocmVhZHM9NiBsb29rYWhlYWRfdGhyZWFkcz0xIHNsaWNlZF90aHJlYWRzPTAgbnI9MCBkZWNpbWF0ZT0xIGludGVybGFjZWQ9MCBibHVyYXlfY29tcGF0PTAgY29uc3RyYWluZWRfaW50cmE9MCBiZnJhbWVzPTAgd2VpZ2h0cD0wIGtleWludD0yNTAga2V5aW50X21pbj0xIHNjZW5lY3V0PTQwIGludHJhX3JlZnJlc2g9MCByY19sb29rYWhlYWQ9NjAgcmM9Y3JmIG1idHJlZT0xIGNyZj0yMy4wIHFjb21wPTAuNjAgcXBtaW49MCBxcG1heD02OSBxcHN0ZXA9NCBpcF9yYXRpbz0xLjQwIGFxPTE6MS4wMACAAAAKs2WIggL+IxQABFEjgACsNHAAFYeTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTk5OTrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrwAAAAAhBmhwF/ABwjAAAAAhBmioBfwAcIwAAAAhBmjsBfwAcIwAAAAlBmkkAX8AHCMAAAAAJQZpZQF/ABwjAAAAACUGaaYBfwAcIwAAAAAlBmnnAX8AHCMAAAAAJQZqIgBfwAcIwAAAACUGamJAX8AHCMAAAAAlBmqigF/ABwjAAAAAJQZq4sBfwAcIwAAAACUGayMAX8AHCMAAAAAlBmtjQF/ABwjAAAAAJQZro4BfwAcIw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';
 
+function skipAfter(time, done) {
+  /* eslint-disable no-invalid-this */
+  this.timeout(time + 1000);
+  setTimeout(function() {
+    console.log('Take too long time, skip.');
+    done();
+  }, time);
+}
+
 describe('Danmaku behavior', function() {
   var danmaku = null;
 
@@ -11,6 +20,9 @@ describe('Danmaku behavior', function() {
   });
 
   it('should deal with modes of comments', function(done) {
+    /* eslint-disable no-invalid-this */
+    skipAfter.apply(this, [6e4, done]);
+
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
@@ -20,13 +32,14 @@ describe('Danmaku behavior', function() {
     danmaku.emit({text: 'top', mode: 'top'});
     danmaku.emit({text: 'bottom', mode: 'bottom'});
 
-    setTimeout(function() {
-      var rl = danmaku.runningList;
-      var rtlPrev = rl[0].x;
-      var ltrPrev = rl[1].x;
-      var topPrev = rl[2].x;
-      var bottomPrev = rl[3].x;
-      setTimeout(function() {
+    var rtlPrev = null;
+    var ltrPrev = null;
+    var topPrev = null;
+    var bottomPrev = null;
+    var rl = danmaku.runningList;
+    var iv = setInterval(function() {
+      if (rtlPrev !== null) {
+        clearInterval(iv);
         assert.equal(true, rl[0].x < rtlPrev);
         assert.equal(0, rl[0].y);
         assert.equal(true, rl[1].x > ltrPrev);
@@ -36,11 +49,20 @@ describe('Danmaku behavior', function() {
         assert.equal(true, rl[3].x === bottomPrev);
         assert.equal(danmaku.height - rl[3].height, rl[3].y);
         done();
-      }, 100);
+      }
+      if (rtlPrev === null && rl.length === 4) {
+        rtlPrev = rl[0].x;
+        ltrPrev = rl[1].x;
+        topPrev = rl[2].x;
+        bottomPrev = rl[3].x;
+      }
     }, 100);
   });
 
   it('should not collide with same comment mode', function(done) {
+    /* eslint-disable no-invalid-this */
+    skipAfter.apply(this, [6e4, done]);
+
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       engine: 'canvas'
@@ -49,19 +71,23 @@ describe('Danmaku behavior', function() {
     danmaku.emit({text: 'ltr 1 loooooooooooooooooooooooong', mode: 'ltr'});
     danmaku.emit({text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr'});
     danmaku.emit({text: 'top 1', mode: 'top'});
-    setTimeout(function() {
-      danmaku.emit({text: 'top 2', mode: 'top'});
-    }, 10);
-    setTimeout(function() {
-      danmaku.emit({text: 'bottom 1', mode: 'bottom'});
-      danmaku.emit({text: 'bottom 2', mode: 'bottom'});
-    }, 20);
-    setTimeout(function() {
-      var rl = danmaku.runningList;
-      assert.equal(rl[0].height, rl[1].y);
-      assert.equal(rl[2].height, rl[3].y);
-      assert.equal(danmaku.height - rl[4].height - rl[5].height, rl[5].y);
-      done();
+
+    var rl = danmaku.runningList;
+    var iv = setInterval(function() {
+      if (rl.length === 6) {
+        clearInterval(iv);
+        assert.equal(rl[0].height, rl[1].y);
+        assert.equal(rl[2].height, rl[3].y);
+        assert.equal(danmaku.height - rl[4].height - rl[5].height, rl[5].y);
+        done();
+      }
+      if (rl.length === 4) {
+        danmaku.emit({text: 'bottom 1', mode: 'bottom'});
+        danmaku.emit({text: 'bottom 2', mode: 'bottom'});
+      }
+      if (rl.length === 3) {
+        danmaku.emit({text: 'top 2', mode: 'top'});
+      }
     }, 100);
   });
 
@@ -94,12 +120,8 @@ describe('Danmaku behavior', function() {
   });
 
   it('should sync timeline with media (DOM engine)', function(done) {
-    // eslint-disable-next-line
-    this.timeout(61000);
-    setTimeout(function() {
-      console.log('Take too long time, skip.');
-      done();
-    }, 60000);
+    /* eslint-disable no-invalid-this */
+    skipAfter.apply(this, [6e4, done]);
 
     var $video = document.createElement('video');
     try {
@@ -142,19 +164,15 @@ describe('Danmaku behavior', function() {
       });
       $video.play();
       if ($video.paused) {
-        console.log('This browsers can\'t play video by script, skip.');
+        console.log('This browser can\'t play video by script, skip.');
         done();
       }
     });
   });
 
   it('should sync timeline with media (canvas engine)', function(done) {
-    // eslint-disable-next-line
-    this.timeout(61000);
-    setTimeout(function() {
-      console.log('Take too long time, skip.');
-      done();
-    }, 60000);
+    /* eslint-disable no-invalid-this */
+    skipAfter.apply(this, [6e4, done]);
 
     var $video = document.createElement('video');
     try {
@@ -189,7 +207,7 @@ describe('Danmaku behavior', function() {
       });
       $video.play();
       if ($video.paused) {
-        console.log('This browsers can\'t play video by script, skip.');
+        console.log('This browser can\'t play video by script, skip.');
         done();
       }
     });

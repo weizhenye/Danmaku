@@ -74,7 +74,7 @@ module.exports = function(config) {
     browserNoActivityTimeout: 120000,
     frameworks: ['mocha', 'chai'],
     browsers: Object.keys(customLaunchers),
-    customLaunchers: customLaunchers,
+    customLaunchers,
     files: [
       'test/test.js'
     ],
@@ -82,7 +82,12 @@ module.exports = function(config) {
       'test/test.js': ['rollup']
     },
     rollupPreprocessor: {
-      format: 'iife'
+      format: 'iife',
+      plugins: [
+        require('rollup-plugin-istanbul')({
+          exclude: ['test/**/*.js']
+        })
+      ]
     },
     reporters: ['dots', 'saucelabs'],
     sauceLabs: {

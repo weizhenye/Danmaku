@@ -1,7 +1,7 @@
 # Danmaku
 
 [![Build status](https://img.shields.io/travis/weizhenye/Danmaku.svg)](https://travis-ci.org/weizhenye/Danmaku)
-[![Coverage](https://img.shields.io/coveralls/weizhenye/Danmaku/master.svg)](https://coveralls.io/github/weizhenye/Danmaku?branch=master)
+[![Coverage](https://img.shields.io/codecov/c/github/weizhenye/Danmaku.svg)](https://codecov.io/gh/weizhenye/Danmaku)
 [![Dependencies](https://img.shields.io/david/weizhenye/Danmaku.svg)](https://david-dm.org/weizhenye/Danmaku)
 [![NPM version](https://img.shields.io/npm/v/danmaku.svg)](https://www.npmjs.com/package/danmaku)
 [![License](https://img.shields.io/npm/l/danmaku.svg)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
