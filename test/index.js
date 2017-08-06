@@ -20,7 +20,6 @@ describe('Danmaku behavior', function() {
   });
 
   it('should deal with modes of comments', function(done) {
-    /* eslint-disable no-invalid-this */
     skipAfter.apply(this, [6e4, done]);
 
     danmaku = new Danmaku({
@@ -60,7 +59,6 @@ describe('Danmaku behavior', function() {
   });
 
   it('should not collide with same comment mode', function(done) {
-    /* eslint-disable no-invalid-this */
     skipAfter.apply(this, [6e4, done]);
 
     danmaku = new Danmaku({
@@ -120,7 +118,6 @@ describe('Danmaku behavior', function() {
   });
 
   it('should sync timeline with media (DOM engine)', function(done) {
-    /* eslint-disable no-invalid-this */
     skipAfter.apply(this, [6e4, done]);
 
     var $video = document.createElement('video');
@@ -171,7 +168,6 @@ describe('Danmaku behavior', function() {
   });
 
   it('should sync timeline with media (canvas engine)', function(done) {
-    /* eslint-disable no-invalid-this */
     skipAfter.apply(this, [6e4, done]);
 
     var $video = document.createElement('video');

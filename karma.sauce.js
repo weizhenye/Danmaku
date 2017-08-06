@@ -2,66 +2,76 @@ const customLaunchers = {
   'SL-Chrome': {
     base: 'SauceLabs',
     browserName: 'chrome',
-    platform: 'Windows 10'
+    platform: 'Windows 10',
   },
   'SL-Firefox': {
     base: 'SauceLabs',
-    browserName: 'firefox'
+    browserName: 'firefox',
   },
   'SL-Safari': {
     base: 'SauceLabs',
     browserName: 'safari',
-    platform: 'OS X 10.11'
+    platform: 'OS X 10.11',
   },
   'SL-Opera-12': {
     base: 'SauceLabs',
     browserName: 'opera',
     platform: 'Windows 7',
-    version: '12.12'
+    version: '12.12',
   },
   'SL-Opera-11': {
     base: 'SauceLabs',
     browserName: 'opera',
     platform: 'Windows 7',
-    version: '11.64'
+    version: '11.64',
   },
   'SL-Edge': {
     base: 'SauceLabs',
-    browserName: 'MicrosoftEdge'
+    browserName: 'MicrosoftEdge',
+    platform: 'Windows 10',
   },
   'SL-IE-11': {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '11'
+    platform: 'Windows 8.1',
+    version: '11',
   },
   'SL-IE-10': {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '10'
+    platform: 'Windows 8',
+    version: '10',
   },
   'SL-IE-9': {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '9'
+    platform: 'Windows 7',
+    version: '9',
   },
-  'SL-iOS-Safari': {
+  'SL-iOS-Safari-10': {
     base: 'SauceLabs',
-    browserName: 'iPhone',
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '10.3',
   },
   'SL-iOS-Safari-8': {
     base: 'SauceLabs',
-    browserName: 'iPhone',
-    version: '8.4'
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '8.4',
   },
-  'SL-Android': {
+  'SL-Android-6': {
     base: 'SauceLabs',
-    browserName: 'Android'
+    browserName: 'android',
+    deviceOrientation: 'landscape',
+    version: '6.0',
   },
   'SL-Android-4': {
     base: 'SauceLabs',
-    browserName: 'Android',
-    version: '4.4'
-  }
+    browserName: 'android',
+    deviceOrientation: 'landscape',
+    version: '4.4',
+  },
 };
 
 module.exports = function(config) {
