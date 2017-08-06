@@ -153,7 +153,7 @@ describe('Danmaku behavior', function() {
         done();
       }
     });
-    $video.addEventListener('canplaythrough', function() {
+    $video.addEventListener('canplay', function() {
       danmaku = new Danmaku({
         container: document.getElementById('test-container'),
         video: $video,
@@ -183,10 +183,19 @@ describe('Danmaku behavior', function() {
     }
     $video.src = VIDEO_SRC;
 
+    var flag = true;
     $video.addEventListener('timeupdate', function() {
       var ct = $video.currentTime;
       if (ct > 0.1 && ct < 0.5) {
         assert.equal(1, danmaku.runningList.length);
+        if (flag) {
+          flag = false;
+          $video.pause();
+          setTimeout(function() {
+            assert.equal(1, danmaku.runningList.length);
+            $video.play();
+          }, 100);
+        }
       }
       if (ct > 0.6 && ct < 1) {
         assert.equal(2, danmaku.runningList.length);
@@ -195,7 +204,7 @@ describe('Danmaku behavior', function() {
         done();
       }
     });
-    $video.addEventListener('canplaythrough', function() {
+    $video.addEventListener('canplay', function() {
       danmaku = new Danmaku({
         container: document.getElementById('test-container'),
         video: $video,

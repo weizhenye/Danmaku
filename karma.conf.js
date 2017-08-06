@@ -2,7 +2,7 @@ module.exports = function(config) {
   config.set({
     singleRun: true,
     frameworks: ['mocha', 'chai'],
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
     files: [
       'test/test.js'
     ],
