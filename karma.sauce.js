@@ -60,11 +60,14 @@ const customLaunchers = {
     deviceOrientation: 'landscape',
     version: '8.4',
   },
-  'SL-Android-6': {
+  'SL-Android-7': {
     base: 'SauceLabs',
-    browserName: 'android',
+    deviceName: 'Android GoogleAPI Emulator',
+    platformName: 'Android',
+    platformVersion: '7.1',
+    browserName: 'Chrome',
+    appiumVersion: '1.6.5',
     deviceOrientation: 'landscape',
-    version: '6.0',
   },
   'SL-Android-4': {
     base: 'SauceLabs',
