@@ -22,6 +22,7 @@ function syncTimeline(danmaku, $video, done) {
   try {
     $video.canPlayType('video/mp4');
   } catch (err) {
+    console.log('This browser does not support <video>, skip.');
     done();
     return;
   }
@@ -49,12 +50,16 @@ function syncTimeline(danmaku, $video, done) {
       done();
     }
   });
-  ($video.play() || thenable).then(function() {
-    if ($video.paused) {
-      console.log('This browser can\'t play video by script, skip.');
+  ($video.play() || thenable)
+    .then(function() {
+      if ($video.paused) {
+        console.log('This browser can\'t play video by script, skip.');
+        done();
+      }
+    }, function(err) {
+      console.log(err);
       done();
-    }
-  });
+    });
 }
 
 describe('Danmaku behavior', function() {
@@ -84,13 +89,13 @@ describe('Danmaku behavior', function() {
     var iv = setInterval(function() {
       if (rtlPrev !== null) {
         clearInterval(iv);
-        assert.equal(true, rl[0].x < rtlPrev);
+        assert.isBelow(rl[0].x, rtlPrev);
         assert.equal(0, rl[0].y);
-        assert.equal(true, rl[1].x > ltrPrev);
+        assert.isAbove(rl[1].x, ltrPrev);
         assert.equal(0, rl[1].y);
-        assert.equal(true, rl[2].x === topPrev);
+        assert.equal(rl[2].x, topPrev);
         assert.equal(0, rl[2].y);
-        assert.equal(true, rl[3].x === bottomPrev);
+        assert.equal(rl[3].x, bottomPrev);
         assert.equal(danmaku.height - rl[3].height, rl[3].y);
         done();
       }
@@ -143,7 +148,7 @@ describe('Danmaku behavior', function() {
     danmaku.emit({text: 'rtl', mode: 'rtl'});
     setTimeout(function() {
       assert.equal(0, danmaku.runningList.length);
-      assert.equal(false, danmaku.stage.hasChildNodes());
+      assert.isFalse(danmaku.stage.hasChildNodes());
       done();
     }, 500);
   });

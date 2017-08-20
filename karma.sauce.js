@@ -1,4 +1,31 @@
 const customLaunchers = {
+  'SL-Android-7': {
+    base: 'SauceLabs',
+    deviceName: 'Android GoogleAPI Emulator',
+    platformName: 'Android',
+    platformVersion: '7.1',
+    browserName: 'Chrome',
+    appiumVersion: '1.6.5',
+    deviceOrientation: 'landscape',
+  },
+  'SL-Android-4': {
+    base: 'SauceLabs',
+    browserName: 'android',
+    deviceOrientation: 'landscape',
+    version: '4.4',
+  },
+  'SL-iOS-Safari-10': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '10.3',
+  },
+  'SL-iOS-Safari-8': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '8.4',
+  },
   'SL-Chrome': {
     base: 'SauceLabs',
     browserName: 'chrome',
@@ -47,33 +74,6 @@ const customLaunchers = {
     browserName: 'internet explorer',
     platform: 'Windows 7',
     version: '9',
-  },
-  'SL-iOS-Safari-10': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '10.3',
-  },
-  'SL-iOS-Safari-8': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '8.4',
-  },
-  'SL-Android-7': {
-    base: 'SauceLabs',
-    deviceName: 'Android GoogleAPI Emulator',
-    platformName: 'Android',
-    platformVersion: '7.1',
-    browserName: 'Chrome',
-    appiumVersion: '1.6.5',
-    deviceOrientation: 'landscape',
-  },
-  'SL-Android-4': {
-    base: 'SauceLabs',
-    browserName: 'android',
-    deviceOrientation: 'landscape',
-    version: '4.4',
   },
 };
 
