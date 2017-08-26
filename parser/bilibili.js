@@ -31,6 +31,7 @@ function BilibiliParser(xmlDoc, engine) {
         font: values[2] + 'px sans-serif',
         fillStyle: '#' + color,
         strokeStyle: (color === '000000') ? '#fff' : '#000',
+        lineWidth: 2.0,
       };
       if (engine === 'DOM') comment.style = style;
       else if (engine === 'canvas') comment.canvasStyle = canvasStyle;

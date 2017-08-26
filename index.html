@@ -38,11 +38,14 @@
     <legend>Initialize</legend>
     <button id="danmaku-init" autocomplete="off">Load sample video</button>
   </fieldset>
+  <br>
   <fieldset>
     <legend>Controls</legend>
     <button id="danmaku-resize" autocomplete="off" disabled>Resize</button>
     <button id="danmaku-show" autocomplete="off" disabled>Show</button>
     <button id="danmaku-hide" autocomplete="off" disabled>Hide</button>
+    <button id="danmaku-clear" autocomplete="off" disabled>Clear</button>
+    <button id="danmaku-destroy" autocomplete="off" disabled>Destroy</button>
   </fieldset>
   <fieldset>
     <legend>Speed</legend>
@@ -91,7 +94,7 @@
   </div>
 </div>
 <div id="message"></div>
-<script src="https://unpkg.com/socket.io-client/dist/socket.io.min.js"></script>
+<script src="https://unpkg.com/socket.io-client@2.0.3/dist/socket.io.js"></script>
 <script src="https://unpkg.com/danmaku/dist/danmaku.min.js"></script>
 <script src="parser/bilibili.js"></script>
 <script src="main.js"></script>

@@ -94,6 +94,16 @@ $('#danmaku-hide')[0].addEventListener('click', function() {
   if (mode === 'audio') audioDanmaku.hide();
   if (mode === 'realtime') realtimeDanmaku.hide();
 });
+$('#danmaku-clear')[0].addEventListener('click', function() {
+  if (mode === 'video') videoDanmaku.clear();
+  if (mode === 'audio') audioDanmaku.clear();
+  if (mode === 'realtime') realtimeDanmaku.clear();
+});
+$('#danmaku-destroy')[0].addEventListener('click', function() {
+  if (mode === 'video') videoDanmaku.destroy();
+  if (mode === 'audio') audioDanmaku.destroy();
+  if (mode === 'realtime') realtimeDanmaku.destroy();
+});
 $('#danmaku-speed')[0].addEventListener('change', function() {
   var s = this.value * 1;
   $('#danmaku-speed-number')[0].textContent = s;
@@ -304,6 +314,8 @@ var enableControls = function() {
   $('#danmaku-resize')[0].disabled = false;
   $('#danmaku-show')[0].disabled = false;
   $('#danmaku-hide')[0].disabled = false;
+  $('#danmaku-clear')[0].disabled = false;
+  $('#danmaku-destroy')[0].disabled = false;
   $('#danmaku-send')[0].disabled = false;
 };
 function DanmakuFileNode(data) {
