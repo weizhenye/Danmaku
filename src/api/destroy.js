@@ -1,6 +1,5 @@
 import {unbindEvents} from '../internal/events.js';
 import pause from '../internal/pause.js';
-import {resetSpace} from '../util/space.js';
 
 export default function(Danmaku) {
   Danmaku.prototype.destroy = function() {
@@ -11,9 +10,8 @@ export default function(Danmaku) {
     pause.call(this);
     this.clear();
     if (this._hasMedia) {
-      unbindEvents.call(this);
+      unbindEvents.call(this, this._listener);
     }
-    resetSpace();
     if (this._hasVideo && !this._hasInitContainer) {
       var isPlay = !this.media.paused;
       this.media.style.position = this.container.style.position;

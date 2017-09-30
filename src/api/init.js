@@ -3,6 +3,7 @@ import play from '../internal/play.js';
 import seek from '../internal/seek.js';
 import {computeFontSize} from '../util/fontSize.js';
 import formatMode from '../util/formatMode.js';
+import {resetSpace} from '../util/space.js';
 
 export default function(Danmaku) {
   Danmaku.prototype.init = function(opt) {
@@ -56,7 +57,8 @@ export default function(Danmaku) {
       }
     }
     if (this._hasMedia) {
-      bindEvents.call(this);
+      this._listener = {};
+      bindEvents.call(this, this._listener);
     }
 
     if (this._useCanvas) {
@@ -72,8 +74,14 @@ export default function(Danmaku) {
     this.resize();
     this.container.appendChild(this.stage);
 
-    computeFontSize(document.getElementsByTagName('html')[0]);
-    computeFontSize(this.container);
+    this._space = {};
+    resetSpace(this._space);
+    this._fontSize = {
+      root: 16,
+      container: 16
+    };
+    computeFontSize(document.getElementsByTagName('html')[0], this._fontSize);
+    computeFontSize(this.container, this._fontSize);
 
     if (!this._hasMedia || !this.media.paused) {
       seek.call(this);

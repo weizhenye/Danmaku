@@ -40,18 +40,6 @@ const customLaunchers = {
     browserName: 'safari',
     platform: 'OS X 10.11',
   },
-  'SL-Opera-12': {
-    base: 'SauceLabs',
-    browserName: 'opera',
-    platform: 'Windows 7',
-    version: '12.12',
-  },
-  'SL-Opera-11': {
-    base: 'SauceLabs',
-    browserName: 'opera',
-    platform: 'Windows 7',
-    version: '11.64',
-  },
   'SL-Edge': {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',

@@ -1,5 +1,3 @@
-import {space} from '../util/space.js';
-
 /* eslint no-invalid-this: 0 */
 export default function(cmt) {
   var that = this;
@@ -18,7 +16,7 @@ export default function(cmt) {
     var cmtArrivalTime = that.duration * that.width / (that.width + cmt.width);
     return crLeftTime > cmtArrivalTime;
   }
-  var crs = space[cmt.mode];
+  var crs = this._space[cmt.mode];
   var last = 0;
   var curr = 0;
   for (var i = 1; i < crs.length; i++) {

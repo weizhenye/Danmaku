@@ -26,7 +26,7 @@ export default function() {
       break;
     }
     cmt._utc = Date.now() / 1000;
-    cmt.canvas = createCommentCanvas(cmt);
+    cmt.canvas = createCommentCanvas(cmt, this._fontSize);
     cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       cmt.x = (this.width - cmt.width) >> 1;

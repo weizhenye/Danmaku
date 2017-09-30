@@ -13,13 +13,9 @@ function collidableRange() {
   }];
 }
 
-export var space = {};
-
-export function resetSpace() {
+export function resetSpace(space) {
   space.ltr = collidableRange();
   space.rtl = collidableRange();
   space.top = collidableRange();
   space.bottom = collidableRange();
 }
-
-resetSpace();

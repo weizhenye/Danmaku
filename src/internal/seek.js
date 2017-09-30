@@ -7,7 +7,7 @@ export default function() {
     return this;
   }
   this.clear();
-  resetSpace();
+  resetSpace(this._space);
   var position = binsearch(this.comments, 'time', this.media.currentTime);
   this.position = Math.max(0, position - 1);
   return this;

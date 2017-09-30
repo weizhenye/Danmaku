@@ -1,6 +1,6 @@
 import canvasHeight from './canvasHeight.js';
 
-export default function(cmt) {
+export default function(cmt, fontSize) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   var style = cmt.canvasStyle || {};
@@ -14,7 +14,7 @@ export default function(cmt) {
   cmt.width = cmt.width ||
     Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
   cmt.height = cmt.height ||
-    Math.ceil(canvasHeight(style.font)) + strokeWidth * 2;
+    Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
   canvas.width = cmt.width;
   canvas.height = cmt.height;
   for (var key in style) {
