@@ -15,7 +15,7 @@ export default function(Danmaku) {
     if (this._hasVideo && !this._hasInitContainer) {
       var isPlay = !this.media.paused;
       this.media.style.position = this.container.style.position;
-      this.container.parentNode.appendChild(this.media);
+      this.container.parentNode.insertBefore(this.media, this.container);
       this.container.parentNode.removeChild(this.container);
       /* istanbul ignore next  */
       if (isPlay && this.media.paused) {
