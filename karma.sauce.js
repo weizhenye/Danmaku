@@ -1,4 +1,16 @@
 const customLaunchers = {
+  'SL-iOS-Safari-11': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '11.0',
+  },
+  'SL-iOS-Safari-8': {
+    base: 'SauceLabs',
+    browserName: 'iphone',
+    deviceOrientation: 'landscape',
+    version: '8.4',
+  },
   'SL-Android-7': {
     base: 'SauceLabs',
     deviceName: 'Android GoogleAPI Emulator',
@@ -13,18 +25,6 @@ const customLaunchers = {
     browserName: 'android',
     deviceOrientation: 'landscape',
     version: '4.4',
-  },
-  'SL-iOS-Safari-10': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '10.3',
-  },
-  'SL-iOS-Safari-8': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '8.4',
   },
   'SL-Chrome': {
     base: 'SauceLabs',
@@ -68,7 +68,7 @@ const customLaunchers = {
 module.exports = function(config) {
   config.set({
     singleRun: true,
-    concurrency: 5,
+    concurrency: 1,
     captureTimeout: 300000,
     browserNoActivityTimeout: 120000,
     frameworks: ['mocha', 'chai'],
