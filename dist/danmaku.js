@@ -4,32 +4,6 @@
 	(global.Danmaku = factory());
 }(this, (function () { 'use strict';
 
-function collidableRange() {
-  var max = 9007199254740991;
-  return [{
-    range: 0,
-    time: -max,
-    width: max,
-    height: 0
-  }, {
-    range: max,
-    time: max,
-    width: 0,
-    height: 0
-  }];
-}
-
-var space = {};
-
-function resetSpace() {
-  space.ltr = collidableRange();
-  space.rtl = collidableRange();
-  space.top = collidableRange();
-  space.bottom = collidableRange();
-}
-
-resetSpace();
-
 /* eslint no-invalid-this: 0 */
 var allocate = function(cmt) {
   var that = this;
@@ -48,7 +22,7 @@ var allocate = function(cmt) {
     var cmtArrivalTime = that.duration * that.width / (that.width + cmt.width);
     return crLeftTime > cmtArrivalTime;
   }
-  var crs = space[cmt.mode];
+  var crs = this._space[cmt.mode];
   var last = 0;
   var curr = 0;
   for (var i = 1; i < crs.length; i++) {
@@ -180,25 +154,9 @@ var domEngine = function() {
   }
 };
 
-var containerFontSize = 16;
-
-var rootFontSize = 16;
-
-function computeFontSize(el) {
-  var fs = window
-    .getComputedStyle(el, null)
-    .getPropertyValue('font-size')
-    .match(/(.+)px/)[1] * 1;
-  if (el.tagName === 'HTML') {
-    rootFontSize = fs;
-  } else {
-    containerFontSize = fs;
-  }
-}
-
 var canvasHeightCache = Object.create(null);
 
-var canvasHeight = function(font) {
+var canvasHeight = function(font, fontSize) {
   if (canvasHeightCache[font]) {
     return canvasHeightCache[font];
   }
@@ -211,20 +169,20 @@ var canvasHeight = function(font) {
     var fsu = p[2];
     var lh = p[3] * 1 || 1.2;
     var lhu = p[4];
-    if (fsu === '%') fs *= containerFontSize / 100;
-    if (fsu === 'em') fs *= containerFontSize;
-    if (fsu === 'rem') fs *= rootFontSize;
+    if (fsu === '%') fs *= fontSize.container / 100;
+    if (fsu === 'em') fs *= fontSize.container;
+    if (fsu === 'rem') fs *= fontSize.root;
     if (lhu === 'px') height = lh;
     if (lhu === '%') height = fs * lh / 100;
     if (lhu === 'em') height = fs * lh;
-    if (lhu === 'rem') height = rootFontSize * lh;
+    if (lhu === 'rem') height = fontSize.root * lh;
     if (lhu === undefined) height = fs * lh;
   }
   canvasHeightCache[font] = height;
   return height;
 };
 
-var createCommentCanvas = function(cmt) {
+var createCommentCanvas = function(cmt, fontSize) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   var style = cmt.canvasStyle || {};
@@ -238,7 +196,7 @@ var createCommentCanvas = function(cmt) {
   cmt.width = cmt.width ||
     Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
   cmt.height = cmt.height ||
-    Math.ceil(canvasHeight(style.font)) + strokeWidth * 2;
+    Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
   canvas.width = cmt.width;
   canvas.height = cmt.height;
   for (var key in style) {
@@ -288,7 +246,7 @@ var canvasEngine = function() {
       break;
     }
     cmt._utc = Date.now() / 1000;
-    cmt.canvas = createCommentCanvas(cmt);
+    cmt.canvas = createCommentCanvas(cmt, this._fontSize);
     cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       cmt.x = (this.width - cmt.width) >> 1;
@@ -306,8 +264,8 @@ var canvasEngine = function() {
   }
 };
 
-/* istanbul ignore next */
 var raf =
+  /* istanbul ignore next */
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
@@ -315,8 +273,8 @@ var raf =
     return setTimeout(cb, 50 / 3);
   };
 
-/* istanbul ignore next */
 var caf =
+  /* istanbul ignore next */
   window.cancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
@@ -373,40 +331,70 @@ var binsearch = function(arr, prop, key) {
   return right;
 };
 
+function collidableRange() {
+  var max = 9007199254740991;
+  return [{
+    range: 0,
+    time: -max,
+    width: max,
+    height: 0
+  }, {
+    range: max,
+    time: max,
+    width: 0,
+    height: 0
+  }];
+}
+
+function resetSpace(space) {
+  space.ltr = collidableRange();
+  space.rtl = collidableRange();
+  space.top = collidableRange();
+  space.bottom = collidableRange();
+}
+
 /* eslint no-invalid-this: 0 */
 var seek = function() {
   if (!this._hasMedia) {
     return this;
   }
   this.clear();
-  resetSpace();
+  resetSpace(this._space);
   var position = binsearch(this.comments, 'time', this.media.currentTime);
   this.position = Math.max(0, position - 1);
   return this;
 };
 
-var playHandler = null;
-var pauseHandler = null;
-var seekingHandler = null;
-
 /* eslint no-invalid-this: 0 */
-function bindEvents() {
-  playHandler = play.bind(this);
-  pauseHandler = pause.bind(this);
-  seekingHandler = seek.bind(this);
-  this.media.addEventListener('play', playHandler);
-  this.media.addEventListener('pause', pauseHandler);
-  this.media.addEventListener('seeking', seekingHandler);
+function bindEvents(_) {
+  _.play = play.bind(this);
+  _.pause = pause.bind(this);
+  _.seeking = seek.bind(this);
+  this.media.addEventListener('play', _.play);
+  this.media.addEventListener('pause', _.pause);
+  this.media.addEventListener('seeking', _.seeking);
 }
 
 /* eslint no-invalid-this: 0 */
-function unbindEvents() {
-  this.media.removeEventListener('play', playHandler);
-  this.media.removeEventListener('pause', pauseHandler);
-  this.media.removeEventListener('seeking', seekingHandler);
-  playHandler = null;
-  pauseHandler = null;
-  seekingHandler = null;
+function unbindEvents(_) {
+  this.media.removeEventListener('play', _.play);
+  this.media.removeEventListener('pause', _.pause);
+  this.media.removeEventListener('seeking', _.seeking);
+  _.play = null;
+  _.pause = null;
+  _.seeking = null;
+}
+
+function computeFontSize(el, fontSize) {
+  var fs = window
+    .getComputedStyle(el, null)
+    .getPropertyValue('font-size')
+    .match(/(.+)px/)[1] * 1;
+  if (el.tagName === 'HTML') {
+    fontSize.root = fs;
+  } else {
+    fontSize.container = fs;
+  }
 }
 
 var formatMode = function(mode) {
@@ -468,7 +456,8 @@ var initMixin = function(Danmaku) {
       }
     }
     if (this._hasMedia) {
-      bindEvents.call(this);
+      this._listener = {};
+      bindEvents.call(this, this._listener);
     }
 
     if (this._useCanvas) {
@@ -484,8 +473,14 @@ var initMixin = function(Danmaku) {
     this.resize();
     this.container.appendChild(this.stage);
 
-    computeFontSize(document.getElementsByTagName('html')[0]);
-    computeFontSize(this.container);
+    this._space = {};
+    resetSpace(this._space);
+    this._fontSize = {
+      root: 16,
+      container: 16
+    };
+    computeFontSize(document.getElementsByTagName('html')[0], this._fontSize);
+    computeFontSize(this.container, this._fontSize);
 
     if (!this._hasMedia || !this.media.paused) {
       seek.call(this);
@@ -550,13 +545,12 @@ var destroyMixin = function(Danmaku) {
     pause.call(this);
     this.clear();
     if (this._hasMedia) {
-      unbindEvents.call(this);
+      unbindEvents.call(this, this._listener);
     }
-    resetSpace();
     if (this._hasVideo && !this._hasInitContainer) {
       var isPlay = !this.media.paused;
       this.media.style.position = this.container.style.position;
-      this.container.parentNode.appendChild(this.media);
+      this.container.parentNode.insertBefore(this.media, this.container);
       this.container.parentNode.removeChild(this.container);
       /* istanbul ignore next  */
       if (isPlay && this.media.paused) {
