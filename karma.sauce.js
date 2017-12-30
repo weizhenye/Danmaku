@@ -5,12 +5,6 @@ const customLaunchers = {
     deviceOrientation: 'landscape',
     version: '11.0',
   },
-  'SL-iOS-Safari-8': {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '8.4',
-  },
   'SL-Android-7': {
     base: 'SauceLabs',
     deviceName: 'Android GoogleAPI Emulator',
