@@ -1,6 +1,14 @@
 import canvasHeight from './canvasHeight.js';
 
 export default function(cmt, fontSize) {
+  if (typeof cmt.render === 'function') {
+    var cvs = cmt.render();
+    if (cvs instanceof HTMLCanvasElement) {
+      cmt.width = cvs.width;
+      cmt.height = cvs.height;
+      return cvs;
+    }
+  }
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   var style = cmt.canvasStyle || {};

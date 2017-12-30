@@ -1,5 +1,4 @@
-export var raf =
-  /* istanbul ignore next */
+export /* istanbul ignore next */ var raf =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
@@ -7,8 +6,7 @@ export var raf =
     return setTimeout(cb, 50 / 3);
   };
 
-export var caf =
-  /* istanbul ignore next */
+export /* istanbul ignore next */ var caf =
   window.cancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||

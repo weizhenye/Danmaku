@@ -157,6 +157,7 @@ danmaku.emit({
   // When using DOM engine, `text` can be parsed as HTML if `html` is `true`.
   // You should never pass in users' inputs directly to avoid XSS.
   // `false` by default.
+  // DEPRECATED, use `render` instead.
   html: false,
 
   // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
@@ -195,6 +196,29 @@ danmaku.emit({
     shadowOffsetY: 0,
     filter: 'none',
     globalAlpha: 1.0
+  },
+
+  // A custom render to draw your comment.
+  // when `render` exist, `text`, `html`, `style` and `canvasStyle` will be ignored.
+
+  // When using DOM engine, you should return an HTMLElement.
+  render: function() {
+    var $div = document.createElement('div');
+    var $img = document.createElement('img');
+    $img.src = '/path/to/xxx.png';
+    $div.appendChild($img);
+    return $div;
+  },
+  // When using canvas engine, you should return an HTMLCanvasElement.
+  render: function() {
+    var canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 180;
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(75, 75, 50, 0, 2 * Math.PI);
+    ctx.stroke();
+    return canvas;
   }
 });
 ```
