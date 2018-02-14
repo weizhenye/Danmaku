@@ -25,7 +25,7 @@ export default function() {
     if (cmtt >= ct) {
       break;
     }
-    cmt._utc = Date.now() / 1000;
+    cmt._utc = dn - (this._hasMedia ? (this.media.currentTime - cmt.time) : 0);
     cmt.canvas = createCommentCanvas(cmt, this._fontSize);
     cmt.y = allocate.call(this, cmt);
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
