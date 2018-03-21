@@ -113,10 +113,16 @@ describe('Initialization', function() {
 
   it('should support comments', function() {
     danmaku = new Danmaku();
+    var render = function() {
+      var $span = document.createElement('span');
+      $span.textContent = '佐倉さんひくわー！！！';
+      return $span;
+    };
     danmaku.init({
       container: document.getElementById('test-container'),
       video: document.createElement('video'),
       comments: [
+        {time: 3, render: render},
         {time: 2, text: '佐倉さんひくわー！！'},
         {time: 0, text: '佐倉さんひくわー'},
         {time: 1, text: '佐倉さんひくわー！'}
@@ -125,6 +131,7 @@ describe('Initialization', function() {
     assert.equal(0, danmaku.comments[0].time);
     assert.equal(1, danmaku.comments[1].time);
     assert.equal(2, danmaku.comments[2].time);
+    assert.equal(render, danmaku.comments[3].render);
   });
 
   it('should support DOM engine', function() {

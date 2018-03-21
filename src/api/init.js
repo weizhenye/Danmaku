@@ -30,7 +30,7 @@ export default function(Danmaku) {
     this._speed = Math.max(0, opt.speed) || 144;
     this.duration = 4;
 
-    this.comments = JSON.parse(JSON.stringify(opt.comments || []));
+    this.comments = opt.comments || [];
     this.comments.sort(function(a, b) {
       return a.time - b.time;
     });
