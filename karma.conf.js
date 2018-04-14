@@ -10,7 +10,9 @@ module.exports = function(config) {
       'test/test.js': ['rollup']
     },
     rollupPreprocessor: {
-      format: 'iife',
+      output: {
+        format: 'iife',
+      },
       plugins: [
         require('rollup-plugin-istanbul')({
           exclude: ['test/**/*.js']

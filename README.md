@@ -6,6 +6,7 @@
 [![NPM version](https://img.shields.io/npm/v/danmaku.svg)](https://www.npmjs.com/package/danmaku)
 [![License](https://img.shields.io/npm/l/danmaku.svg)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
 [![File size](https://badge-size.herokuapp.com/weizhenye/Danmaku/master/dist/danmaku.min.js?compression=gzip&color=blue&label=min%2Bgzip)](https://unpkg.com/danmaku/dist/danmaku.min.js)
+[![jsDelivr](https://data.jsdelivr.com/v1/package/npm/danmaku/badge?style=rounded)](https://www.jsdelivr.com/package/npm/danmaku)
 
 [![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
 
@@ -24,7 +25,7 @@ npm install danmaku
 ```bash
 bower install danmaku
 ```
-You can also download [danmaku.min.js](https://github.com/weizhenye/Danmaku/raw/master/dist/danmaku.min.js) directly and include it in your HTML.
+You can also use [jsDelivr CDN](https://www.jsdelivr.com/package/npm/danmaku) or download [danmaku.min.js](https://github.com/weizhenye/Danmaku/raw/master/dist/danmaku.min.js) directly.
 
 ## Usage
 

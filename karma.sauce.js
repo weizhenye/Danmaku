@@ -32,7 +32,6 @@ const customLaunchers = {
   'SL-Safari': {
     base: 'SauceLabs',
     browserName: 'safari',
-    platform: 'OS X 10.11',
   },
   'SL-Edge': {
     base: 'SauceLabs',
@@ -75,7 +74,9 @@ module.exports = function(config) {
       'test/test.js': ['rollup']
     },
     rollupPreprocessor: {
-      format: 'iife',
+      output: {
+        format: 'iife',
+      },
       plugins: [
         require('rollup-plugin-istanbul')({
           exclude: ['test/**/*.js']
