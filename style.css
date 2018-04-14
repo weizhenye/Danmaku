@@ -185,6 +185,11 @@ fieldset {
   bottom: .5em;
   opacity: 1;
 }
+#perf {
+  position: fixed;
+  right: .5em;
+  bottom: .5em;
+}
 .transition {
   transition: opacity 4s cubic-bezier(1,0,1,1);
 }
