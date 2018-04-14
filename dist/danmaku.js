@@ -129,7 +129,9 @@
       if (cmtt >= ct) {
         break;
       }
-      cmt._utc = dn - (this._hasMedia ? (this.media.currentTime - cmt.time) : 0);
+      if (this._hasMedia) {
+        cmt._utc = dn - (this.media.currentTime - cmt.time);
+      }
       cmt.node = cmt.node || createCommentNode(cmt);
       this.runningList.push(cmt);
       pendingList.push(cmt);
@@ -265,7 +267,9 @@
       if (cmtt >= ct) {
         break;
       }
-      cmt._utc = dn - (this._hasMedia ? (this.media.currentTime - cmt.time) : 0);
+      if (this._hasMedia) {
+        cmt._utc = dn - (this.media.currentTime - cmt.time);
+      }
       cmt.canvas = createCommentCanvas(cmt, this._fontSize);
       cmt.y = allocate.call(this, cmt);
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
