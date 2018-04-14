@@ -30,7 +30,9 @@ export default function() {
     if (cmtt >= ct) {
       break;
     }
-    cmt._utc = dn - (this._hasMedia ? (this.media.currentTime - cmt.time) : 0);
+    if (this._hasMedia) {
+      cmt._utc = dn - (this.media.currentTime - cmt.time);
+    }
     cmt.node = cmt.node || createCommentNode(cmt);
     this.runningList.push(cmt);
     pendingList.push(cmt);
