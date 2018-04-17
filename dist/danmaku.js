@@ -21,7 +21,9 @@
       // (rtl mode) the right end of `cr` move out of left side of stage
       var crLeftTime = that.duration + cr.time - ct;
       var cmtTotalWidth = that.width + cmt.width;
-      var cmtElapsed = cmtTotalWidth * (ct - cmt.time) * pbr / that.duration;
+      var cmtTime = that._hasMedia ? cmt.time : cmt._utc;
+      var cmtElapsed = cmtTotalWidth * (ct - cmtTime) * pbr / that.duration;
+      // var cmtElapsed = cmtTotalWidth * (ct - cmt.time) * pbr / that.duration;
       var cmtArrival = that.width - cmtElapsed;
       // (rtl mode) the left end of `cmt` reach the left side of stage
       var cmtArrivalTime = that.duration * cmtArrival / (that.width + cmt.width);
