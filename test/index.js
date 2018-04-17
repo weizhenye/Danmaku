@@ -118,22 +118,24 @@ describe('Danmaku behavior', function() {
       engine: 'canvas'
     });
 
-    danmaku.emit({text: 'ltr 1 loooooooooooooooooooooooong', mode: 'ltr'});
+    danmaku.emit({text: 'ltr 1', mode: 'ltr'});
     danmaku.emit({text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr'});
     danmaku.emit({text: 'top 1', mode: 'top'});
 
     var rl = danmaku.runningList;
     var iv = setInterval(function() {
-      if (rl.length === 6) {
+      if (rl.length === 7) {
         clearInterval(iv);
         assert.equal(rl[0].height, rl[1].y);
         assert.equal(rl[2].height, rl[3].y);
         assert.equal(danmaku.height - rl[4].height - rl[5].height, rl[5].y);
+        assert.equal(true, rl[6].y > rl[0].y);
         done();
       }
       if (rl.length === 4) {
         danmaku.emit({text: 'bottom 1', mode: 'bottom'});
         danmaku.emit({text: 'bottom 2', mode: 'bottom'});
+        danmaku.emit({text: 'this is a long text', mode: 'ltr'});
       }
       if (rl.length === 3) {
         danmaku.emit({text: 'top 2', mode: 'top'});
