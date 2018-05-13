@@ -68,6 +68,7 @@ module.exports = function(config) {
     browsers: Object.keys(customLaunchers),
     customLaunchers,
     files: [
+      'node_modules/es6-promise/dist/es6-promise.auto.min.js',
       'test/test.js'
     ],
     preprocessors: {

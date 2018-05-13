@@ -19,7 +19,7 @@ describe('comment canvas', function() {
     assert.equal('CANVAS', canvas.tagName);
     assert.equal(comment.width, canvas.width);
     assert.equal(comment.height, canvas.height);
-    assert.equal(comment.canvasStyle.font, ctx.font);
+    assert.equal(comment.canvasStyle.font, ctx.font.trim());
     assert.equal(comment.canvasStyle.strokeStyle, ctx.strokeStyle);
   });
 
@@ -54,7 +54,7 @@ describe('comment canvas', function() {
     };
     var canvas = createCommentCanvas(comment, fontSize);
     var ctx = canvas.getContext('2d');
-    assert.equal(comment.canvasStyle.font, ctx.font);
+    assert.equal(comment.canvasStyle.font, ctx.font.trim());
   });
 
   it('should support to set textBaseline', function() {

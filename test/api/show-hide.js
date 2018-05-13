@@ -1,4 +1,5 @@
 import Danmaku from '../../src/index.js';
+import {createVideo, delay} from '../helper.js';
 
 describe('show and hide API', function() {
   var danmaku = null;
@@ -27,23 +28,43 @@ describe('show and hide API', function() {
     assert.equal(true, danmaku.visible);
   });
 
-  it('should pause when hided and restore when showed', function() {
-    var $video = document.getElementById('test-video');
-    try {
-      $video.canPlayType('video/mp4');
-    } catch (err) {
-      return;
-    }
-    $video.play();
-    danmaku.hide();
-    assert.equal(true, danmaku.paused);
-    danmaku.show();
-    assert.equal($video.paused, danmaku.paused);
-    $video.pause();
-    danmaku.hide();
-    assert.equal(true, danmaku.paused);
-    danmaku.show();
-    assert.equal($video.paused, danmaku.paused);
+  it('should pause when hided and restore when showed', function(done) {
+    createVideo(function(err, $video) {
+      if (err) {
+        console.log(err);
+        done();
+        return;
+      }
+      document.body.appendChild($video);
+      danmaku = new Danmaku({
+        video: $video
+      });
+      Promise.resolve()
+        .then($video.play.bind($video))
+        .then(delay(100))
+        .then(function() {
+          danmaku.hide();
+          assert.equal(true, danmaku.paused);
+          danmaku.show();
+          assert.equal($video.paused, danmaku.paused);
+        })
+        .then($video.pause.bind($video))
+        .then(function() {
+          danmaku.hide();
+          assert.equal(true, danmaku.paused);
+          danmaku.show();
+          assert.equal($video.paused, danmaku.paused);
+
+          danmaku.hide();
+        })
+        .then($video.play.bind($video))
+        .then(delay(100))
+        .then(function() {
+          assert.equal(true, danmaku.paused);
+          done();
+        })
+        .catch(done);
+    });
   });
 
   it('should just return when called many times', function() {

@@ -1,4 +1,5 @@
 import Danmaku from '../../src/index.js';
+import {createVideo, delay} from '../helper.js';
 
 describe('emit API', function() {
   var danmaku = null;
@@ -31,6 +32,42 @@ describe('emit API', function() {
     var comment = {time: 1, text: 'Panzer Vor!'};
     danmaku.emit(comment);
     assert.equal(comment.time, danmaku.comments[1].time);
+  });
+
+  it('should keep current position right when insert comment', function(done) {
+    createVideo(function(err, $video) {
+      if (err) {
+        console.log(err);
+        done();
+        return;
+      }
+      danmaku = new Danmaku({
+        container: document.getElementById('test-container'),
+        video: $video,
+        comments: [
+          {time: 0, text: 'Panzer Vor'},
+          {time: 2, text: 'Panzer Vor!!'},
+          {time: 3, text: 'Panzer Vor!!!'}
+        ]
+      });
+      $video.currentTime = 2.2;
+      Promise.resolve()
+        .then($video.play.bind($video))
+        .then(delay(100))
+        .then($video.pause.bind($video))
+        .then(function() {
+          assert.equal(danmaku.position, 2);
+          danmaku.emit({time: 1, text: 'Panzer Vor!'});
+        })
+        .then($video.play.bind($video))
+        .then(delay(100))
+        .then($video.pause.bind($video))
+        .then(function() {
+          assert.equal(danmaku.position, 3);
+          done();
+        })
+        .catch(done);
+    });
   });
 
   it('should default comment time to media currentTime', function() {

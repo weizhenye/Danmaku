@@ -1,10 +1,11 @@
 import Danmaku from '../../src/index.js';
+import {createVideo, delay} from '../helper.js';
 
 describe('Initialization', function() {
   var danmaku = null;
 
   afterEach(function() {
-    danmaku.destroy();
+    danmaku && danmaku.destroy();
   });
 
   it('should support set options in constructor', function() {
@@ -71,21 +72,27 @@ describe('Initialization', function() {
     assert.equal($video.parentNode, danmaku.container);
   });
 
-  it('should keep video playing status', function() {
-    var $video = document.createElement('video');
-    document.body.appendChild($video);
-    try {
-      $video.canPlayType('video/mp4');
-    } catch (err) {
-      return;
-    }
-    $video.play();
-
-    var paused = $video.paused;
-    danmaku = new Danmaku({
-      video: $video
+  it('should keep video playing status', function(done) {
+    createVideo(function(err, $video) {
+      if (err) {
+        console.log(err);
+        done();
+        return;
+      }
+      document.body.appendChild($video);
+      Promise.resolve()
+        .then($video.play.bind($video))
+        .then(delay(100))
+        .then(function() {
+          var paused = $video.paused;
+          danmaku = new Danmaku({
+            video: $video
+          });
+          assert.equal(paused, $video.paused);
+          done();
+        })
+        .catch(done);
     });
-    assert.equal(paused, $video.paused);
   });
 
   it('should throw error when no container is assigned', function() {
