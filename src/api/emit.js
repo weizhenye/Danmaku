@@ -33,6 +33,9 @@ export default function(Danmaku) {
         position = this.position;
       } else {
         position = binsearch(this.comments, 'time', cmt.time);
+        if (position < this.position) {
+          this.position += 1;
+        }
       }
       this.comments.splice(position, 0, cmt);
     } else {
