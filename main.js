@@ -1,4 +1,4 @@
-var SERVER_ORIGIN = 'https://gulu.herokuapp.com';
+var SERVER_ORIGIN = 'https://danmaku-demo-server-dwunvywgtw.now.sh';
 var SAMPLE_VIDEO = 'https://media.w3.org/2010/05/video/movie_300.mp4';
 var $ = function(s) {return document.querySelectorAll(s)};
 var socket = io(SERVER_ORIGIN + '/live');
