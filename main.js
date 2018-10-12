@@ -1,4 +1,4 @@
-var SERVER_ORIGIN = 'https://danmaku-demo-server-dwunvywgtw.now.sh';
+var SERVER_ORIGIN = 'https://danmaku-demo-server.now.sh';
 var SAMPLE_VIDEO = 'https://media.w3.org/2010/05/video/movie_300.mp4';
 var $ = function(s) {return document.querySelectorAll(s)};
 var socket = io(SERVER_ORIGIN + '/live');
@@ -207,15 +207,15 @@ $('#get-bilibili button')[0].addEventListener('click', function() {
   $input.value = '';
 });
 var downloadInfo = function(url) {
-  var params = url.match(/.*av(\d+)(?:\/index_(\d+))?/),
-      api = SERVER_ORIGIN + '/view?id=' + params[1] + (params[2] ? '&page=' + params[2] : '');
+  var params = url.match(/.*av(\d+)/),
+      api = SERVER_ORIGIN + '/view?aid=' + params[1];
   var xhr = new XMLHttpRequest();
   xhr.open('GET', api, 1);
   xhr.send(null);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        var result = JSON.parse(xhr.responseText);
+        var result = JSON.parse(xhr.responseText).data;
         var data = {
           title: result.title,
           cid: result.cid
