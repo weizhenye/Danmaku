@@ -1,29 +1,36 @@
+// https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
 const customLaunchers = {
-  'SL-iOS-Safari-11': {
+  'SL-iOS-Safari-Latest': {
     base: 'SauceLabs',
-    browserName: 'iphone',
-    deviceOrientation: 'landscape',
-    version: '11.0',
+    browserName: 'Safari',
+    deviceName: 'iPhone Simulator',
+    platformVersion: '12.2',
+    platformName: 'iOS',
   },
-  'SL-Android-7': {
+  'SL-iOS-Safari-Oldest': {
     base: 'SauceLabs',
-    deviceName: 'Android GoogleAPI Emulator',
-    platformName: 'Android',
-    platformVersion: '7.1',
+    browserName: 'Safari',
+    deviceName: 'iPhone Simulator',
+    platformVersion: '10.3',
+    platformName: 'iOS',
+  },
+  'SL-Android-Latest': {
+    base: 'SauceLabs',
+    deviceName: 'Android Emulator',
     browserName: 'Chrome',
-    appiumVersion: '1.6.5',
-    deviceOrientation: 'landscape',
+    platformVersion: '8.0',
+    platformName: 'Android',
   },
-  'SL-Android-4': {
+  'SL-Android-Oldest': {
     base: 'SauceLabs',
-    browserName: 'android',
-    deviceOrientation: 'landscape',
-    version: '4.4',
+    deviceName: 'Android Emulator',
+    browserName: 'Browser',
+    platformVersion: '5.1',
+    platformName: 'Android',
   },
   'SL-Chrome': {
     base: 'SauceLabs',
     browserName: 'chrome',
-    platform: 'Windows 10',
   },
   'SL-Firefox': {
     base: 'SauceLabs',
@@ -36,7 +43,6 @@ const customLaunchers = {
   'SL-Edge': {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
-    platform: 'Windows 10',
   },
   'SL-IE-11': {
     base: 'SauceLabs',
@@ -61,7 +67,7 @@ const customLaunchers = {
 module.exports = function(config) {
   config.set({
     singleRun: true,
-    concurrency: 1,
+    concurrency: 5,
     captureTimeout: 300000,
     browserNoActivityTimeout: 120000,
     frameworks: ['mocha', 'chai'],

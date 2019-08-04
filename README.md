@@ -1,12 +1,12 @@
 # Danmaku
 
-[![Build status](https://img.shields.io/travis/weizhenye/Danmaku.svg)](https://travis-ci.org/weizhenye/Danmaku)
-[![Coverage](https://img.shields.io/codecov/c/github/weizhenye/Danmaku.svg)](https://codecov.io/gh/weizhenye/Danmaku)
-[![Dependencies](https://img.shields.io/david/weizhenye/Danmaku.svg)](https://david-dm.org/weizhenye/Danmaku)
-[![NPM version](https://img.shields.io/npm/v/danmaku.svg)](https://www.npmjs.com/package/danmaku)
-[![License](https://img.shields.io/npm/l/danmaku.svg)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
-[![File size](https://badge-size.herokuapp.com/weizhenye/Danmaku/master/dist/danmaku.min.js?compression=gzip&color=blue&label=min%2Bgzip)](https://unpkg.com/danmaku/dist/danmaku.min.js)
-[![jsDelivr](https://data.jsdelivr.com/v1/package/npm/danmaku/badge?style=rounded)](https://www.jsdelivr.com/package/npm/danmaku)
+[![Build status](https://badgen.net/travis/weizhenye/Danmaku?icon=travis&label=build)](https://travis-ci.org/weizhenye/Danmaku)
+[![Coverage](https://badgen.net/codecov/c/github/weizhenye/Danmaku?icon=codecov)](https://codecov.io/gh/weizhenye/Danmaku)
+[![Dependencies](https://badgen.net/david/dep/weizhenye/Danmaku?icon=https://api.iconify.design/si-glyph:connect-2.svg?color=white)](https://david-dm.org/weizhenye/Danmaku)
+[![NPM version](https://badgen.net/npm/v/danmaku?icon=npm)](https://www.npmjs.com/package/danmaku)
+[![License](https://badgen.net/npm/license/danmaku?icon=https://api.iconify.design/octicon:law.svg?color=white)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
+[![File size](https://badgen.net/bundlephobia/minzip/danmaku?icon=https://api.iconify.design/ant-design:file-zip-outline.svg?color=white)](https://bundlephobia.com/result?p=danmaku)
+[![jsDelivr](https://badgen.net/jsdelivr/hits/npm/danmaku?icon=https://api.iconify.design/simple-icons:jsdelivr.svg?color=white)](https://www.jsdelivr.com/package/npm/danmaku)
 
 [![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
 
