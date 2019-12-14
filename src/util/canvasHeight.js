@@ -6,7 +6,7 @@ export default function(font, fontSize) {
   }
   var height = 12;
   // eslint-disable-next-line max-len
-  var regex = /^(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
+  var regex = /(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
   var p = font.match(regex);
   if (p) {
     var fs = p[1] * 1 || 10;
