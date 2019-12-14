@@ -25,6 +25,10 @@ export default function() {
     if (cmtt >= ct) {
       break;
     }
+    if (ct - cmtt > this.duration) {
+      ++this.position;
+      continue;
+    }
     if (this._hasMedia) {
       cmt._utc = dn - (this.media.currentTime - cmt.time);
     }
