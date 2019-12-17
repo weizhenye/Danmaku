@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.Danmaku = factory());
-}(this, (function () { 'use strict';
+  (global = global || self, global.Danmaku = factory());
+}(this, function () { 'use strict';
 
   /* eslint no-invalid-this: 0 */
   function allocate(cmt) {
@@ -130,6 +130,10 @@
       if (cmtt >= ct) {
         break;
       }
+      if (ct - cmtt > this.duration) {
+        ++this.position;
+        continue;
+      }
       if (this._hasMedia) {
         cmt._utc = dn - (this.media.currentTime - cmt.time);
       }
@@ -177,7 +181,7 @@
     }
     var height = 12;
     // eslint-disable-next-line max-len
-    var regex = /^(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
+    var regex = /(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
     var p = font.match(regex);
     if (p) {
       var fs = p[1] * 1 || 10;
@@ -267,6 +271,10 @@
       cmtt = this._hasMedia ? cmt.time : cmt._utc;
       if (cmtt >= ct) {
         break;
+      }
+      if (ct - cmtt > this.duration) {
+        ++this.position;
+        continue;
       }
       if (this._hasMedia) {
         cmt._utc = dn - (this.media.currentTime - cmt.time);
@@ -696,4 +704,4 @@
 
   return Danmaku;
 
-})));
+}));
