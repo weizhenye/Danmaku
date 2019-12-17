@@ -42,4 +42,10 @@ describe('canvas height', function() {
     assert.equal(12, ch('0px sans-serif', _));
     assert.equal(12, ch('large sans-serif', _));
   });
+
+  it('should support vaild CSS font syntax', function() {
+    assert.equal(16 * LH, ch('italic 16px serif', _));
+    assert.equal(32, ch('italic small-caps bold 16px/2 cursive', _));
+    assert.equal(24, ch('small-caps 700 24px/1 sans-serif', _));
+  });
 });
