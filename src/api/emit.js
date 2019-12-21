@@ -7,7 +7,7 @@ var properties = [
   // both engine
   'text', 'render',
   // DOM engine
-  'html', 'style',
+  'style',
   // canvas engine
   'canvasStyle'
 ];

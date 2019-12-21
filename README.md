@@ -155,12 +155,6 @@ var danmaku = new Danmaku({/* options */});
 danmaku.emit({
   text: 'example',
 
-  // When using DOM engine, `text` can be parsed as HTML if `html` is `true`.
-  // You should never pass in users' inputs directly to avoid XSS.
-  // `false` by default.
-  // DEPRECATED, use `render` instead.
-  html: false,
-
   // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
   mode: 'rtl',
 
@@ -200,7 +194,7 @@ danmaku.emit({
   },
 
   // A custom render to draw your comment.
-  // when `render` exist, `text`, `html`, `style` and `canvasStyle` will be ignored.
+  // when `render` exist, `text`, `style` and `canvasStyle` will be ignored.
 
   // When using DOM engine, you should return an HTMLElement.
   render: function() {

@@ -8,11 +8,7 @@ export default function(cmt) {
       return node;
     }
   }
-  if (cmt.html === true) {
-    node.innerHTML = cmt.text;
-  } else {
-    node.textContent = cmt.text;
-  }
+  node.textContent = cmt.text;
   if (cmt.style) {
     for (var key in cmt.style) {
       node.style[key] = cmt.style[key];
