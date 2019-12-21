@@ -5,14 +5,14 @@ import createCommentCanvas from '../util/commentCanvas.js';
 export default function() {
   this.stage.context.clearRect(0, 0, this.width, this.height);
   var dn = Date.now() / 1000;
-  var ct = this._hasMedia ? this.media.currentTime : dn;
-  var pbr = this._hasMedia ? this.media.playbackRate : 1;
+  var ct = this.media ? this.media.currentTime : dn;
+  var pbr = this.media ? this.media.playbackRate : 1;
   var cmt = null;
   var cmtt = 0;
   var i = 0;
   for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
-    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    cmtt = this.media ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
       // avoid caching canvas to reduce memory usage
       cmt.canvas = null;
@@ -21,7 +21,7 @@ export default function() {
   }
   while (this.position < this.comments.length) {
     cmt = this.comments[this.position];
-    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    cmtt = this.media ? cmt.time : cmt._utc;
     if (cmtt >= ct) {
       break;
     }
@@ -29,7 +29,7 @@ export default function() {
       ++this.position;
       continue;
     }
-    if (this._hasMedia) {
+    if (this.media) {
       cmt._utc = dn - (this.media.currentTime - cmt.time);
     }
     cmt.canvas = createCommentCanvas(cmt, this._fontSize);

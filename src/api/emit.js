@@ -26,7 +26,7 @@ export default function(obj) {
   cmt.text = (cmt.text || '').toString();
   cmt.mode = formatMode(cmt.mode);
   cmt._utc = Date.now() / 1000;
-  if (this._hasMedia) {
+  if (this.media) {
     var position = 0;
     if (cmt.time === undefined) {
       cmt.time = this.media.currentTime;

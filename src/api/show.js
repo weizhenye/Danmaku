@@ -7,7 +7,7 @@ export default function() {
     return this;
   }
   this.visible = true;
-  if (this._hasMedia && this.media.paused) {
+  if (this.media && this.media.paused) {
     return this;
   }
   seek.call(this);

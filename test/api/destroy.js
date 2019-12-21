@@ -16,27 +16,4 @@ describe('destroy API', function() {
       done();
     }, 100);
   });
-
-  it('should revert DOM structure', function(done) {
-    var $video = document.createElement('video');
-    document.body.appendChild($video);
-    try {
-      $video.canPlayType('video/mp4');
-    } catch (err) {
-      done();
-      return;
-    }
-    $video.play();
-
-    var danmaku = new Danmaku({
-      video: $video
-    });
-
-    setTimeout(function() {
-      danmaku.destroy();
-      assert.equal(document.body, $video.parentNode);
-      document.body.removeChild($video);
-      done();
-    }, 100);
-  });
 });

@@ -11,7 +11,7 @@ describe('show and hide API', function() {
 
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: $video
+      media: $video
     });
   });
 
@@ -37,7 +37,8 @@ describe('show and hide API', function() {
       }
       document.body.appendChild($video);
       danmaku = new Danmaku({
-        video: $video
+        container: document.getElementById('test-container'),
+        media: $video
       });
       Promise.resolve()
         .then($video.play.bind($video))

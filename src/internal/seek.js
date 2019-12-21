@@ -3,7 +3,7 @@ import { resetSpace } from '../util/space.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {
-  if (!this._hasMedia) {
+  if (!this.media) {
     return this;
   }
   this.clear();

@@ -8,7 +8,7 @@ export default function() {
     return this;
   }
   this.paused = false;
-  if (this._hasMedia) {
+  if (this.media) {
     for (var i = 0; i < this.runningList.length; i++) {
       var cmt = this.runningList[i];
       cmt._utc = Date.now() / 1000 - (this.media.currentTime - cmt.time);

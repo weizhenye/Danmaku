@@ -7,20 +7,8 @@ import { resetSpace } from '../util/space.js';
 
 /* eslint-disable no-invalid-this */
 export default function(opt) {
-  if (this._isInited) {
-    return this;
-  }
-
-  if (
-    !opt || (
-      !opt.container &&
-      (!opt.video || (opt.video && !opt.video.parentNode))
-    )
-  ) {
-    throw new Error('Danmaku requires container when initializing.');
-  }
-  this._hasInitContainer = !!opt.container;
-  this.container = opt.container;
+  this.container = opt.container || document.createElement('div');
+  this.media = opt.media;
   this.visible = true;
 
   this.engine = (opt.engine || 'DOM').toLowerCase();
@@ -41,22 +29,7 @@ export default function(opt) {
   this.position = 0;
 
   this.paused = true;
-  this.media = opt.video || opt.audio;
-  this._hasMedia = !!this.media;
-  this._hasVideo = !!opt.video;
-  if (this._hasVideo && !this._hasInitContainer) {
-    var isPlay = !this.media.paused;
-    this.container = document.createElement('div');
-    this.container.style.position = this.media.style.position;
-    this.media.style.position = 'absolute';
-    this.media.parentNode.insertBefore(this.container, this.media);
-    this.container.appendChild(this.media);
-    // In Webkit/Blink, making a change to video element will pause the video.
-    if (isPlay && this.media.paused) {
-      this.media.play();
-    }
-  }
-  if (this._hasMedia) {
+  if (this.media) {
     this._listener = {};
     bindEvents.call(this, this._listener);
   }
@@ -83,10 +56,9 @@ export default function(opt) {
   computeFontSize(document.getElementsByTagName('html')[0], this._fontSize);
   computeFontSize(this.container, this._fontSize);
 
-  if (!this._hasMedia || !this.media.paused) {
+  if (!this.media || !this.media.paused) {
     seek.call(this);
     play.call(this);
   }
-  this._isInited = true;
   return this;
 }

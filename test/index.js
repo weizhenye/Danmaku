@@ -169,7 +169,7 @@ describe('Danmaku behavior', function() {
     var $video = document.createElement('video');
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: $video,
+      media: $video,
       comments: [
         { text: '0', time: 0 },
         { text: '0.5', time: 0.5 }
@@ -184,7 +184,7 @@ describe('Danmaku behavior', function() {
     var $video = document.createElement('video');
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: $video,
+      media: $video,
       engine: 'canvas',
       comments: [
         { text: '0', time: 0 },

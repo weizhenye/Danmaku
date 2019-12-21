@@ -1,5 +1,4 @@
 import Danmaku from '../../src/index.js';
-import { createVideo, delay } from '../helper.js';
 
 describe('Initialization', function() {
   var danmaku = null;
@@ -22,75 +21,23 @@ describe('Initialization', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(true, danmaku._hasInitContainer);
-    assert.equal(false, danmaku._hasMedia);
+    assert.equal(false, !!danmaku.media);
   });
 
   it('should support audio mode', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      audio: document.createElement('audio')
+      media: document.createElement('audio')
     });
-    assert.equal(true, danmaku._hasInitContainer);
-    assert.equal(true, danmaku._hasMedia);
-    assert.equal(false, danmaku._hasVideo);
+    assert.equal(true, !!danmaku.media);
   });
 
   it('should support video mode', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: document.createElement('video')
+      media: document.createElement('video')
     });
-    assert.equal(true, danmaku._hasInitContainer);
-    assert.equal(true, danmaku._hasMedia);
-    assert.equal(true, danmaku._hasVideo);
-  });
-
-  it('should support video mode without container', function() {
-    var $video = document.createElement('video');
-    document.body.appendChild($video);
-
-    danmaku = new Danmaku({
-      video: $video
-    });
-    assert.equal(false, danmaku._hasInitContainer);
-    assert.equal(true, danmaku._hasMedia);
-    assert.equal(true, danmaku._hasVideo);
-    assert.equal($video.parentNode, danmaku.container);
-  });
-
-  it('should keep video playing status', function(done) {
-    createVideo(function(err, $video) {
-      if (err) {
-        console.log(err);
-        done();
-        return;
-      }
-      document.body.appendChild($video);
-      Promise.resolve()
-        .then($video.play.bind($video))
-        .then(delay(100))
-        .then(function() {
-          var paused = $video.paused;
-          danmaku = new Danmaku({
-            video: $video
-          });
-          assert.equal(paused, $video.paused);
-          done();
-        })
-        .catch(done);
-    });
-  });
-
-  it('should throw error when no container is assigned', function() {
-    assert.throws(function() {
-      danmaku = new Danmaku({});
-    });
-    assert.throws(function() {
-      danmaku = new Danmaku({
-        audio: document.createElement('audio')
-      });
-    });
+    assert.equal(true, !!danmaku.media);
   });
 
   it('should support comments', function() {

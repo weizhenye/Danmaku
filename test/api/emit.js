@@ -23,7 +23,7 @@ describe('emit API', function() {
   it('should insert comment to correct position', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: document.createElement('video'),
+      media: document.createElement('video'),
       comments: [
         { time: 0, text: 'Panzer Vor' },
         { time: 2, text: 'Panzer Vor!!' }
@@ -43,7 +43,7 @@ describe('emit API', function() {
       }
       danmaku = new Danmaku({
         container: document.getElementById('test-container'),
-        video: $video,
+        media: $video,
         comments: [
           { time: 0, text: 'Panzer Vor' },
           { time: 2, text: 'Panzer Vor!!' },
@@ -73,7 +73,7 @@ describe('emit API', function() {
   it('should default comment time to media currentTime', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
-      video: document.createElement('video')
+      media: document.createElement('video')
     });
     var comment = { text: 'without time property' };
     danmaku.emit(comment);

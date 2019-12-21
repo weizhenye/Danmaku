@@ -18,44 +18,38 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 
 ## Installation
 
-You can install it by using npm or bower:
+You can install it with npm or CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/danmaku), [unpkg](https://unpkg.com/danmaku)):
+
 ```bash
 npm install danmaku
 ```
-```bash
-bower install danmaku
+
+```js
+import Danmaku from 'danmaku';
 ```
-You can also use [jsDelivr CDN](https://www.jsdelivr.com/package/npm/danmaku) or download [danmaku.min.js](https://github.com/weizhenye/Danmaku/raw/master/dist/danmaku.min.js) directly.
 
 ## Usage
 
-### Video mode
+### Media mode
 
 ```html
-<video id="my-video" src="./example.mp4"></video>
+<div id="my-video-container" style="width:640px;height:360px;position:relative;">
+  <video id="my-video" src="./example.mp4" style="position:absolute;"></video>
+</div>
 
-<script src="./dist/danmaku.min.js"></script>
-<script>
-  var danmaku = new Danmaku();
-  danmaku.init({
-    video: document.getElementById('my-video'),
-    comments: []
-  });
-</script>
-```
-
-### Audio mode
-
-```html
-<div id="my-container" style="width:640px;height:360px;"></div>
+<div id="my-audio-container" style="width:640px;height:360px;position:relative;"></div>
 <audio id="my-audio" src="./example.mp3"></audio>
 
-<script src="./dist/danmaku.min.js"></script>
+<script src="path/to/danmaku.min.js"></script>
 <script>
-  var danmaku = new Danmaku();
-  danmaku.init({
-    container: document.getElementById('my-container'),
-    audio: document.getElementById('my-audio'),
+  var danmaku1 = new Danmaku({
+    container: document.getElementById('my-video-container'),
+    media: document.getElementById('my-video'),
+    comments: []
+  });
+  var danmaku2 = new Danmaku({
+    container: document.getElementById('my-audio-container'),
+    media: document.getElementById('my-audio'),
     comments: []
   });
 </script>
@@ -89,11 +83,10 @@ Client:
 <div id="my-container" style="width:640px;height:360px;"></div>
 <button id="send-button">Send</button>
 
-<script src="./socket.io.js"></script>
-<script src="./dist/danmaku.min.js"></script>
+<script src="path/to/socket.io.js"></script>
+<script src="path/to/danmaku.min.js"></script>
 <script>
-  var danmaku = new Danmaku();
-  danmaku.init({
+  var danmaku = new Danmaku({
     container: document.getElementById('my-container')
   });
   var socket = io();
@@ -120,17 +113,13 @@ Client:
 ### Initialization
 
 ```js
-var danmaku = new Danmaku();
-danmaku.init({
-  // The stage to display comments will be appended to container.
+var danmaku = new Danmaku({
+  // REQUIRED. The stage to display comments will be appended to container.
   container: document.getElementById('my-container'),
 
-  // Danmaku will create a container automatically and append video to the
-  // container if container isn't assigned.
-  video: document.getElementById('my-video'),
-
-  // You should always assign a container when using audio mode.
-  audio: document.getElementById('my-audio'),
+  // media can be <video> or <audio> element,
+  // if it's not provided, Danmaku will be in live mode
+  media: document.getElementById('my-media'),
 
   // Array of comment, you can find its format in `danmaku.emit` API.
   comments: [],
@@ -144,10 +133,6 @@ danmaku.init({
   speed: 144
 });
 ```
-Or just put options here:
-```js
-var danmaku = new Danmaku({/* options */});
-```
 
 ### Emit a comment
 
@@ -158,7 +143,7 @@ danmaku.emit({
   // 'rtl'(right to left) by default, available mode: 'ltr', 'rtl', 'top', 'bottom'.
   mode: 'rtl',
 
-  // Specified in seconds, if not provided when using with media(video or audio),
+  // Specified in seconds, if not provided when using with media,
   // it will be set to `media.currentTime`. Not required in live mode.
   time: 233.3,
 
@@ -229,7 +214,7 @@ Tips:
 
 ### Resize
 
-Do it when you resize container or video.
+Do it when you resize container.
 
 ```js
 danmaku.resize();

@@ -1,8 +1,8 @@
 /* eslint no-invalid-this: 0 */
 export default function(cmt) {
   var that = this;
-  var ct = this._hasMedia ? this.media.currentTime : Date.now() / 1000;
-  var pbr = this._hasMedia ? this.media.playbackRate : 1;
+  var ct = this.media ? this.media.currentTime : Date.now() / 1000;
+  var pbr = this.media ? this.media.playbackRate : 1;
   function willCollide(cr, cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       return ct - cr.time < that.duration;
@@ -15,7 +15,7 @@ export default function(cmt) {
     // (rtl mode) the right end of `cr` move out of left side of stage
     var crLeftTime = that.duration + cr.time - ct;
     var cmtTotalWidth = that.width + cmt.width;
-    var cmtTime = that._hasMedia ? cmt.time : cmt._utc;
+    var cmtTime = that.media ? cmt.time : cmt._utc;
     var cmtElapsed = cmtTotalWidth * (ct - cmtTime) * pbr / that.duration;
     var cmtArrival = that.width - cmtElapsed;
     // (rtl mode) the left end of `cmt` reach the left side of stage
@@ -42,7 +42,7 @@ export default function(cmt) {
   var channel = crs[last].range;
   var crObj = {
     range: channel + cmt.height,
-    time: this._hasMedia ? cmt.time : cmt._utc,
+    time: this.media ? cmt.time : cmt._utc,
     width: cmt.width,
     height: cmt.height
   };

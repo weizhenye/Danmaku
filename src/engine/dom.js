@@ -5,18 +5,18 @@ import { transform } from '../util/transform.js';
 /* eslint no-invalid-this: 0 */
 export default function() {
   var dn = Date.now() / 1000;
-  var ct = this._hasMedia ? this.media.currentTime : dn;
-  var pbr = this._hasMedia ? this.media.playbackRate : 1;
+  var ct = this.media ? this.media.currentTime : dn;
+  var pbr = this.media ? this.media.playbackRate : 1;
   var cmt = null;
   var cmtt = 0;
   var i = 0;
   for (i = this.runningList.length - 1; i >= 0; i--) {
     cmt = this.runningList[i];
-    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    cmtt = this.media ? cmt.time : cmt._utc;
     if (ct - cmtt > this.duration) {
       this.stage.removeChild(cmt.node);
       /* istanbul ignore else */
-      if (!this._hasMedia) {
+      if (!this.media) {
         cmt.node = null;
       }
       this.runningList.splice(i, 1);
@@ -26,7 +26,7 @@ export default function() {
   var df = document.createDocumentFragment();
   while (this.position < this.comments.length) {
     cmt = this.comments[this.position];
-    cmtt = this._hasMedia ? cmt.time : cmt._utc;
+    cmtt = this.media ? cmt.time : cmt._utc;
     if (cmtt >= ct) {
       break;
     }
@@ -34,7 +34,7 @@ export default function() {
       ++this.position;
       continue;
     }
-    if (this._hasMedia) {
+    if (this.media) {
       cmt._utc = dn - (this.media.currentTime - cmt.time);
     }
     cmt.node = cmt.node || createCommentNode(cmt);

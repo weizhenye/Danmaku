@@ -8,7 +8,6 @@ import resize from './api/resize.js';
 import speed from './api/speed.js';
 
 function Danmaku(opt) {
-  this._isInited = false;
   opt && init.call(this, opt);
 }
 Danmaku.prototype.destroy = function() {

@@ -1,14 +1,7 @@
 /* eslint-disable no-invalid-this */
 export default function() {
-  if (this._hasInitContainer) {
-    this.width = this.container.offsetWidth;
-    this.height = this.container.offsetHeight;
-  }
-  if (this._hasVideo &&
-    (!this._hasInitContainer || !this.width || !this.height)) {
-    this.width = this.media.clientWidth;
-    this.height = this.media.clientHeight;
-  }
+  this.width = this.container.offsetWidth;
+  this.height = this.container.offsetHeight;
   if (this._useCanvas) {
     this.stage.width = this.width;
     this.stage.height = this.height;
