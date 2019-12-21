@@ -11,7 +11,6 @@ describe('destroy API', function() {
       danmaku.destroy();
       assert.equal(null, danmaku.comments);
       assert.equal(null, danmaku.container);
-      assert.equal(null, danmaku.stage);
       danmaku.destroy();
       done();
     }, 100);

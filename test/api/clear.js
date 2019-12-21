@@ -14,11 +14,11 @@ describe('clear API', function() {
 
     danmaku.emit({ text: '勝ったな！ガハハ！' });
     setTimeout(function() {
-      assert.equal(1, danmaku.runningList.length);
-      assert.equal(true, danmaku.stage.hasChildNodes());
+      assert.equal(1, danmaku._.runningList.length);
+      assert.equal(true, danmaku._.stage.hasChildNodes());
       danmaku.clear();
-      assert.equal(0, danmaku.runningList.length);
-      assert.equal(false, danmaku.stage.hasChildNodes());
+      assert.equal(0, danmaku._.runningList.length);
+      assert.equal(false, danmaku._.stage.hasChildNodes());
       done();
     }, 100);
   });
@@ -31,10 +31,10 @@ describe('clear API', function() {
 
     danmaku.emit({ text: '勝ったな！ガハハ！' });
     setTimeout(function() {
-      assert.equal(1, danmaku.runningList.length);
-      assert.equal('CANVAS', danmaku.runningList[0].canvas.tagName);
+      assert.equal(1, danmaku._.runningList.length);
+      assert.equal('CANVAS', danmaku._.runningList[0].canvas.tagName);
       danmaku.clear();
-      assert.equal(0, danmaku.runningList.length);
+      assert.equal(0, danmaku._.runningList.length);
       done();
     }, 100);
   });

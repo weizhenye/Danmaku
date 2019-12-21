@@ -9,12 +9,12 @@ describe('Initialization', function() {
 
   it.skip('should support set options in constructor', function() {
     danmaku = new Danmaku();
-    assert.equal(false, danmaku._isInited);
+    assert.equal(false, danmaku._.isInited);
 
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(true, danmaku._isInited);
+    assert.equal(true, danmaku._.isInited);
   });
 
   it('should support live mode', function() {
@@ -67,18 +67,18 @@ describe('Initialization', function() {
       container: document.getElementById('test-container'),
       engine: 'DOM'
     });
-    assert.equal(false, danmaku._useCanvas);
+    assert.equal(false, danmaku._.useCanvas);
     assert.equal('dom', danmaku.engine);
-    assert.equal('DIV', danmaku.stage.tagName);
+    assert.equal('DIV', danmaku._.stage.tagName);
   });
 
   it('should use DOM engine by default', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(false, danmaku._useCanvas);
+    assert.equal(false, danmaku._.useCanvas);
     assert.equal('dom', danmaku.engine);
-    assert.equal('DIV', danmaku.stage.tagName);
+    assert.equal('DIV', danmaku._.stage.tagName);
   });
 
   it('should support canvas engine', function() {
@@ -86,9 +86,9 @@ describe('Initialization', function() {
       container: document.getElementById('test-container'),
       engine: 'canvas'
     });
-    assert.equal(true, danmaku._useCanvas);
+    assert.equal(true, danmaku._.useCanvas);
     assert.equal('canvas', danmaku.engine);
-    assert.equal('CANVAS', danmaku.stage.tagName);
+    assert.equal('CANVAS', danmaku._.stage.tagName);
   });
 
   it('should support speed', function() {
@@ -110,9 +110,9 @@ describe('Initialization', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(640, danmaku.width);
-    assert.equal(360, danmaku.height);
-    assert.equal('640px', danmaku.stage.style.width);
-    assert.equal('360px', danmaku.stage.style.height);
+    assert.equal(640, danmaku._.width);
+    assert.equal(360, danmaku._.height);
+    assert.equal('640px', danmaku._.stage.style.width);
+    assert.equal('360px', danmaku._.stage.style.height);
   });
 });

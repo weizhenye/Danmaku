@@ -7,16 +7,17 @@ import { resetSpace } from '../util/space.js';
 
 /* eslint-disable no-invalid-this */
 export default function(opt) {
+  this._ = {};
   this.container = opt.container || document.createElement('div');
   this.media = opt.media;
-  this.visible = true;
+  this._.visible = true;
 
   this.engine = (opt.engine || 'DOM').toLowerCase();
-  this._useCanvas = (this.engine === 'canvas');
-  this._requestID = 0;
+  this._.useCanvas = (this.engine === 'canvas');
+  this._.requestID = 0;
 
-  this._speed = Math.max(0, opt.speed) || 144;
-  this.duration = 4;
+  this._.speed = Math.max(0, opt.speed) || 144;
+  this._.duration = 4;
 
   this.comments = opt.comments || [];
   this.comments.sort(function(a, b) {
@@ -25,36 +26,36 @@ export default function(opt) {
   for (var i = 0; i < this.comments.length; i++) {
     this.comments[i].mode = formatMode(this.comments[i].mode);
   }
-  this.runningList = [];
-  this.position = 0;
+  this._.runningList = [];
+  this._.position = 0;
 
-  this.paused = true;
+  this._.paused = true;
   if (this.media) {
-    this._listener = {};
-    bindEvents.call(this, this._listener);
+    this._.listener = {};
+    bindEvents.call(this, this._.listener);
   }
 
-  if (this._useCanvas) {
-    this.stage = document.createElement('canvas');
-    this.stage.context = this.stage.getContext('2d');
+  if (this._.useCanvas) {
+    this._.stage = document.createElement('canvas');
+    this._.stage.context = this._.stage.getContext('2d');
   } else {
-    this.stage = document.createElement('div');
-    this.stage.style.cssText =
+    this._.stage = document.createElement('div');
+    this._.stage.style.cssText =
       'overflow:hidden;white-space:nowrap;transform:translateZ(0);';
   }
-  this.stage.style.cssText += 'position:relative;pointer-events:none;';
+  this._.stage.style.cssText += 'position:relative;pointer-events:none;';
 
   this.resize();
-  this.container.appendChild(this.stage);
+  this.container.appendChild(this._.stage);
 
-  this._space = {};
-  resetSpace(this._space);
-  this._fontSize = {
+  this._.space = {};
+  resetSpace(this._.space);
+  this._.fontSize = {
     root: 16,
     container: 16
   };
-  computeFontSize(document.getElementsByTagName('html')[0], this._fontSize);
-  computeFontSize(this.container, this._fontSize);
+  computeFontSize(document.getElementsByTagName('html')[0], this._.fontSize);
+  computeFontSize(this.container, this._.fontSize);
 
   if (!this.media || !this.media.paused) {
     seek.call(this);

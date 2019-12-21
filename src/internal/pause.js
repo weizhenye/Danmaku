@@ -2,11 +2,11 @@ import { caf } from '../util/animationFrame.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {
-  if (!this.visible || this.paused) {
+  if (!this._.visible || this._.paused) {
     return this;
   }
-  this.paused = true;
-  caf(this._requestID);
-  this._requestID = 0;
+  this._.paused = true;
+  caf(this._.requestID);
+  this._.requestID = 0;
   return this;
 }

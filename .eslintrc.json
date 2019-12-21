@@ -97,7 +97,13 @@
     "indent": [2, 2, { "SwitchCase": 1 }],
     "key-spacing": 2,
     "keyword-spacing": 2,
-    "max-len": [2, { "ignoreUrls": true }],
+    "max-len": ["error", 100, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": false,
+      "ignoreRegExpLiterals": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
     "max-statements-per-line": 2,
     "new-cap": 2,
     "new-parens": 2,

@@ -7,8 +7,8 @@ export default function() {
     return this;
   }
   this.clear();
-  resetSpace(this._space);
+  resetSpace(this._.space);
   var position = binsearch(this.comments, 'time', this.media.currentTime);
-  this.position = Math.max(0, position - 1);
+  this._.position = Math.max(0, position - 1);
   return this;
 }

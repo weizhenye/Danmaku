@@ -56,14 +56,14 @@ describe('emit API', function() {
         .then(delay(100))
         .then($video.pause.bind($video))
         .then(function() {
-          assert.equal(danmaku.position, 2);
+          assert.equal(danmaku._.position, 2);
           danmaku.emit({ time: 1, text: 'Panzer Vor!' });
         })
         .then($video.play.bind($video))
         .then(delay(100))
         .then($video.pause.bind($video))
         .then(function() {
-          assert.equal(danmaku.position, 3);
+          assert.equal(danmaku._.position, 3);
           done();
         })
         .catch(done);

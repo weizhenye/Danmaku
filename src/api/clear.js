@@ -1,18 +1,18 @@
 /* eslint-disable no-invalid-this */
 export default function() {
-  if (this._useCanvas) {
-    this.stage.context.clearRect(0, 0, this.width, this.height);
+  if (this._.useCanvas) {
+    this._.stage.context.clearRect(0, 0, this._.width, this._.height);
     // avoid caching canvas to reduce memory usage
-    for (var i = 0; i < this.runningList.length; i++) {
-      this.runningList[i].canvas = null;
+    for (var i = 0; i < this._.runningList.length; i++) {
+      this._.runningList[i].canvas = null;
     }
   } else {
-    var lc = this.stage.lastChild;
+    var lc = this._.stage.lastChild;
     while (lc) {
-      this.stage.removeChild(lc);
-      lc = this.stage.lastChild;
+      this._.stage.removeChild(lc);
+      lc = this._.stage.lastChild;
     }
   }
-  this.runningList = [];
+  this._.runningList = [];
   return this;
 }

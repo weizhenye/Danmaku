@@ -10,7 +10,7 @@ export default function() {
   pause.call(this);
   this.clear();
   if (this.media) {
-    unbindEvents.call(this, this._listener);
+    unbindEvents.call(this, this._.listener);
   }
   for (var key in this) {
     /* istanbul ignore else  */

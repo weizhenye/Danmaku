@@ -35,9 +35,9 @@ describe('speed API', function() {
     danmaku = new Danmaku({
       container: $zwc
     });
-    var dur = danmaku.duration;
+    var dur = danmaku._.duration;
     danmaku.speed = 72;
-    assert.equal(dur, danmaku.duration);
+    assert.equal(dur, danmaku._.duration);
     danmaku.destroy();
   });
 });

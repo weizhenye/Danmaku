@@ -26,18 +26,18 @@ function syncTimeline(danmaku, $video, done) {
   $video.addEventListener('timeupdate', function() {
     var ct = $video.currentTime;
     if (ct > 0.1 && ct < 0.5) {
-      assert.equal(1, danmaku.runningList.length);
+      assert.equal(1, danmaku._.runningList.length);
       if (flag) {
         flag = false;
         $video.pause();
         setTimeout(function() {
-          assert.equal(1, danmaku.runningList.length);
+          assert.equal(1, danmaku._.runningList.length);
           $video.play();
         }, 100);
       }
     }
     if (ct > 0.6 && ct < 1) {
-      assert.equal(2, danmaku.runningList.length);
+      assert.equal(2, danmaku._.runningList.length);
     }
     if (ct > 1) {
       done();
@@ -78,7 +78,7 @@ describe('Danmaku behavior', function() {
     var ltrPrev = null;
     var topPrev = null;
     var bottomPrev = null;
-    var rl = danmaku.runningList;
+    var rl = danmaku._.runningList;
     var iv = setInterval(function() {
       if (rtlPrev !== null) {
         clearInterval(iv);
@@ -89,7 +89,7 @@ describe('Danmaku behavior', function() {
         assert.equal(rl[2].x, topPrev);
         assert.equal(0, rl[2].y);
         assert.equal(rl[3].x, bottomPrev);
-        assert.equal(danmaku.height - rl[3].height, rl[3].y);
+        assert.equal(danmaku._.height - rl[3].height, rl[3].y);
         done();
       }
       if (rtlPrev === null && rl.length === 4) {
@@ -114,13 +114,13 @@ describe('Danmaku behavior', function() {
     danmaku.emit({ text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr' });
     danmaku.emit({ text: 'top 1', mode: 'top' });
 
-    var rl = danmaku.runningList;
+    var rl = danmaku._.runningList;
     var iv = setInterval(function() {
       if (rl.length === 7) {
         clearInterval(iv);
         assert.equal(rl[0].height, rl[1].y);
         assert.equal(rl[2].height, rl[3].y);
-        assert.equal(danmaku.height - rl[4].height - rl[5].height, rl[5].y);
+        assert.equal(danmaku._.height - rl[4].height - rl[5].height, rl[5].y);
         assert.equal(true, rl[6].y > rl[0].y);
         done();
       }
@@ -143,8 +143,8 @@ describe('Danmaku behavior', function() {
     danmaku.speed = 12800;
     danmaku.emit({ text: 'rtl', mode: 'rtl' });
     setTimeout(function() {
-      assert.equal(0, danmaku.runningList.length);
-      assert.isFalse(danmaku.stage.hasChildNodes());
+      assert.equal(0, danmaku._.runningList.length);
+      assert.isFalse(danmaku._.stage.hasChildNodes());
       done();
     }, 500);
   });
@@ -158,7 +158,7 @@ describe('Danmaku behavior', function() {
     danmaku.speed = 12800;
     danmaku.emit({ text: 'rtl', mode: 'rtl' });
     setTimeout(function() {
-      assert.equal(0, danmaku.runningList.length);
+      assert.equal(0, danmaku._.runningList.length);
       done();
     }, 500);
   });

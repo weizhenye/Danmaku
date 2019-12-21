@@ -30,11 +30,11 @@ export default function(obj) {
     var position = 0;
     if (cmt.time === undefined) {
       cmt.time = this.media.currentTime;
-      position = this.position;
+      position = this._.position;
     } else {
       position = binsearch(this.comments, 'time', cmt.time);
-      if (position < this.position) {
-        this.position += 1;
+      if (position < this._.position) {
+        this._.position += 1;
       }
     }
     this.comments.splice(position, 0, cmt);

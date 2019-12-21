@@ -3,10 +3,10 @@ import seek from '../internal/seek.js';
 
 /* eslint-disable no-invalid-this */
 export default function() {
-  if (this.visible) {
+  if (this._.visible) {
     return this;
   }
-  this.visible = true;
+  this._.visible = true;
   if (this.media && this.media.paused) {
     return this;
   }
