@@ -11,25 +11,15 @@ describe('Initialization', function() {
   it('should support set options in constructor', function() {
     danmaku = new Danmaku();
     assert.equal(false, danmaku._isInited);
-    danmaku.init({
-      container: document.getElementById('test-container')
-    });
-    assert.equal(true, danmaku._isInited);
 
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     assert.equal(true, danmaku._isInited);
-    danmaku.init({
-      video: document.createElement('video')
-    });
-    assert.equal(false, danmaku._hasMedia);
-    assert.equal(false, danmaku._hasVideo);
   });
 
   it('should support live mode', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     assert.equal(true, danmaku._hasInitContainer);
@@ -37,8 +27,7 @@ describe('Initialization', function() {
   });
 
   it('should support audio mode', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       audio: document.createElement('audio')
     });
@@ -48,8 +37,7 @@ describe('Initialization', function() {
   });
 
   it('should support video mode', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       video: document.createElement('video')
     });
@@ -62,8 +50,7 @@ describe('Initialization', function() {
     var $video = document.createElement('video');
     document.body.appendChild($video);
 
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       video: $video
     });
     assert.equal(false, danmaku._hasInitContainer);
@@ -96,18 +83,6 @@ describe('Initialization', function() {
   });
 
   it('should throw error when no container is assigned', function() {
-    danmaku = new Danmaku();
-    assert.throws(function() {
-      danmaku.init();
-    });
-    assert.throws(function() {
-      danmaku.init({});
-    });
-    assert.throws(function() {
-      danmaku.init({
-        audio: document.createElement('audio')
-      });
-    });
     assert.throws(function() {
       danmaku = new Danmaku({});
     });
@@ -119,13 +94,12 @@ describe('Initialization', function() {
   });
 
   it('should support comments', function() {
-    danmaku = new Danmaku();
     var render = function() {
       var $span = document.createElement('span');
       $span.textContent = '佐倉さんひくわー！！！';
       return $span;
     };
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       video: document.createElement('video'),
       comments: [
@@ -142,8 +116,7 @@ describe('Initialization', function() {
   });
 
   it('should support DOM engine', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       engine: 'DOM'
     });
@@ -153,8 +126,7 @@ describe('Initialization', function() {
   });
 
   it('should use DOM engine by default', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     assert.equal(false, danmaku._useCanvas);
@@ -163,8 +135,7 @@ describe('Initialization', function() {
   });
 
   it('should support canvas engine', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       engine: 'canvas'
     });
@@ -174,8 +145,7 @@ describe('Initialization', function() {
   });
 
   it('should support speed', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       speed: 100
     });
@@ -183,8 +153,7 @@ describe('Initialization', function() {
   });
 
   it('should set speed as 144 by default', function() {
-    danmaku = new Danmaku();
-    danmaku.init({
+    danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
     assert.equal(144, danmaku.speed);

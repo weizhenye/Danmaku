@@ -1,24 +1,34 @@
-import initMixin from './api/init.js';
-import emitMixin from './api/emit.js';
-import clearMixin from './api/clear.js';
-import destroyMixin from './api/destroy.js';
-import showMixin from './api/show.js';
-import hideMixin from './api/hide.js';
-import resizeMixin from './api/resize.js';
-import speedMixin from './api/speed.js';
+import init from './api/init.js';
+import destroy from './api/destroy.js';
+import emit from './api/emit.js';
+import show from './api/show.js';
+import hide from './api/hide.js';
+import clear from './api/clear.js';
+import resize from './api/resize.js';
+import speed from './api/speed.js';
 
 function Danmaku(opt) {
   this._isInited = false;
-  opt && this.init(opt);
+  opt && init.call(this, opt);
 }
-
-initMixin(Danmaku);
-emitMixin(Danmaku);
-clearMixin(Danmaku);
-destroyMixin(Danmaku);
-showMixin(Danmaku);
-hideMixin(Danmaku);
-resizeMixin(Danmaku);
-speedMixin(Danmaku);
+Danmaku.prototype.destroy = function() {
+  return destroy.call(this);
+};
+Danmaku.prototype.emit = function(cmt) {
+  return emit.call(this, cmt);
+};
+Danmaku.prototype.show = function() {
+  return show.call(this);
+};
+Danmaku.prototype.hide = function() {
+  return hide.call(this);
+};
+Danmaku.prototype.clear = function() {
+  return clear.call(this);
+};
+Danmaku.prototype.resize = function() {
+  return resize.call(this);
+};
+Object.defineProperty(Danmaku.prototype, 'speed', speed);
 
 export default Danmaku;
