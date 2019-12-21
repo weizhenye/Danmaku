@@ -1,6 +1,6 @@
 import allocate from '../internal/allocate.js';
 import createCommentNode from '../util/commentNode.js';
-import {transform} from '../util/transform.js';
+import { transform } from '../util/transform.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {

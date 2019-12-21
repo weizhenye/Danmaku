@@ -1,5 +1,5 @@
 import Danmaku from '../../src/index.js';
-import {createVideo, delay} from '../helper.js';
+import { createVideo, delay } from '../helper.js';
 
 describe('emit API', function() {
   var danmaku = null;
@@ -9,7 +9,7 @@ describe('emit API', function() {
   });
 
   it('should deal with comment\'s properties', function() {
-    var comment = {text: 'Panzer Vor'};
+    var comment = { text: 'Panzer Vor' };
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
@@ -25,11 +25,11 @@ describe('emit API', function() {
       container: document.getElementById('test-container'),
       video: document.createElement('video'),
       comments: [
-        {time: 0, text: 'Panzer Vor'},
-        {time: 2, text: 'Panzer Vor!!'}
+        { time: 0, text: 'Panzer Vor' },
+        { time: 2, text: 'Panzer Vor!!' }
       ]
     });
-    var comment = {time: 1, text: 'Panzer Vor!'};
+    var comment = { time: 1, text: 'Panzer Vor!' };
     danmaku.emit(comment);
     assert.equal(comment.time, danmaku.comments[1].time);
   });
@@ -45,9 +45,9 @@ describe('emit API', function() {
         container: document.getElementById('test-container'),
         video: $video,
         comments: [
-          {time: 0, text: 'Panzer Vor'},
-          {time: 2, text: 'Panzer Vor!!'},
-          {time: 3, text: 'Panzer Vor!!!'}
+          { time: 0, text: 'Panzer Vor' },
+          { time: 2, text: 'Panzer Vor!!' },
+          { time: 3, text: 'Panzer Vor!!!' }
         ]
       });
       $video.currentTime = 2.2;
@@ -57,7 +57,7 @@ describe('emit API', function() {
         .then($video.pause.bind($video))
         .then(function() {
           assert.equal(danmaku.position, 2);
-          danmaku.emit({time: 1, text: 'Panzer Vor!'});
+          danmaku.emit({ time: 1, text: 'Panzer Vor!' });
         })
         .then($video.play.bind($video))
         .then(delay(100))
@@ -75,7 +75,7 @@ describe('emit API', function() {
       container: document.getElementById('test-container'),
       video: document.createElement('video')
     });
-    var comment = {text: 'without time property'};
+    var comment = { text: 'without time property' };
     danmaku.emit(comment);
     assert.equal('number', typeof danmaku.comments[0].time);
   });

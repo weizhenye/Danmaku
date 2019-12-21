@@ -58,22 +58,22 @@ describe('comment canvas', function() {
   });
 
   it('should support to set textBaseline', function() {
-    var comment = {text: 'ドキドキ'};
+    var comment = { text: 'ドキドキ' };
     var canvas = createCommentCanvas(comment, fontSize);
     var ctx = canvas.getContext('2d');
     assert.equal('bottom', ctx.textBaseline);
 
-    comment = {text: '', canvasStyle: {textBaseline: 'top'}};
+    comment = { text: '', canvasStyle: { textBaseline: 'top' } };
     canvas = createCommentCanvas(comment, fontSize);
     ctx = canvas.getContext('2d');
     assert.equal(comment.canvasStyle.textBaseline, ctx.textBaseline);
 
-    comment = {text: '', canvasStyle: {textBaseline: 'middle'}};
+    comment = { text: '', canvasStyle: { textBaseline: 'middle' } };
     canvas = createCommentCanvas(comment, fontSize);
     ctx = canvas.getContext('2d');
     assert.equal(comment.canvasStyle.textBaseline, ctx.textBaseline);
 
-    comment = {text: '', canvasStyle: {textBaseline: 'alphabetic'}};
+    comment = { text: '', canvasStyle: { textBaseline: 'alphabetic' } };
     canvas = createCommentCanvas(comment, fontSize);
     ctx = canvas.getContext('2d');
     assert.equal(comment.canvasStyle.textBaseline, ctx.textBaseline);

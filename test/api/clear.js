@@ -12,7 +12,7 @@ describe('clear API', function() {
       container: document.getElementById('test-container')
     });
 
-    danmaku.emit({text: '勝ったな！ガハハ！'});
+    danmaku.emit({ text: '勝ったな！ガハハ！' });
     setTimeout(function() {
       assert.equal(1, danmaku.runningList.length);
       assert.equal(true, danmaku.stage.hasChildNodes());
@@ -29,7 +29,7 @@ describe('clear API', function() {
       engine: 'canvas'
     });
 
-    danmaku.emit({text: '勝ったな！ガハハ！'});
+    danmaku.emit({ text: '勝ったな！ガハハ！' });
     setTimeout(function() {
       assert.equal(1, danmaku.runningList.length);
       assert.equal('CANVAS', danmaku.runningList[0].canvas.tagName);

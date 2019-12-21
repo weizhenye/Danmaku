@@ -1,4 +1,4 @@
-import {caf} from '../util/animationFrame.js';
+import { caf } from '../util/animationFrame.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {

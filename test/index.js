@@ -1,6 +1,6 @@
 import Danmaku from '../src/index.js';
 import domEngine from '../src/engine/dom.js';
-import {VIDEO_SRC} from './helper.js';
+import { VIDEO_SRC } from './helper.js';
 
 function skipAfter(time, done) {
   /* eslint-disable no-invalid-this */
@@ -69,10 +69,10 @@ describe('Danmaku behavior', function() {
       container: document.getElementById('test-container')
     });
 
-    danmaku.emit({text: 'rtl', mode: 'rtl'});
-    danmaku.emit({text: 'ltr', mode: 'ltr'});
-    danmaku.emit({text: 'top', mode: 'top'});
-    danmaku.emit({text: 'bottom', mode: 'bottom'});
+    danmaku.emit({ text: 'rtl', mode: 'rtl' });
+    danmaku.emit({ text: 'ltr', mode: 'ltr' });
+    danmaku.emit({ text: 'top', mode: 'top' });
+    danmaku.emit({ text: 'bottom', mode: 'bottom' });
 
     var rtlPrev = null;
     var ltrPrev = null;
@@ -110,9 +110,9 @@ describe('Danmaku behavior', function() {
       engine: 'canvas'
     });
 
-    danmaku.emit({text: 'ltr 1', mode: 'ltr'});
-    danmaku.emit({text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr'});
-    danmaku.emit({text: 'top 1', mode: 'top'});
+    danmaku.emit({ text: 'ltr 1', mode: 'ltr' });
+    danmaku.emit({ text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr' });
+    danmaku.emit({ text: 'top 1', mode: 'top' });
 
     var rl = danmaku.runningList;
     var iv = setInterval(function() {
@@ -125,12 +125,12 @@ describe('Danmaku behavior', function() {
         done();
       }
       if (rl.length === 4) {
-        danmaku.emit({text: 'bottom 1', mode: 'bottom'});
-        danmaku.emit({text: 'bottom 2', mode: 'bottom'});
-        danmaku.emit({text: 'this is a long text', mode: 'ltr'});
+        danmaku.emit({ text: 'bottom 1', mode: 'bottom' });
+        danmaku.emit({ text: 'bottom 2', mode: 'bottom' });
+        danmaku.emit({ text: 'this is a long text', mode: 'ltr' });
       }
       if (rl.length === 3) {
-        danmaku.emit({text: 'top 2', mode: 'top'});
+        danmaku.emit({ text: 'top 2', mode: 'top' });
       }
     }, 100);
   });
@@ -141,7 +141,7 @@ describe('Danmaku behavior', function() {
     });
 
     danmaku.speed = 12800;
-    danmaku.emit({text: 'rtl', mode: 'rtl'});
+    danmaku.emit({ text: 'rtl', mode: 'rtl' });
     setTimeout(function() {
       assert.equal(0, danmaku.runningList.length);
       assert.isFalse(danmaku.stage.hasChildNodes());
@@ -156,7 +156,7 @@ describe('Danmaku behavior', function() {
     });
 
     danmaku.speed = 12800;
-    danmaku.emit({text: 'rtl', mode: 'rtl'});
+    danmaku.emit({ text: 'rtl', mode: 'rtl' });
     setTimeout(function() {
       assert.equal(0, danmaku.runningList.length);
       done();
@@ -171,8 +171,8 @@ describe('Danmaku behavior', function() {
       container: document.getElementById('test-container'),
       video: $video,
       comments: [
-        {text: '0', time: 0},
-        {text: '0.5', time: 0.5}
+        { text: '0', time: 0 },
+        { text: '0.5', time: 0.5 }
       ]
     });
     syncTimeline(danmaku, $video, done);
@@ -187,8 +187,8 @@ describe('Danmaku behavior', function() {
       video: $video,
       engine: 'canvas',
       comments: [
-        {text: '0', time: 0},
-        {text: '0.5', time: 0.5}
+        { text: '0', time: 0 },
+        { text: '0.5', time: 0.5 }
       ]
     });
     syncTimeline(danmaku, $video, done);

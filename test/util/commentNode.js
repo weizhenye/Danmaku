@@ -2,13 +2,13 @@ import createCommentNode from '../../src/util/commentNode.js';
 
 describe('comment node', function() {
   it('should create a <div> node by style', function() {
-    var comment = {text: 'Fly Me To The Moon'};
+    var comment = { text: 'Fly Me To The Moon' };
     var node = createCommentNode(comment);
     assert.equal('DIV', node.tagName);
     assert.equal(comment.text, node.textContent);
     assert.equal('absolute', node.style.position);
 
-    comment.style = {fontSize: '20px'};
+    comment.style = { fontSize: '20px' };
     node = createCommentNode(comment);
     assert.equal(comment.style.fontSize, node.style.fontSize);
   });

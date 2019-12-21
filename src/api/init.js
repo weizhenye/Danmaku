@@ -1,9 +1,9 @@
-import {bindEvents} from '../internal/events.js';
+import { bindEvents } from '../internal/events.js';
 import play from '../internal/play.js';
 import seek from '../internal/seek.js';
-import {computeFontSize} from '../util/fontSize.js';
+import { computeFontSize } from '../util/fontSize.js';
 import formatMode from '../util/formatMode.js';
-import {resetSpace} from '../util/space.js';
+import { resetSpace } from '../util/space.js';
 
 /* eslint-disable no-invalid-this */
 export default function(opt) {

@@ -1,6 +1,6 @@
 import domEngine from '../engine/dom.js';
 import canvasEngine from '../engine/canvas.js';
-import {raf} from '../util/animationFrame.js';
+import { raf } from '../util/animationFrame.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {

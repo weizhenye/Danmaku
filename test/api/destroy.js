@@ -6,13 +6,12 @@ describe('destroy API', function() {
       container: document.getElementById('test-container')
     });
 
-    danmaku.emit({text: 'Flip Flapper'});
+    danmaku.emit({ text: 'Flip Flapper' });
     setTimeout(function() {
       danmaku.destroy();
       assert.equal(null, danmaku.comments);
       assert.equal(null, danmaku.container);
       assert.equal(null, danmaku.stage);
-      assert.equal(null, danmaku._isInited);
       danmaku.destroy();
       done();
     }, 100);

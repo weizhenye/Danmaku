@@ -1,5 +1,5 @@
 import Danmaku from '../../src/index.js';
-import {createVideo, delay} from '../helper.js';
+import { createVideo, delay } from '../helper.js';
 
 describe('show and hide API', function() {
   var danmaku = null;

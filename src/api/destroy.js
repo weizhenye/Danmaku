@@ -1,4 +1,4 @@
-import {unbindEvents} from '../internal/events.js';
+import { unbindEvents } from '../internal/events.js';
 import pause from '../internal/pause.js';
 
 /* eslint-disable no-invalid-this */

@@ -1,4 +1,4 @@
-import {computeFontSize} from '../../src/util/fontSize.js';
+import { computeFontSize } from '../../src/util/fontSize.js';
 
 describe('font size', function() {
   var fontSize = {
