@@ -7,14 +7,15 @@ describe('Initialization', function() {
     danmaku && danmaku.destroy();
   });
 
-  it.skip('should support set options in constructor', function() {
-    danmaku = new Danmaku();
-    assert.equal(false, danmaku._.isInited);
+  it('should support set options in constructor', function() {
+    danmaku = new Danmaku({});
+    assert.equal(null, danmaku.container.parentNode);
 
+    var container = document.getElementById('test-container');
     danmaku = new Danmaku({
-      container: document.getElementById('test-container')
+      container: container
     });
-    assert.equal(true, danmaku._.isInited);
+    assert.equal(container, danmaku.container);
   });
 
   it('should support live mode', function() {
@@ -67,7 +68,6 @@ describe('Initialization', function() {
       container: document.getElementById('test-container'),
       engine: 'DOM'
     });
-    assert.equal(false, danmaku._.useCanvas);
     assert.equal('dom', danmaku.engine);
     assert.equal('DIV', danmaku._.stage.tagName);
   });
@@ -76,7 +76,6 @@ describe('Initialization', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(false, danmaku._.useCanvas);
     assert.equal('dom', danmaku.engine);
     assert.equal('DIV', danmaku._.stage.tagName);
   });
@@ -86,7 +85,6 @@ describe('Initialization', function() {
       container: document.getElementById('test-container'),
       engine: 'canvas'
     });
-    assert.equal(true, danmaku._.useCanvas);
     assert.equal('canvas', danmaku.engine);
     assert.equal('CANVAS', danmaku._.stage.tagName);
   });
@@ -110,8 +108,8 @@ describe('Initialization', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(640, danmaku._.width);
-    assert.equal(360, danmaku._.height);
+    assert.equal(640, danmaku._.stage.width);
+    assert.equal(360, danmaku._.stage.height);
     assert.equal('640px', danmaku._.stage.style.width);
     assert.equal('360px', danmaku._.stage.style.height);
   });

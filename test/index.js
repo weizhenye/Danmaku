@@ -1,5 +1,5 @@
 import Danmaku from '../src/index.js';
-import domEngine from '../src/engine/dom.js';
+import createEngine from '../src/engine/index.js';
 import { VIDEO_SRC } from './helper.js';
 
 function skipAfter(time, done) {
@@ -89,7 +89,7 @@ describe('Danmaku behavior', function() {
         assert.equal(rl[2].x, topPrev);
         assert.equal(0, rl[2].y);
         assert.equal(rl[3].x, bottomPrev);
-        assert.equal(danmaku._.height - rl[3].height, rl[3].y);
+        assert.equal(danmaku._.stage.height - rl[3].height, rl[3].y);
         done();
       }
       if (rtlPrev === null && rl.length === 4) {
@@ -97,7 +97,13 @@ describe('Danmaku behavior', function() {
         ltrPrev = rl[1].x;
         topPrev = rl[2].x;
         bottomPrev = rl[3].x;
-        domEngine.call(danmaku);
+        var engine = createEngine(
+          danmaku._.engine.framing.bind(danmaku),
+          danmaku._.engine.setup.bind(danmaku),
+          danmaku._.engine.render.bind(danmaku),
+          danmaku._.engine.remove.bind(danmaku)
+        );
+        engine.call(danmaku);
       }
     }, 100);
   });
@@ -120,7 +126,7 @@ describe('Danmaku behavior', function() {
         clearInterval(iv);
         assert.equal(rl[0].height, rl[1].y);
         assert.equal(rl[2].height, rl[3].y);
-        assert.equal(danmaku._.height - rl[4].height - rl[5].height, rl[5].y);
+        assert.equal(danmaku._.stage.height - rl[4].height - rl[5].height, rl[5].y);
         assert.equal(true, rl[6].y > rl[0].y);
         done();
       }

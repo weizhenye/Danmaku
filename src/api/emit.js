@@ -1,16 +1,6 @@
-import formatMode from '../util/formatMode.js';
-import binsearch from '../util/binsearch.js';
+import { formatMode, binsearch } from '../utils.js';
 
-var properties = [
-  // meta
-  'mode', 'time',
-  // both engine
-  'text', 'render',
-  // DOM engine
-  'style',
-  // canvas engine
-  'canvasStyle'
-];
+var properties = ['mode', 'time', 'text', 'render', 'style'];
 
 /* eslint-disable no-invalid-this */
 export default function(obj) {

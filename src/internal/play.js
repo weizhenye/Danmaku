@@ -1,6 +1,5 @@
-import domEngine from '../engine/dom.js';
-import canvasEngine from '../engine/canvas.js';
-import { raf } from '../util/animationFrame.js';
+import createEngine from '../engine/index.js';
+import { raf } from '../utils.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {
@@ -15,7 +14,12 @@ export default function() {
     }
   }
   var that = this;
-  var engine = this._.useCanvas ? canvasEngine : domEngine;
+  var engine = createEngine(
+    this._.engine.framing.bind(this),
+    this._.engine.setup.bind(this),
+    this._.engine.render.bind(this),
+    this._.engine.remove.bind(this)
+  );
   function frame() {
     engine.call(that);
     that._.requestID = raf(frame);

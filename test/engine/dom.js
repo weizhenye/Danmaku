@@ -1,4 +1,4 @@
-import createCommentNode from '../../src/util/commentNode.js';
+import { createCommentNode } from '../../src/engine/dom.js';
 
 describe('comment node', function() {
   it('should create a <div> node by style', function() {

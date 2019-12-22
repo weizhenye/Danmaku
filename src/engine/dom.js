@@ -1,74 +1,103 @@
-import allocate from '../internal/allocate.js';
-import createCommentNode from '../util/commentNode.js';
-import { transform } from '../util/transform.js';
+var transform = (function() {
+  var properties = [
+    'oTransform', // Opera 11.5
+    'msTransform', // IE 9
+    'mozTransform',
+    'webkitTransform',
+    'transform'
+  ];
+  var style = document.createElement('div').style;
+  for (var i = 0; i < properties.length; i++) {
+    /* istanbul ignore else */
+    if (properties[i] in style) {
+      return properties[i];
+    }
+  }
+  /* istanbul ignore next */
+  return 'transform';
+}());
 
-/* eslint no-invalid-this: 0 */
-export default function() {
-  var dn = Date.now() / 1000;
-  var ct = this.media ? this.media.currentTime : dn;
-  var pbr = this.media ? this.media.playbackRate : 1;
-  var cmt = null;
-  var cmtt = 0;
-  var i = 0;
-  for (i = this._.runningList.length - 1; i >= 0; i--) {
-    cmt = this._.runningList[i];
-    cmtt = this.media ? cmt.time : cmt._utc;
-    if (ct - cmtt > this._.duration) {
-      this._.stage.removeChild(cmt.node);
-      /* istanbul ignore else */
-      if (!this.media) {
-        cmt.node = null;
-      }
-      this._.runningList.splice(i, 1);
+export function createCommentNode(cmt) {
+  var node = document.createElement('div');
+  node.style.cssText = 'position:absolute;';
+  if (typeof cmt.render === 'function') {
+    var $el = cmt.render();
+    if ($el instanceof HTMLElement) {
+      node.appendChild($el);
+      return node;
     }
   }
-  var pendingList = [];
+  node.textContent = cmt.text;
+  if (cmt.style) {
+    for (var key in cmt.style) {
+      node.style[key] = cmt.style[key];
+    }
+  }
+  return node;
+}
+
+export function init() {
+  var stage = document.createElement('div');
+  stage.style.cssText = 'overflow:hidden;white-space:nowrap;transform:translateZ(0);';
+  return stage;
+}
+
+export function clear(stage) {
+  var lc = stage.lastChild;
+  while (lc) {
+    stage.removeChild(lc);
+    lc = stage.lastChild;
+  }
+}
+
+export function resize(stage) {
+  stage.style.width = stage.width + 'px';
+  stage.style.height = stage.height + 'px';
+}
+
+export function framing() {
+  //
+}
+
+export function setup(stage, comments) {
   var df = document.createDocumentFragment();
-  while (this._.position < this.comments.length) {
-    cmt = this.comments[this._.position];
-    cmtt = this.media ? cmt.time : cmt._utc;
-    if (cmtt >= ct) {
-      break;
-    }
-    if (ct - cmtt > this._.duration) {
-      ++this._.position;
-      continue;
-    }
-    if (this.media) {
-      cmt._utc = dn - (this.media.currentTime - cmt.time);
-    }
+  var i = 0;
+  var cmt = null;
+  for (i = 0; i < comments.length; i++) {
+    cmt = comments[i];
     cmt.node = cmt.node || createCommentNode(cmt);
-    this._.runningList.push(cmt);
-    pendingList.push(cmt);
     df.appendChild(cmt.node);
-    ++this._.position;
   }
-  if (pendingList.length) {
-    this._.stage.appendChild(df);
+  if (comments.length) {
+    stage.appendChild(df);
   }
-  for (i = 0; i < pendingList.length; i++) {
-    cmt = pendingList[i];
+  for (i = 0; i < comments.length; i++) {
+    cmt = comments[i];
     cmt.width = cmt.width || cmt.node.offsetWidth;
     cmt.height = cmt.height || cmt.node.offsetHeight;
   }
-  for (i = 0; i < pendingList.length; i++) {
-    cmt = pendingList[i];
-    cmt.y = allocate.call(this, cmt);
-    if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-      cmt.x = (this._.width - cmt.width) >> 1;
-      cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
-    }
-  }
-  for (i = 0; i < this._.runningList.length; i++) {
-    cmt = this._.runningList[i];
-    if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-      continue;
-    }
-    var totalWidth = this._.width + cmt.width;
-    var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
-    elapsed |= 0;
-    if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
-    if (cmt.mode === 'rtl') cmt.x = this._.width - elapsed;
-    cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
+}
+
+export function render(stage, cmt) {
+  cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
+}
+
+/* eslint no-invalid-this: 0 */
+export function remove(stage, cmt) {
+  stage.removeChild(cmt.node);
+  /* istanbul ignore else */
+  if (!this.media) {
+    cmt.node = null;
   }
 }
+
+export default {
+  name: 'dom',
+  init: init,
+  clear: clear,
+  resize: resize,
+  framing: framing,
+  setup: setup,
+  render: render,
+  remove: remove,
+};

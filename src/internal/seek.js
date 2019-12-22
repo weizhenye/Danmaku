@@ -1,5 +1,4 @@
-import binsearch from '../util/binsearch.js';
-import { resetSpace } from '../util/space.js';
+import { binsearch, resetSpace } from '../utils.js';
 
 /* eslint no-invalid-this: 0 */
 export default function() {

@@ -158,7 +158,7 @@ danmaku.emit({
 
   // When using canvas engine, following properties are available by default
   // as a CanvasRenderingContext2D object.
-  canvasStyle: {
+  style: {
     // In Chrome, minimum font-size is 12px
     font: '10px sans-serif',
     textAlign: 'start',
@@ -179,7 +179,7 @@ danmaku.emit({
   },
 
   // A custom render to draw your comment.
-  // when `render` exist, `text`, `style` and `canvasStyle` will be ignored.
+  // when `render` exist, `text` and `style` will be ignored.
 
   // When using DOM engine, you should return an HTMLElement.
   render: function() {
@@ -207,10 +207,10 @@ More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-U
 
 Tips:
 * With DOM engine, you may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
-* With canvas engine, line height is `1.2` by default, you can set it with `canvasStyle.font`.
-* `canvasStyle.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
-* There is a hitbox for each comment, which height is determined by its line height. When `canvasStyle.textBaseline` is `top` or `hanging`, the baseline is set to top of the hitbox; when it's `middle`, baseline is middle of the hitbox; otherwise baseline is bottom of the hitbox. So if you set `canvasStyle.textBaseline` to `alphabetic` or `hanging`, the comment's head or foot may out of the hitbox and be invisible.
-* [`canvasStyle.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
+* With canvas engine, line height is `1.2` by default, you can set it with `style.font`.
+* With canvas engine, `style.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
+* There is a hitbox for each comment, which height is determined by its line height. With canvas engine, when `style.textBaseline` is `top` or `hanging`, the baseline is set to top of the hitbox; when it's `middle`, baseline is middle of the hitbox; otherwise baseline is bottom of the hitbox. So if you set `style.textBaseline` to `alphabetic` or `hanging`, the comment's head or foot may out of the hitbox and be invisible.
+* With canvas engine, [`style.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
 
 ### Resize
 

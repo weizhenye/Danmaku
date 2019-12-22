@@ -1,9 +1,9 @@
+import domEngine from '../engine/dom.js';
+import canvasEngine from '../engine/canvas.js';
 import { bindEvents } from '../internal/events.js';
 import play from '../internal/play.js';
 import seek from '../internal/seek.js';
-import { computeFontSize } from '../util/fontSize.js';
-import formatMode from '../util/formatMode.js';
-import { resetSpace } from '../util/space.js';
+import { formatMode, resetSpace } from '../utils.js';
 
 /* eslint-disable no-invalid-this */
 export default function(opt) {
@@ -13,7 +13,7 @@ export default function(opt) {
   this._.visible = true;
 
   this.engine = (opt.engine || 'DOM').toLowerCase();
-  this._.useCanvas = (this.engine === 'canvas');
+  this._.engine = this.engine === 'dom' ? domEngine : canvasEngine;
   this._.requestID = 0;
 
   this._.speed = Math.max(0, opt.speed) || 144;
@@ -35,14 +35,7 @@ export default function(opt) {
     bindEvents.call(this, this._.listener);
   }
 
-  if (this._.useCanvas) {
-    this._.stage = document.createElement('canvas');
-    this._.stage.context = this._.stage.getContext('2d');
-  } else {
-    this._.stage = document.createElement('div');
-    this._.stage.style.cssText =
-      'overflow:hidden;white-space:nowrap;transform:translateZ(0);';
-  }
+  this._.stage = this._.engine.init(this.container);
   this._.stage.style.cssText += 'position:relative;pointer-events:none;';
 
   this.resize();
@@ -50,12 +43,6 @@ export default function(opt) {
 
   this._.space = {};
   resetSpace(this._.space);
-  this._.fontSize = {
-    root: 16,
-    container: 16
-  };
-  computeFontSize(document.getElementsByTagName('html')[0], this._.fontSize);
-  computeFontSize(this.container, this._.fontSize);
 
   if (!this.media || !this.media.paused) {
     seek.call(this);

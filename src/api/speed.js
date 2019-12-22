@@ -10,8 +10,8 @@ export default {
       return this._.speed;
     }
     this._.speed = s;
-    if (this._.width) {
-      this._.duration = this._.width / s;
+    if (this._.stage.width) {
+      this._.duration = this._.stage.width / s;
     }
     return s;
   }
