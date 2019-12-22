@@ -1,3 +1,6 @@
+const replace = require('@rollup/plugin-replace');
+const istanbul = require('rollup-plugin-istanbul');
+
 // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
 const customLaunchers = {
   'SL-iOS-Safari-Latest': {
@@ -85,9 +88,8 @@ module.exports = function(config) {
         format: 'iife',
       },
       plugins: [
-        require('rollup-plugin-istanbul')({
-          exclude: ['test/**/*.js']
-        })
+        replace({ 'process.env.ENGINE': '""' }),
+        istanbul({ exclude: ['test/**/*.js'] })
       ]
     },
     reporters: ['dots', 'saucelabs'],

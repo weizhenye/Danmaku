@@ -12,8 +12,23 @@ export default function(opt) {
   this.media = opt.media;
   this._.visible = true;
 
-  this.engine = (opt.engine || 'DOM').toLowerCase();
-  this._.engine = this.engine === 'dom' ? domEngine : canvasEngine;
+  /* eslint-disable no-undef */
+  /* istanbul ignore next */
+  if (process.env.ENGINE === 'dom') {
+    this.engine = 'dom';
+    this._.engine = domEngine;
+  }
+  /* istanbul ignore next */
+  if (process.env.ENGINE === 'canvas') {
+    this.engine = 'canvas';
+    this._.engine = canvasEngine;
+  }
+  /* istanbul ignore else */
+  if (!process.env.ENGINE) {
+    this.engine = (opt.engine || 'DOM').toLowerCase();
+    this._.engine = this.engine === 'canvas' ? canvasEngine : domEngine;
+  }
+  /* eslint-enable no-undef */
   this._.requestID = 0;
 
   this._.speed = Math.max(0, opt.speed) || 144;

@@ -10,7 +10,7 @@
 
 [![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
 
-Danmaku is a JavaScript library to display flying comments on HTML5 video. It can also display comments to your container in real time without timeline or be used with HTML5 audio.
+Danmaku is a JavaScript library to display flying comments on HTML media elements (video and audio). It can also display comments to your container in real time without timeline.
 
 [Demo](https://danmaku.js.org/)
 
@@ -18,15 +18,29 @@ Danmaku is a JavaScript library to display flying comments on HTML5 video. It ca
 
 ## Installation
 
-You can install it with npm or CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/danmaku), [unpkg](https://unpkg.com/danmaku)):
+You can install it with npm:
 
 ```bash
 npm install danmaku
 ```
 
 ```js
+// Full version
 import Danmaku from 'danmaku';
+// DOM engine only
+import Danmaku from 'danmaku/dist/esm/danmaku.dom.js';
+// Canvas engine only
+import Danmaku from 'danmaku/dist/esm/danmaku.canvas.js';
 ```
+
+Or use CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/danmaku), [unpkg](https://unpkg.com/danmaku/)):
+
+|  | Full | DOM engine only | Canvas engine only |
+| - | - | - | - |
+| UMD | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.js?label=danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.js?label=danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.js?label=danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.js) |
+| UMD (production) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.min.js?label=danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.min.js?label=danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.min.js?label=danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.min.js) |
+| ESM | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.js?label=esm/danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.js?label=esm/danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.js?label=esm/danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.js) |
+| ESM (production) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.min.js?label=esm/danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.min.js?label=esm/danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.min.js?label=esm/danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.min.js) |
 
 ## Usage
 
@@ -121,12 +135,13 @@ var danmaku = new Danmaku({
   // if it's not provided, Danmaku will be in live mode
   media: document.getElementById('my-media'),
 
-  // Array of comment, you can find its format in `danmaku.emit` API.
+  // Array of comment, used in media mode,
+  // you can find its format in `danmaku.emit` API.
   comments: [],
 
-  // You can use 'DOM' engine or 'canvas' engine to render comments.
+  // You can use DOM engine or canvas engine to render comments.
   // Canvas engine may more efficient than DOM however it costs more memory.
-  // 'DOM' by default, available in all mode.
+  // 'DOM' by default in full version.
   engine: 'canvas',
 
   // You can also set speed by using `danmaku.speed` API.

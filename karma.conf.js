@@ -1,3 +1,6 @@
+const replace = require('@rollup/plugin-replace');
+const istanbul = require('rollup-plugin-istanbul');
+
 module.exports = function(config) {
   config.set({
     singleRun: true,
@@ -14,9 +17,8 @@ module.exports = function(config) {
         format: 'iife',
       },
       plugins: [
-        require('rollup-plugin-istanbul')({
-          exclude: ['test/**/*.js']
-        })
+        replace({ 'process.env.ENGINE': '""' }),
+        istanbul({ exclude: ['test/**/*.js'] })
       ]
     },
     reporters: ['progress', 'coverage'],
