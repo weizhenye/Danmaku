@@ -38,9 +38,9 @@ Or use CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/danmaku), [unpkg](ht
 |  | Full | DOM engine only | Canvas engine only |
 | - | - | - | - |
 | UMD | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.js?label=danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.js?label=danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.js?label=danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.js) |
-| UMD (production) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.min.js?label=danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.min.js?label=danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.min.js?label=danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.min.js) |
+| UMD minified | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.min.js?label=danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.min.js?label=danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.min.js?label=danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.min.js) |
 | ESM | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.js?label=esm/danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.js?label=esm/danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.js?label=esm/danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.js) |
-| ESM (production) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.min.js?label=esm/danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.min.js?label=esm/danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.min.js?label=esm/danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.min.js) |
+| ESM minified | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.min.js?label=esm/danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.min.js?label=esm/danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.min.js?label=esm/danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.min.js) |
 
 ## Usage
 
@@ -163,7 +163,8 @@ danmaku.emit({
   time: 233.3,
 
   // When using DOM engine, Danmaku will create a <div> node for each comment,
-  // these styles will be set to `node.style` directly, just write with CSS rules.
+  // the style object will be set to `node.style` directly, just write with CSS rules.
+  // For example:
   style: {
     fontSize: '20px',
     color: '#ffffff',
@@ -171,29 +172,22 @@ danmaku.emit({
     textShadow: '-1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000'
   },
 
-  // When using canvas engine, following properties are available by default
-  // as a CanvasRenderingContext2D object.
+  // When using canvas engine, Danmaku will create a <canvas> object for each comment,
+  // you should pass in a CanvasRenderingContext2D object.
+  // For example:
   style: {
-    // In Chrome, minimum font-size is 12px
     font: '10px sans-serif',
     textAlign: 'start',
     // Note that 'bottom' is the default
     textBaseline: 'bottom',
     direction: 'inherit',
     fillStyle: '#000',
-    // If strokeStyle isn't assigned, there will be no stroke.
     strokeStyle: '#000',
-    // It will be effect like strokeWidth.
     lineWidth: 1.0,
-    shadowBlur: 0,
-    shadowColor: '#000',
-    shadowOffsetX: 0,
-    shadowOffsetY: 0,
-    filter: 'none',
-    globalAlpha: 1.0
+    // ...
   },
 
-  // A custom render to draw your comment.
+  // A custom render to draw comment.
   // when `render` exist, `text` and `style` will be ignored.
 
   // When using DOM engine, you should return an HTMLElement.
