@@ -54,7 +54,7 @@
     "karma-rollup-preprocessor": "^7.0.3",
     "karma-sauce-launcher": "^1.2.0",
     "mocha": "^4.1.0",
-    "rollup": "^1.29.1",
+    "rollup": "^1.30.0",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-terser": "^5.2.0"
   }

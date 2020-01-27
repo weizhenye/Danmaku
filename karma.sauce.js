@@ -7,7 +7,7 @@ const customLaunchers = {
     base: 'SauceLabs',
     browserName: 'Safari',
     deviceName: 'iPhone Simulator',
-    platformVersion: '12.2',
+    platformVersion: '13.0',
     platformName: 'iOS',
   },
   'SL-iOS-Safari-Oldest': {
