@@ -29,7 +29,7 @@ jobs:
     - name: Test on Sauce Labs
       run: npm run sauce
       env:
-        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        SAUCE_USERNAME: danmaku
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       if: github.event_name == 'push'
       continue-on-error: true

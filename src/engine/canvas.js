@@ -1,4 +1,4 @@
-var canvasHeightCache = Object.create(null);
+export var canvasHeightCache = Object.create(null);
 
 export function canvasHeight(font, fontSize) {
   if (canvasHeightCache[font]) {
@@ -72,7 +72,7 @@ export function createCommentCanvas(cmt, fontSize) {
   return canvas;
 }
 
-export function computeFontSize(el) {
+function computeFontSize(el) {
   return window
     .getComputedStyle(el, null)
     .getPropertyValue('font-size')

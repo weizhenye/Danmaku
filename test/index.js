@@ -1,6 +1,5 @@
 import Danmaku from '../src/index.js';
-import createEngine from '../src/engine/index.js';
-import { VIDEO_SRC } from './helper.js';
+import { createVideo } from './helper.js';
 
 function skipAfter(time, done) {
   /* eslint-disable no-invalid-this */
@@ -11,48 +10,69 @@ function skipAfter(time, done) {
   }, time);
 }
 
-function syncTimeline(danmaku, $video, done) {
-  try {
-    $video.canPlayType('video/mp4');
-  } catch (err) {
-    console.log('This browser does not support <video>');
-    done();
-    return;
-  }
-  $video.muted = true;
-  $video.src = VIDEO_SRC;
-
-  var flag = true;
-  $video.addEventListener('timeupdate', function() {
-    var ct = $video.currentTime;
-    if (ct > 0.1 && ct < 0.5) {
-      assert.equal(1, danmaku._.runningList.length);
-      if (flag) {
-        flag = false;
-        $video.pause();
-        setTimeout(function() {
-          assert.equal(1, danmaku._.runningList.length);
-          $video.play();
-        }, 100);
-      }
-    }
-    if (ct > 0.6 && ct < 1) {
-      assert.equal(2, danmaku._.runningList.length);
-    }
-    if (ct > 1) {
-      done();
-    }
+function ensureFraming(comment) {
+  var danmaku = new Danmaku({
+    container: document.getElementById('test-container')
   });
-  ($video.play() || Promise.resolve())
-    .then(function() {
-      if ($video.paused) {
-        console.log('This browser can\'t play video by script');
+  danmaku.emit(comment);
+  var x = null;
+  var rl = danmaku._.runningList;
+  return new Promise(function(resolve) {
+    var iv = setInterval(function() {
+      if (x !== null) {
+        clearInterval(iv);
+        resolve({
+          danmaku: danmaku,
+          comment: rl[0],
+          x: x
+        });
+      }
+      if (x === null && rl.length) {
+        x = rl[0].x;
+      }
+    }, 100);
+  });
+}
+
+function syncTimeline(engine, done) {
+  return createVideo().then(function($video) {
+    if (!$video) {
+      done();
+      return Promise.resolve();
+    }
+    var danmaku = new Danmaku({
+      container: document.getElementById('test-container'),
+      media: $video,
+      comments: [
+        { text: '0', time: 0 },
+        { text: '0.5', time: 0.5 }
+      ],
+      engine: engine
+    });
+    var flag = true;
+    $video.addEventListener('timeupdate', function() {
+      var ct = $video.currentTime;
+      if (ct > 0.1 && ct < 0.5) {
+        assert.equal(1, danmaku._.runningList.length);
+        if (flag) {
+          flag = false;
+          $video.pause();
+          setTimeout(function() {
+            assert.equal(1, danmaku._.runningList.length);
+            $video.play();
+          }, 100);
+        }
+      }
+      if (ct > 0.6 && ct < 1) {
+        assert.equal(2, danmaku._.runningList.length);
+      }
+      if (ct > 1) {
         done();
       }
-    }, function(err) {
-      console.log(err);
-      done();
     });
+    $video.play();
+    return danmaku;
+  });
 }
 
 describe('Danmaku behavior', function() {
@@ -62,50 +82,36 @@ describe('Danmaku behavior', function() {
     danmaku.destroy && danmaku.destroy();
   });
 
-  it('should deal with modes of comments', function(done) {
-    skipAfter.apply(this, [6e4, done]);
-
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container')
+  it('should support ltr mode', function() {
+    return ensureFraming({ text: 'ltr', mode: 'ltr' }).then(function(result) {
+      danmaku = result.danmaku;
+      assert.isAbove(result.comment.x, result.x);
+      assert.equal(0, result.comment.y);
     });
+  });
 
-    danmaku.emit({ text: 'rtl', mode: 'rtl' });
-    danmaku.emit({ text: 'ltr', mode: 'ltr' });
-    danmaku.emit({ text: 'top', mode: 'top' });
-    danmaku.emit({ text: 'bottom', mode: 'bottom' });
+  it('should support rtl mode', function() {
+    return ensureFraming({ text: 'rtl', mode: 'rtl' }).then(function(result) {
+      danmaku = result.danmaku;
+      assert.isBelow(result.comment.x, result.x);
+      assert.equal(0, result.comment.y);
+    });
+  });
 
-    var rtlPrev = null;
-    var ltrPrev = null;
-    var topPrev = null;
-    var bottomPrev = null;
-    var rl = danmaku._.runningList;
-    var iv = setInterval(function() {
-      if (rtlPrev !== null) {
-        clearInterval(iv);
-        assert.isBelow(rl[0].x, rtlPrev);
-        assert.equal(0, rl[0].y);
-        assert.isAbove(rl[1].x, ltrPrev);
-        assert.equal(0, rl[1].y);
-        assert.equal(rl[2].x, topPrev);
-        assert.equal(0, rl[2].y);
-        assert.equal(rl[3].x, bottomPrev);
-        assert.equal(danmaku._.stage.height - rl[3].height, rl[3].y);
-        done();
-      }
-      if (rtlPrev === null && rl.length === 4) {
-        rtlPrev = rl[0].x;
-        ltrPrev = rl[1].x;
-        topPrev = rl[2].x;
-        bottomPrev = rl[3].x;
-        var engine = createEngine(
-          danmaku._.engine.framing.bind(danmaku),
-          danmaku._.engine.setup.bind(danmaku),
-          danmaku._.engine.render.bind(danmaku),
-          danmaku._.engine.remove.bind(danmaku)
-        );
-        engine.call(danmaku);
-      }
-    }, 100);
+  it('should support top mode', function() {
+    return ensureFraming({ text: 'top', mode: 'top' }).then(function(result) {
+      danmaku = result.danmaku;
+      assert.equal(result.comment.x, result.x);
+      assert.equal(0, result.comment.y);
+    });
+  });
+
+  it('should support bottom mode', function() {
+    return ensureFraming({ text: 'bottom', mode: 'bottom' }).then(function(result) {
+      danmaku = result.danmaku;
+      assert.equal(result.comment.x, result.x);
+      assert.equal(danmaku._.stage.height - result.comment.height, result.comment.y);
+    });
   });
 
   it('should not collide with same comment mode', function(done) {
@@ -172,31 +178,20 @@ describe('Danmaku behavior', function() {
   it('should sync timeline with media (DOM engine)', function(done) {
     skipAfter.apply(this, [6e4, done]);
 
-    var $video = document.createElement('video');
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      media: $video,
-      comments: [
-        { text: '0', time: 0 },
-        { text: '0.5', time: 0.5 }
-      ]
+    syncTimeline('dom', done).then(function(d) {
+      if (d) {
+        danmaku = d;
+      }
     });
-    syncTimeline(danmaku, $video, done);
   });
 
   it('should sync timeline with media (canvas engine)', function(done) {
     skipAfter.apply(this, [6e4, done]);
 
-    var $video = document.createElement('video');
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      media: $video,
-      engine: 'canvas',
-      comments: [
-        { text: '0', time: 0 },
-        { text: '0.5', time: 0.5 }
-      ]
+    syncTimeline('canvas', done).then(function(d) {
+      if (d) {
+        danmaku = d;
+      }
     });
-    syncTimeline(danmaku, $video, done);
   });
 });

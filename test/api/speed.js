@@ -25,7 +25,6 @@ describe('speed API', function() {
     assert.equal(42, danmaku.speed);
     danmaku.speed = 'string';
     assert.equal(42, danmaku.speed);
-    danmaku.destroy();
   });
 
   it('should not calculate duration with zero width container', function() {
@@ -38,6 +37,5 @@ describe('speed API', function() {
     var dur = danmaku._.duration;
     danmaku.speed = 72;
     assert.equal(dur, danmaku._.duration);
-    danmaku.destroy();
   });
 });

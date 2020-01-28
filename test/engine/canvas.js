@@ -1,4 +1,4 @@
-import { canvasHeight, computeFontSize, createCommentCanvas } from '../../src/engine/canvas.js';
+import { canvasHeight, canvasHeightCache, createCommentCanvas } from '../../src/engine/canvas.js';
 
 describe('canvas height', function() {
   var ch = canvasHeight;
@@ -13,7 +13,7 @@ describe('canvas height', function() {
   });
 
   it('should cache result', function() {
-    assert.equal(12, ch('10px sans-serif', _));
+    assert.equal(12, canvasHeightCache['10px sans-serif']);
   });
 
   it('should support font-size units', function() {
@@ -47,23 +47,6 @@ describe('canvas height', function() {
     assert.equal(16 * LH, ch('italic 16px serif', _));
     assert.equal(32, ch('italic small-caps bold 16px/2 cursive', _));
     assert.equal(24, ch('small-caps 700 24px/1 sans-serif', _));
-  });
-});
-
-describe('font size', function() {
-  it('should compute container font size by container node', function() {
-    var $container = document.createElement('div');
-    document.body.appendChild($container);
-    $container.style.fontSize = '20px';
-    assert.equal(20, computeFontSize($container));
-
-    document.body.removeChild($container);
-  });
-
-  it('should compute root font size by <HTML>', function() {
-    var $html = document.getElementsByTagName('html')[0];
-    $html.style.fontSize = '20px';
-    assert.equal(20, computeFontSize($html));
   });
 });
 

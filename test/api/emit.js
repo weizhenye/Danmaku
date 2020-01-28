@@ -34,13 +34,9 @@ describe('emit API', function() {
     assert.equal(comment.time, danmaku.comments[1].time);
   });
 
-  it('should keep current position right when insert comment', function(done) {
-    createVideo(function(err, $video) {
-      if (err) {
-        console.log(err);
-        done();
-        return;
-      }
+  it('should keep current position right when insert comment', function() {
+    return createVideo().then(function($video) {
+      if (!$video) return Promise.resolve();
       danmaku = new Danmaku({
         container: document.getElementById('test-container'),
         media: $video,
@@ -51,7 +47,7 @@ describe('emit API', function() {
         ]
       });
       $video.currentTime = 2.2;
-      Promise.resolve()
+      return Promise.resolve()
         .then($video.play.bind($video))
         .then(delay(100))
         .then($video.pause.bind($video))
@@ -64,9 +60,7 @@ describe('emit API', function() {
         .then($video.pause.bind($video))
         .then(function() {
           assert.equal(danmaku._.position, 3);
-          done();
-        })
-        .catch(done);
+        });
     });
   });
 

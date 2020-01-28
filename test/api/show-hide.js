@@ -28,19 +28,15 @@ describe('show and hide API', function() {
     assert.equal(true, danmaku._.visible);
   });
 
-  it('should pause when hided and restore when showed', function(done) {
-    createVideo(function(err, $video) {
-      if (err) {
-        console.log(err);
-        done();
-        return;
-      }
+  it('should pause when hided and restore when showed', function() {
+    return createVideo().then(function($video) {
+      if (!$video) return Promise.resolve();
       document.body.appendChild($video);
       danmaku = new Danmaku({
         container: document.getElementById('test-container'),
         media: $video
       });
-      Promise.resolve()
+      return Promise.resolve()
         .then($video.play.bind($video))
         .then(delay(100))
         .then(function() {
@@ -62,13 +58,11 @@ describe('show and hide API', function() {
         .then(delay(100))
         .then(function() {
           assert.equal(true, danmaku._.paused);
-          done();
-        })
-        .catch(done);
+        });
     });
   });
 
-  it('should just return when called many times', function() {
+  it('should just return when called multi times', function() {
     var $video = document.getElementById('test-video');
     danmaku.hide();
     assert.equal(true, danmaku._.paused);

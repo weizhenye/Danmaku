@@ -7,14 +7,14 @@ describe('Initialization', function() {
     danmaku && danmaku.destroy();
   });
 
-  it('should support set options in constructor', function() {
+  it('don\'t throw error when container is not provided', function() {
     danmaku = new Danmaku({});
     assert.equal(null, danmaku.container.parentNode);
+  });
 
+  it('should set container to instance', function() {
     var container = document.getElementById('test-container');
-    danmaku = new Danmaku({
-      container: container
-    });
+    danmaku = new Danmaku({ container: container });
     assert.equal(container, danmaku.container);
   });
 
@@ -25,15 +25,15 @@ describe('Initialization', function() {
     assert.equal(false, !!danmaku.media);
   });
 
-  it('should support audio mode', function() {
+  it('should support media mode', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       media: document.createElement('audio')
     });
     assert.equal(true, !!danmaku.media);
-  });
 
-  it('should support video mode', function() {
+    danmaku.destroy();
+
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
       media: document.createElement('video')
@@ -41,7 +41,7 @@ describe('Initialization', function() {
     assert.equal(true, !!danmaku.media);
   });
 
-  it('should support comments', function() {
+  it('should support preseted comments', function() {
     var render = function() {
       var $span = document.createElement('span');
       $span.textContent = '佐倉さんひくわー！！！';
@@ -63,18 +63,18 @@ describe('Initialization', function() {
     assert.equal(render, danmaku.comments[3].render);
   });
 
-  it('should support DOM engine', function() {
+  it('should use DOM engine by default', function() {
     danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      engine: 'DOM'
+      container: document.getElementById('test-container')
     });
     assert.equal('dom', danmaku.engine);
     assert.equal('DIV', danmaku._.stage.tagName);
   });
 
-  it('should use DOM engine by default', function() {
+  it('should support DOM engine', function() {
     danmaku = new Danmaku({
-      container: document.getElementById('test-container')
+      container: document.getElementById('test-container'),
+      engine: 'DOM'
     });
     assert.equal('dom', danmaku.engine);
     assert.equal('DIV', danmaku._.stage.tagName);
