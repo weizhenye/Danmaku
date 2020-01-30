@@ -9,6 +9,7 @@ export default function() {
 
   pause.call(this);
   this.clear();
+  this.container.removeChild(this._.stage);
   if (this.media) {
     unbindEvents.call(this, this._.listener);
   }
