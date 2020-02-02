@@ -108,140 +108,6 @@
     remove: remove,
   };
 
-  var canvasHeightCache = Object.create(null);
-
-  function canvasHeight(font, fontSize) {
-    if (canvasHeightCache[font]) {
-      return canvasHeightCache[font];
-    }
-    var height = 12;
-    var regex = /(\d+(?:\.\d+)?)(px|%|em|rem)(?:\s*\/\s*(\d+(?:\.\d+)?)(px|%|em|rem)?)?/;
-    var p = font.match(regex);
-    if (p) {
-      var fs = p[1] * 1 || 10;
-      var fsu = p[2];
-      var lh = p[3] * 1 || 1.2;
-      var lhu = p[4];
-      if (fsu === '%') fs *= fontSize.container / 100;
-      if (fsu === 'em') fs *= fontSize.container;
-      if (fsu === 'rem') fs *= fontSize.root;
-      if (lhu === 'px') height = lh;
-      if (lhu === '%') height = fs * lh / 100;
-      if (lhu === 'em') height = fs * lh;
-      if (lhu === 'rem') height = fontSize.root * lh;
-      if (lhu === undefined) height = fs * lh;
-    }
-    canvasHeightCache[font] = height;
-    return height;
-  }
-
-  function createCommentCanvas(cmt, fontSize) {
-    if (typeof cmt.render === 'function') {
-      var cvs = cmt.render();
-      if (cvs instanceof HTMLCanvasElement) {
-        cmt.width = cvs.width;
-        cmt.height = cvs.height;
-        return cvs;
-      }
-    }
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var style = cmt.style || {};
-    style.font = style.font || '10px sans-serif';
-    style.textBaseline = style.textBaseline || 'bottom';
-    var strokeWidth = style.lineWidth * 1;
-    strokeWidth = (strokeWidth > 0 && strokeWidth !== Infinity)
-      ? Math.ceil(strokeWidth)
-      : !!style.strokeStyle * 1;
-    ctx.font = style.font;
-    cmt.width = cmt.width ||
-      Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
-    cmt.height = cmt.height ||
-      Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
-    canvas.width = cmt.width;
-    canvas.height = cmt.height;
-    for (var key in style) {
-      ctx[key] = style[key];
-    }
-    var baseline = 0;
-    switch (style.textBaseline) {
-      case 'top':
-      case 'hanging':
-        baseline = strokeWidth;
-        break;
-      case 'middle':
-        baseline = cmt.height >> 1;
-        break;
-      default:
-        baseline = cmt.height - strokeWidth;
-    }
-    if (style.strokeStyle) {
-      ctx.strokeText(cmt.text, strokeWidth, baseline);
-    }
-    ctx.fillText(cmt.text, strokeWidth, baseline);
-    return canvas;
-  }
-
-  function computeFontSize(el) {
-    return window
-      .getComputedStyle(el, null)
-      .getPropertyValue('font-size')
-      .match(/(.+)px/)[1] * 1;
-  }
-
-  function init$1(container) {
-    var stage = document.createElement('canvas');
-    stage.context = stage.getContext('2d');
-    stage._fontSize = {
-      root: computeFontSize(document.getElementsByTagName('html')[0]),
-      container: computeFontSize(container)
-    };
-    return stage;
-  }
-
-  function clear$1(stage, comments) {
-    stage.context.clearRect(0, 0, stage.width, stage.height);
-    // avoid caching canvas to reduce memory usage
-    for (var i = 0; i < comments.length; i++) {
-      comments[i].canvas = null;
-    }
-  }
-
-  function resize$1() {
-    //
-  }
-
-  function framing$1(stage) {
-    stage.context.clearRect(0, 0, stage.width, stage.height);
-  }
-
-  function setup$1(stage, comments) {
-    for (var i = 0; i < comments.length; i++) {
-      var cmt = comments[i];
-      cmt.canvas = createCommentCanvas(cmt, stage._fontSize);
-    }
-  }
-
-  function render$1(stage, cmt) {
-    stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
-  }
-
-  function remove$1(stage, cmt) {
-    // avoid caching canvas to reduce memory usage
-    cmt.canvas = null;
-  }
-
-  var canvasEngine = {
-    name: 'canvas',
-    init: init$1,
-    clear: clear$1,
-    resize: resize$1,
-    framing: framing$1,
-    setup: setup$1,
-    render: render$1,
-    remove: remove$1,
-  };
-
   /* eslint no-invalid-this: 0 */
   function allocate(cmt) {
     var that = this;
@@ -482,15 +348,17 @@
   }
 
   /* eslint-disable no-invalid-this */
-  function init$2(opt) {
+  function init$1(opt) {
     this._ = {};
     this.container = opt.container || document.createElement('div');
     this.media = opt.media;
     this._.visible = true;
-    /* istanbul ignore else */
+
+    /* eslint-disable no-undef */
+    /* istanbul ignore next */
     {
-      this.engine = (opt.engine || 'DOM').toLowerCase();
-      this._.engine = this.engine === 'canvas' ? canvasEngine : domEngine;
+      this.engine = 'dom';
+      this._.engine = domEngine;
     }
     /* eslint-enable no-undef */
     this._.requestID = 0;
@@ -611,14 +479,14 @@
   }
 
   /* eslint-disable no-invalid-this */
-  function clear$2() {
+  function clear$1() {
     this._.engine.clear(this._.stage, this._.runningList);
     this._.runningList = [];
     return this;
   }
 
   /* eslint-disable no-invalid-this */
-  function resize$2() {
+  function resize$1() {
     this._.stage.width = this.container.offsetWidth;
     this._.stage.height = this.container.offsetHeight;
     this._.engine.resize(this._.stage);
@@ -646,7 +514,7 @@
   };
 
   function Danmaku(opt) {
-    opt && init$2.call(this, opt);
+    opt && init$1.call(this, opt);
   }
   Danmaku.prototype.destroy = function() {
     return destroy.call(this);
@@ -661,10 +529,10 @@
     return hide.call(this);
   };
   Danmaku.prototype.clear = function() {
-    return clear$2.call(this);
+    return clear$1.call(this);
   };
   Danmaku.prototype.resize = function() {
-    return resize$2.call(this);
+    return resize$1.call(this);
   };
   Object.defineProperty(Danmaku.prototype, 'speed', speed);
 
