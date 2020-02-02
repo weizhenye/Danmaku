@@ -31,5 +31,6 @@ jobs:
       env:
         SAUCE_USERNAME: danmaku
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        BUILD_NUMBER: ${{ github.sha }}
       if: github.event_name == 'push'
       continue-on-error: true
