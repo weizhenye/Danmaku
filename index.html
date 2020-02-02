@@ -2,111 +2,148 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="description" content="A high performance JavaScript danmaku engine">
-  <meta name="keywords" content="Danmaku, danmu, 弹幕, JavaScript, demo">
   <meta name="author" content="weizhenye">
   <title>Danmaku - A high-performance JavaScript danmaku engine</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1 id="site-title">Danmaku</h1>
-  <h2 id="site-subtitle">A high-performance JavaScript danmaku engine</h2>
-  <iframe src="https://ghbtns.com/github-btn.html?user=weizhenye&repo=Danmaku&type=star&count=true&size=large" frameborder="0" scrolling="0" width="120px" height="30px"></iframe>
+<header class="header">
+  <h1 class="header__title">Danmaku</h1>
+  <h2 class="header__subtitle">A high-performance JavaScript danmaku engine</h2>
+  <a href="https://github.com/weizhenye/Danmaku" target="_blank" class="header__badge">
+    <img src="https://badgen.net/github/stars/weizhenye/Danmaku?icon=github&scale=1.2" alt="GitHub">
+  </a>
+  <a href="https://www.npmjs.com/package/danmaku" target="_blank" class="header__badge">
+    <img src="https://badgen.net/npm/v/danmaku?icon=npm&scale=1.2" alt="version">
+  </a>
 </header>
-<div class="wrapper">
-  <fieldset id="mode-selector">
-    <legend>Mode</legend>
-    <input type="radio" name="mode" id="mode-video" autocomplete="off" checked>
-    <label for="mode-video">Video</label>
-    <input type="radio" name="mode" id="mode-audio" autocomplete="off">
-    <label for="mode-audio">Audio</label>
-    <input type="radio" name="mode" id="mode-realtime" autocomplete="off">
-    <label for="mode-realtime">Real time</label>
-  </fieldset>
-  <fieldset>
-    <legend>Engine</legend>
-    <input type="radio" name="engine" id="dom-engine" autocomplete="off" checked>
-    <label for="dom-engine">DOM</label>
-    <input type="radio" name="engine" id="canvas-engine" autocomplete="off">
-    <label for="canvas-engine">canvas</label>
-  </fieldset>
-  <fieldset>
-    <legend>Initialize</legend>
-    <button id="danmaku-init" autocomplete="off">Load sample video</button>
-  </fieldset>
-  <br>
-  <fieldset>
-    <legend>Controls</legend>
-    <button id="danmaku-resize" autocomplete="off" disabled>Resize</button>
-    <button id="danmaku-show" autocomplete="off" disabled>Show</button>
-    <button id="danmaku-hide" autocomplete="off" disabled>Hide</button>
-    <button id="danmaku-clear" autocomplete="off" disabled>Clear</button>
-    <button id="danmaku-destroy" autocomplete="off" disabled>Destroy</button>
-  </fieldset>
-  <fieldset>
-    <legend>Speed</legend>
-    <input id="danmaku-speed" type="range" min="96" max="192" autocomplete="off">
-    <output id="danmaku-speed-number">144</output>
-  </fieldset>
-  <fieldset>
-    <legend>Emit</legend>
-    <input id="danmaku-emit" type="text" placeholder="bla bla" autocomplete="off">
-    <button id="danmaku-send" autocomplete="off" disabled>Emit</button>
-  </fieldset>
-</div>
-<div class="wrapper">
-  <div id="media-mode">
-    <div id="manager">
-      <div id="get-bilibili">
-        <div>You can load <a href="https://www.bilibili.com/" target="_blank">Bilibili</a> danmaku for test.</div>
-        <input type="text" placeholder="https://www.bilibili.com/video/av123456/"><button>Download</button>
+<main class="main">
+  <section class="config">
+    <fieldset class="config__mode">
+      <legend>Mode</legend>
+      <label>
+        <input type="radio" name="mode" autocomplete="off" data-mode="video" checked>
+        Media (Video)
+      </label>
+      <label>
+        <input type="radio" name="mode" autocomplete="off" data-mode="audio">
+        Media (Audio)
+      </label>
+      <label>
+        <input type="radio" name="mode" autocomplete="off" data-mode="live">
+        Live
+      </label>
+    </fieldset>
+    <fieldset class="config__engine">
+      <legend>Engine</legend>
+      <label>
+        <input type="radio" name="engine" autocomplete="off" data-engine="dom" checked>
+        DOM
+      </label>
+      <label>
+        <input type="radio" name="engine" autocomplete="off" data-engine="canvas">
+        canvas
+      </label>
+    </fieldset>
+    <br>
+    <fieldset disabled class="config__control">
+      <legend>Control</legend>
+      <button data-fn="resize">Resize</button>
+      <button data-fn="show">Show</button>
+      <button data-fn="hide">Hide</button>
+      <button data-fn="clear">Clear</button>
+      <button data-fn="destroy">Destroy</button>
+    </fieldset>
+    <fieldset disabled class="config__speed">
+      <legend>Speed</legend>
+      <input type="range" min="96" max="192" autocomplete="off">
+      <output>144</output>
+    </fieldset>
+    <fieldset disabled class="config__emit">
+      <legend>Emit</legend>
+      <input type="text" placeholder="bla bla" autocomplete="off">
+      <button>Emit</button>
+    </fieldset>
+  </section>
+  <section data-mode="video" data-size="360P" class="player">
+    <div data-canplay="false" data-initialized="false" class="player__video">
+      <div class="player__media-init">
+        <div>Drop video here</div>
+        <div class="or">or</div>
+        <input type="file">
+        <div class="or">or</div>
+        <button>Load sample video</button>
       </div>
-      <div id="manager-tab">
-        <div>
-          <input id="files" type="radio" name="tabs" checked>
-          <label for="files">Danmaku files</label>
-          <ul id="manager-files" class="tab-content"></ul>
-        </div><div>
-          <input id="comments" type="radio" name="tabs">
-          <label for="comments">Comments list</label>
-          <ul id="manager-comments" class="tab-content"></ul>
+      <div class="player__container">
+        <video controls></video>
+      </div>
+    </div>
+    <div data-canplay="false" data-initialized="false" class="player__audio">
+      <div class="player__media-init">
+        <div>Drop audio here</div>
+        <div class="or">or</div>
+        <input type="file">
+        <div class="or">or</div>
+        <button>Load sample audio</button>
+      </div>
+      <div class="player__container">
+        <canvas width="1280" height="720"></canvas>
+        <audio controls crossorigin="anonymous"></audio>
+      </div>
+    </div>
+    <div data-initialized="false" class="player__live">
+      <div class="player__live-tip">You can open this page with another browser to test.</div>
+      <div class="player__container"></div>
+    </div>
+    <div class="player__danmaku-manager">
+      <div class="manager__tip">You can load <a href="https://www.bilibili.com/" target="_blank">Bilibili</a> danmaku for test.</div>
+      <div class="manager__download">
+        <input type="text" placeholder="https://www.bilibili.com/video/av123456/">
+        <button>Download</button>
+      </div>
+      <div class="manager__tabs">
+        <div class="manager__tab">
+          <input id="manager__files" type="radio" name="manager__tab" checked>
+          <label for="manager__files">Danmaku Files</label>
+          <ul class="manager__list"></ul>
+        </div>
+        <div class="manager__tab">
+          <input id="manager__comments" type="radio" name="manager__tab">
+          <label for="manager__comments">Comments list</label>
+          <ul class="manager__list"></ul>
         </div>
       </div>
     </div>
-    <div id="video-mode"></div>
-    <div id="audio-mode">
-      <div class="danmaku-container">
-        <canvas width="640" height="360"></canvas>
-      </div>
+  </section>
+</main>
+<footer class="footer">
+  Built by <a href="https://github.com/weizhenye">Zhenye Wei</a> | MIT Licensed
+</footer>
+<template id="danamku-file">
+  <li class="danmaku-file">
+    <div class="title"></div>
+    <div class="buttons">
+      <button data-fn="initialize">Initialize</button>
+      <button data-fn="reload">Reload</button>
+      <button data-fn="delete">Delete</button>
     </div>
-    <div id="drop-area">
-      <div id="drop-text">Select or drag a video file here</div>
-      <input type="file">
-    </div>
-  </div>
-  <div id="realtime-mode">
-    <div>You can open this page with another browser to test real time danmaku.</div>
-    <div id="realtime-container"></div>
-  </div>
-</div>
-<div id="message"></div>
+  </li>
+</template>
+<template id="danmaku-comment">
+  <li class="danmaku-comment">
+    <time class="time"></time>
+    <span class="text"></span>
+  </li>
+</template>
 <button id="perf">Open Performance Monitor</button>
-<script src="https://cdn.jsdelivr.net/npm/socket.io-client@2.1.1/dist/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/socket.io-client@2.3.0/dist/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js"></script>
-<script src="parser/bilibili.js"></script>
-<script src="main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/perf-monitor@0.4.1/dist/umd/perf-monitor.js"></script>
 <script>
-document.querySelector('#perf').addEventListener('click', function() {
-  perfMonitor.startFPSMonitor();
-  perfMonitor.startMemMonitor();
-  this.style.display = 'none';
-});
+window.$ = document.querySelector.bind(document);
 </script>
+<script type="module" src="./src/index.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

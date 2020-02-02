@@ -1,221 +1,238 @@
-body, ul, h1, h2 {
-  margin: 0;
-  padding: 0;
+body {
+  color: rgba(0, 0, 0, 0.87);
   font-size: 16px;
-  font-family: sans-serif;
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
 }
-header {
-  background: #8fe0fa;
+
+.header {
+  background-color: #daa;
   text-align: center;
-  padding: 1em 0;
+  padding: 1rem 0;
 }
-#site-title {
-  font-size: 3em;
+.header__title {
+  font-size: 3rem;
   font-weight: normal;
+  line-height: 1.5;
+  margin: 0;
 }
-#site-subtitle {
-  font-size: 1em;
+.header__subtitle {
+  font-size: 1.25rem;
   font-weight: normal;
-  padding-bottom: 1em;
+  line-height: 1.6;
+  margin: 0;
+  padding-bottom: 1rem;
 }
-.wrapper {
+.header__badge {
+  display: inline-flex;
+}
+
+.main {
   width: 960px;
-  text-align: center;
   margin: auto;
-  margin-top: 1em;
 }
-fieldset {
-  height: 2.5em;
-  text-align: left;
-  display: inline-block;
-}
-#danmaku-speed {
-  width: 4em;
-  height: .5em;
-}
-#manager {
-  width: 320px;
-  height: 360px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  float: right;
-  overflow: hidden;
-}
-#get-bilibili {
-  height: 44px;
-}
-#get-bilibili input {
-  width: 240px;
-  font-family: Arial;
-}
-#get-bilibili button {
-  width: 72px;
-}
-#manager-tab {
-  width: 100%;
+.config {
   text-align: center;
-  position: relative;
+  margin: 1rem 0;
 }
-#manager-tab > div {
-  width: 50%;
-  background-color: #ccc;
-  display: inline-block;
-}
-#manager-tab label {
-  width: 100%;
-  display: inline-block;
-  cursor: pointer;
-}
-#manager-tab label:hover {
-  background-color: #aaa;
-}
-#manager-tab [type=radio] {
-  display: none;
-}
-.tab-content {
-  width: 100%;
-  height: 294px;
+.config fieldset {
   text-align: left;
-  overflow-x: hidden;
-  overflow-y: auto;
+  display: inline-block;
+}
+
+.player {
+  display: flex;
+  justify-content: center;
+}
+.player__video,
+.player__audio,
+.player__live {
+  width: 640px;
+  height: 360px;
   display: none;
-  position: absolute;
-  left: 0;
 }
-.tab-content li {
-  list-style: none;
+.player[data-size="540P"] [data-initialized="true"] {
+  width: 960px;
+  height: 540px;
 }
-#manager-tab [type=radio]:checked ~ label {
-  background-color: #888;
-}
-#manager-tab [type=radio]:checked ~ label ~ .tab-content {
+.player[data-mode="video"] .player__video,
+.player[data-mode="audio"] .player__audio,
+.player[data-mode="live"] .player__live {
   display: block;
 }
-#manager-files li {
-  height: 1em;
-  overflow: hidden;
-  padding: .25em;
-}
-#manager-files li:hover {
-  height: auto;
-  background-color: #aaa;
-}
-.file-title {
-  height: 20px;
-  overflow: hidden;
-}
-.comment-time {
-  padding: 0 .5em;
-}
-.comment-text {
-  white-space: nowrap;
-}
-#video-mode,
-#audio-mode {
-  background-color: #fff;
+.player__video video,
+.player__audio canvas {
+  width: 100%;
+  height: 100%;
   position: absolute;
-  float: left;
 }
-#audio-mode,
-#realtime-mode {
+.player__audio audio {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.player__live {
+  text-align: center;
+}
+.player__live .player__container {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+.player__media-init {
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  border: 8px dashed rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+.player__media-init[data-dragover="true"] {
+  border-color: rgba(0, 0, 0, 0.38);
+}
+.player [data-canplay="true"] .player__media-init {
   display: none;
 }
-#realtime-mode {
-  text-align: left;
+.player__media-init .or {
+  color: rgba(0, 0, 0, 0.38);
+  font-size: 1rem;
+  padding: 4px 0;
 }
-#realtime-mode div {
-  margin: auto;
-  text-align: center;
-}
-#server {
-  float: left;
-}
-#server:before {
-  content: 'Server';
-}
-#client {
-  float: right;
-}
-#client:before {
-  content: 'Client';
-}
-.danmaku-container {
-  width: 640px;
-  height: 360px;
+.player__container {
+  width: 100%;
+  height: 100%;
   position: relative;
 }
-.danmaku-container canvas {
-  position: absolute;
-  left: 0;
+.player [data-canplay="false"] .player__container {
+  display: none;
 }
-#realtime-container {
-  width: 640px;
+.player__danmaku-manager {
+  width: 320px;
   height: 360px;
-  border: 1px solid #000;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
 }
-#drop-area {
-  width: 640px;
-  height: 360px;
+.player[data-mode="live"] .player__danmaku-manager,
+.player[data-mode="video"][data-size="540P"] .player__video[data-initialized="true"] ~ .player__danmaku-manager,
+.player[data-mode="audio"][data-size="540P"] .player__audio[data-initialized="true"] ~ .player__danmaku-manager {
+  display: none;
+}
+
+.manager__tip {
   text-align: center;
-  box-sizing: border-box;
-  border: 10px dashed #ccc;
-  position: absolute;
+  line-height: 24px;
 }
-#drop-area input {
-  width: 100%;
-  height: 340px;
-  opacity: 0;
+.manager__download {
+  height: 24px;
+  margin: 0 4px;
+  display: flex;
+  align-items: center;
+}
+.manager__download input {
+  flex: 1 1 auto;
+}
+.manager__download button {
+  flex: 0 0 auto;
+}
+.manager__tabs {
+  height: 310px;
+  line-height: 24px;
+  display: flex;
+  position: relative;
+}
+.manager__tab {
+  min-width: 0;
+  flex: 1 1 50%;
+}
+.manager__tab input {
+  display: none;
+}
+.manager__tab label {
+  text-align: center;
+  display: block;
   cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
-#drop-text {
+.manager__tab label:hover {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+.manager__tab input:checked + label {
+  background-color: rgba(0, 0, 0, 0.37);
+}
+.manager__list {
+  width: 200%;
+  height: calc(100% - 24px);
+  display: none;
+  margin: 0;
+  padding: 0;
+  transform: translateZ(0);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#manager__comments ~ .manager__list {
+  transform: translateX(-50%);
+}
+.manager__tab input:checked ~ .manager__list {
+  display: block;
+}
+.danmaku-file {
+  height: 24px;
+  line-height: 24px;
+  list-style: none;
+  overflow: hidden;
+}
+.danmaku-file:hover {
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+.danmaku-file .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.danmaku-file .buttons {
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+.danmaku-comment {
   width: 100%;
-  font-size: 2em;
-  line-height: 1;
-  position: absolute;
-  top: 154px;
+  display: flex;
 }
-#message {
-  padding: .5em;
-  position: fixed;
-  left: .5em;
-  bottom: .5em;
-  opacity: 1;
+.danmaku-comment .time {
+  flex: 0 0 auto;
+  padding: 0 8px;
 }
+.danmaku-comment .text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.footer {
+  width: 960px;
+  text-align: center;
+  margin: 4rem auto 2rem auto;
+}
+
 #perf {
   position: fixed;
-  right: .5em;
-  bottom: .5em;
+  right: 8px;
+  bottom: 8px;
 }
-.transition {
-  transition: opacity 4s cubic-bezier(1,0,1,1);
-}
-.error {
-  background-color: #d5515f;
-}
-.error:before {
-  content: 'Error: ';
-}
-.success {
-  background-color: #48b551;
-}
-.success:before {
-  content: 'Success: ';
-}
-video {
-  width: 640px;
-  height: 360px;
-  background-color: #000;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-audio {
-  width: 100%;
-  position: absolute;
+
+.message {
+  color: #fff;
+  background-color: #f5222d;
+  box-shadow:
+    0 3px 1px -2px rgba(0,0,0,.2),
+    0 2px 2px 0 rgba(0,0,0,.14),
+    0 1px 5px 0 rgba(0,0,0,.12);
+  border-radius: 4px;
+  margin: 16px;
+  padding: 8px;
+  position: fixed;
   left: 0;
   bottom: 0;
 }
