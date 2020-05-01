@@ -1,16 +1,17 @@
-import { SERVER_ORIGIN, message } from './index.js';
 import { bilibiliParser } from './bilibili.js';
 import { init } from './media.js';
 
+const API_BASE = 'https://danmaku-demo-server.weizhenye.now.sh/api/bilibili';
 async function fetchBilibili(url) {
-  const aid = url.match(/av(\d+)/)[1];
-  const { data, code, message } = await fetch(`${SERVER_ORIGIN}/view?aid=${aid}`)
+  const aid = (url.match(/\/av(\d+)/i) || [])[1] || '';
+  const bvid = (url.match(/\/(BV\w+)/i) || [])[1] || '';
+  const { data, code, message } = await fetch(`${API_BASE}/video?aid=${aid}&bvid=${bvid}`)
     .then((res) => res.json());
   if (code) {
     throw new Error(message);
   }
   const { cid, title } = data;
-  const comments = await fetch(`${SERVER_ORIGIN}/danmaku/${cid}`)
+  const comments = await fetch(`${API_BASE}/danmaku?cid=${cid}`)
     .then((res) => res.text())
     .then(bilibiliParser);
   const result = { aid, cid, title, comments };

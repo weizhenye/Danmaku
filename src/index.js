@@ -2,7 +2,7 @@ import './media.js';
 import './manager.js';
 import './pref-monitor.js';
 
-export const SERVER_ORIGIN = 'https://danmaku-demo-server.now.sh';
+export const SERVER_ORIGIN = 'https://danmaku-demo-server.weizhenye.now.sh';
 export const SAMPLE_MEDIA = {
   video: 'https://media.w3.org/2010/05/video/movie_300.mp4',
   audio: 'https://cdn.jsdelivr.net/gh/goldfire/howler.js@v2.1.3/tests/audio/sound1.mp3',
@@ -119,9 +119,9 @@ function createComment(text) {
 const socket = window.io ? io('https://socketio-chat-h9jt.herokuapp.com/') : null;
 if (socket) {
   socket.emit('add user', 'danmaku.js.org');
-  socket.on('new message', (data) => {
+  socket.on('new message', ({ username, message }) => {
     if (state.mode === 'live') {
-      state.danmaku.emit(createComment(data.message));
+      state.danmaku.emit(createComment(`[${username}] ${message}`));
     }
   });
 }
