@@ -101,21 +101,9 @@ $('.config__speed input').addEventListener('change', (evt) => {
   $('.config__speed output').value = evt.target.value;
 });
 
-const socket = window.io ? io(`${SERVER_ORIGIN}/live`) : null;
-if (socket) {
-  socket.on('danmaku', (comment) => {
-    if (state.mode === 'live') {
-      state.danmaku.emit(comment);
-    }
-  });
-}
-const $emitInput = $('.config__emit input');
-$('.config__emit button').addEventListener('click', (evt) => {
-  if (!$emitInput.value) {
-    return;
-  }
-  const comment = {
-    text: $emitInput.value,
+function createComment(text) {
+  return {
+    text,
     style: {
       fontSize: '25px',
       background: 'rgb(221, 170, 170, 0.2)',
@@ -126,9 +114,25 @@ $('.config__emit button').addEventListener('click', (evt) => {
       lineWidth: 8,
     },
   };
-  state.danmaku.emit(comment);
+}
+
+const socket = window.io ? io('https://socketio-chat-h9jt.herokuapp.com/') : null;
+if (socket) {
+  socket.emit('add user', 'danmaku.js.org');
+  socket.on('new message', (data) => {
+    if (state.mode === 'live') {
+      state.danmaku.emit(createComment(data.message));
+    }
+  });
+}
+const $emitInput = $('.config__emit input');
+$('.config__emit button').addEventListener('click', (evt) => {
+  if (!$emitInput.value) {
+    return;
+  }
+  state.danmaku.emit(createComment($emitInput.value));
   if (socket) {
-    socket.emit('danmaku', comment);
+    socket.emit('new message', $emitInput.value);
   }
   $emitInput.value = '';
 });
