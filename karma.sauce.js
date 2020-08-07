@@ -7,7 +7,7 @@ const customLaunchers = {
     base: 'SauceLabs',
     browserName: 'Safari',
     deviceName: 'iPhone Simulator',
-    platformVersion: '13.0',
+    platformVersion: '13.4',
     platformName: 'iOS',
   },
   'SL-iOS-Safari-Oldest': {
@@ -19,9 +19,9 @@ const customLaunchers = {
   },
   // 'SL-Android-Latest': {
   //   base: 'SauceLabs',
-  //   deviceName: 'Android Emulator',
+  //   deviceName: 'Android GoogleAPI Emulator',
   //   browserName: 'Chrome',
-  //   platformVersion: '8.0',
+  //   platformVersion: '10.0',
   //   platformName: 'Android',
   // },
   'SL-Android-Oldest': {

@@ -16,13 +16,11 @@ export default ['', 'dom', 'canvas'].map((engine) => {
         file: ['dist', path, file].filter((x) => x).join('/'),
         format,
         name: 'Danmaku',
+        plugins: file.includes('.min') ? [terser()] : [],
       })))
     ),
     plugins: [
       replace({ 'process.env.ENGINE': `"${engine}"` }),
-      terser({
-        include: [/^.+\.min\.js$/],
-      }),
     ],
   };
 });
