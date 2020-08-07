@@ -51,7 +51,7 @@ declare class Danmaku {
   /**
    * Destroy the instance and release memory.
    */
-  destory(): Danmaku;
+  destroy(): Danmaku;
   emit(comment: Comment): Danmaku;
   show(): Danmaku;
   hide(): Danmaku;
