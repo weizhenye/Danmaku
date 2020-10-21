@@ -210,7 +210,7 @@
     if (cmt.mode === 'bottom') {
       return this._.stage.height - cmt.height - channel % this._.stage.height;
     }
-    return channel % (this._.stage.height - cmt.height);
+    return (channel * (cmt.lineHeight || 1)) % (this._.stage.height - cmt.height);
   }
 
   /* eslint no-invalid-this: 0 */
@@ -466,7 +466,7 @@
     return this;
   }
 
-  var properties = ['mode', 'time', 'text', 'render', 'style'];
+  var properties = ['mode', 'time', 'text', 'render', 'style', 'lineHeight'];
 
   /* eslint-disable no-invalid-this */
   function emit(obj) {

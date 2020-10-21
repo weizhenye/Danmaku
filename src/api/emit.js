@@ -1,6 +1,6 @@
 import { formatMode, binsearch } from '../utils.js';
 
-var properties = ['mode', 'time', 'text', 'render', 'style'];
+var properties = ['mode', 'time', 'text', 'render', 'style', 'lineHeight'];
 
 /* eslint-disable no-invalid-this */
 export default function(obj) {

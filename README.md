@@ -187,6 +187,9 @@ danmaku.emit({
     // ...
   },
 
+  // each comment line height, default 1
+  lineHeight: 1,
+
   // A custom render to draw comment.
   // when `render` exist, `text` and `style` will be ignored.
 
