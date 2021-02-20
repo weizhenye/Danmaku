@@ -377,6 +377,8 @@ function bindEvents(_) {
   _.seeking = seek.bind(this);
   this.media.addEventListener('play', _.play);
   this.media.addEventListener('pause', _.pause);
+  this.media.addEventListener('playing', _.play);
+  this.media.addEventListener('waiting', _.pause);
   this.media.addEventListener('seeking', _.seeking);
 }
 
@@ -384,6 +386,8 @@ function bindEvents(_) {
 function unbindEvents(_) {
   this.media.removeEventListener('play', _.play);
   this.media.removeEventListener('pause', _.pause);
+  this.media.removeEventListener('playing', _.play);
+  this.media.removeEventListener('waiting', _.pause);
   this.media.removeEventListener('seeking', _.seeking);
   _.play = null;
   _.pause = null;
