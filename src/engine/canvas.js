@@ -45,9 +45,9 @@ export function createCommentCanvas(cmt, fontSize) {
     : !!style.strokeStyle * 1;
   ctx.font = style.font;
   cmt.width = cmt.width ||
-    Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
+    Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2) * devicePixelRatio;
   cmt.height = cmt.height ||
-    Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
+    (Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2) * devicePixelRatio;
   canvas.width = cmt.width;
   canvas.height = cmt.height;
   for (var key in style) {
@@ -60,11 +60,12 @@ export function createCommentCanvas(cmt, fontSize) {
       baseline = strokeWidth;
       break;
     case 'middle':
-      baseline = cmt.height >> 1;
+      baseline = cmt.height/devicePixelRatio >> 1;
       break;
     default:
-      baseline = cmt.height - strokeWidth;
+      baseline = cmt.height/devicePixelRatio - strokeWidth;
   }
+  ctx.scale(devicePixelRatio, devicePixelRatio);
   if (style.strokeStyle) {
     ctx.strokeText(cmt.text, strokeWidth, baseline);
   }
