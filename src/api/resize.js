@@ -10,6 +10,6 @@ export default function() {
     this._.stage.height = this.container.offsetHeight;
   }
   this._.engine.resize(this._.stage);
-  this._.duration = this._.stage.width / this._.speed;
+  this._.duration = this._.stage.width / (this.engine == "canvas" ? devicePixelRatio:1) / this._.speed;
   return this;
 }
