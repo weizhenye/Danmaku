@@ -60,10 +60,10 @@ export function createCommentCanvas(cmt, fontSize) {
       baseline = strokeWidth;
       break;
     case 'middle':
-      baseline = cmt.height/devicePixelRatio >> 1;
+      baseline = cmt.height / devicePixelRatio >> 1;
       break;
     default:
-      baseline = cmt.height/devicePixelRatio - strokeWidth;
+      baseline = cmt.height / devicePixelRatio - strokeWidth;
   }
   ctx.scale(devicePixelRatio, devicePixelRatio);
   if (style.strokeStyle) {
