@@ -11,7 +11,7 @@ export default {
     }
     this._.speed = s;
     if (this._.stage.width) {
-      this._.duration = this._.stage.width / s;
+      this._.duration = this._.stage.width / (this.engine === 'canvas' ? devicePixelRatio : 1) / s;
     }
     return s;
   }
