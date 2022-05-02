@@ -42,9 +42,6 @@ export default function(framing, setup, render, remove) {
     for (i = 0; i < pendingList.length; i++) {
       cmt = pendingList[i];
       cmt.y = allocate.call(this, cmt);
-      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-        cmt.x = (this._.width - cmt.width) >> 1;
-      }
       this._.runningList.push(cmt);
     }
     for (i = 0; i < this._.runningList.length; i++) {
@@ -53,6 +50,9 @@ export default function(framing, setup, render, remove) {
       var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
       if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
       if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        cmt.x = (this._.width - cmt.width) >> 1;
+      }
       render(this._.stage, cmt);
     }
   };
