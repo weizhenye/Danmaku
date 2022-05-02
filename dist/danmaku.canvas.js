@@ -23,6 +23,8 @@
     return 'transform';
   }());
 
+  const dpr = window.devicePixelRatio || 1;
+
   var canvasHeightCache = Object.create(null);
 
   function canvasHeight(font, fontSize) {
@@ -61,6 +63,7 @@
     }
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
     var style = cmt.style || {};
     style.font = style.font || '10px sans-serif';
     style.textBaseline = style.textBaseline || 'bottom';
@@ -73,8 +76,8 @@
       Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
     cmt.height = cmt.height ||
       Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
-    canvas.width = cmt.width;
-    canvas.height = cmt.height;
+    canvas.width = cmt.width * dpr;
+    canvas.height = cmt.height * dpr;
     for (var key in style) {
       ctx[key] = style[key];
     }
@@ -122,8 +125,11 @@
     }
   }
 
-  function resize() {
-    //
+  function resize(stage, width, height) {
+    stage.width = width * dpr;
+    stage.height = height * dpr;
+    stage.style.width = width + 'px';
+    stage.style.height = height + 'px';
   }
 
   function framing(stage) {
@@ -138,7 +144,7 @@
   }
 
   function render(stage, cmt) {
-    stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
+    stage.context.drawImage(cmt.canvas, cmt.x * dpr, cmt.y * dpr);
   }
 
   function remove(stage, cmt) {
@@ -166,19 +172,19 @@
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
         return ct - cr.time < that._.duration;
       }
-      var crTotalWidth = that._.stage.width + cr.width;
+      var crTotalWidth = that._.width + cr.width;
       var crElapsed = crTotalWidth * (ct - cr.time) * pbr / that._.duration;
       if (cr.width > crElapsed) {
         return true;
       }
       // (rtl mode) the right end of `cr` move out of left side of stage
       var crLeftTime = that._.duration + cr.time - ct;
-      var cmtTotalWidth = that._.stage.width + cmt.width;
+      var cmtTotalWidth = that._.width + cmt.width;
       var cmtTime = that.media ? cmt.time : cmt._utc;
       var cmtElapsed = cmtTotalWidth * (ct - cmtTime) * pbr / that._.duration;
-      var cmtArrival = that._.stage.width - cmtElapsed;
+      var cmtArrival = that._.width - cmtElapsed;
       // (rtl mode) the left end of `cmt` reach the left side of stage
-      var cmtArrivalTime = that._.duration * cmtArrival / (that._.stage.width + cmt.width);
+      var cmtArrivalTime = that._.duration * cmtArrival / (that._.width + cmt.width);
       return crLeftTime > cmtArrivalTime;
     }
     var crs = this._.space[cmt.mode];
@@ -208,9 +214,9 @@
     crs.splice(last + 1, curr - last - 1, crObj);
 
     if (cmt.mode === 'bottom') {
-      return this._.stage.height - cmt.height - channel % this._.stage.height;
+      return this._.height - cmt.height - channel % this._.height;
     }
-    return channel % (this._.stage.height - cmt.height);
+    return channel % (this._.height - cmt.height);
   }
 
   /* eslint no-invalid-this: 0 */
@@ -255,17 +261,17 @@
       for (i = 0; i < pendingList.length; i++) {
         cmt = pendingList[i];
         cmt.y = allocate.call(this, cmt);
-        if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-          cmt.x = (this._.stage.width - cmt.width) >> 1;
-        }
         this._.runningList.push(cmt);
       }
       for (i = 0; i < this._.runningList.length; i++) {
         cmt = this._.runningList[i];
-        var totalWidth = this._.stage.width + cmt.width;
+        var totalWidth = this._.width + cmt.width;
         var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
         if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
-        if (cmt.mode === 'rtl') cmt.x = (this._.stage.width - elapsed + .5) | 0;
+        if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
+        if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+          cmt.x = (this._.width - cmt.width) >> 1;
+        }
         render(this._.stage, cmt);
       }
     };
@@ -538,10 +544,10 @@
 
   /* eslint-disable no-invalid-this */
   function resize$1() {
-    this._.stage.width = this.container.offsetWidth;
-    this._.stage.height = this.container.offsetHeight;
-    this._.engine.resize(this._.stage);
-    this._.duration = this._.stage.width / this._.speed;
+    this._.width = this.container.offsetWidth;
+    this._.height = this.container.offsetHeight;
+    this._.engine.resize(this._.stage, this._.width, this._.height);
+    this._.duration = this._.width / this._.speed;
     return this;
   }
 
@@ -557,8 +563,8 @@
         return this._.speed;
       }
       this._.speed = s;
-      if (this._.stage.width) {
-        this._.duration = this._.stage.width / s;
+      if (this._.width) {
+        this._.duration = this._.width / s;
       }
       return s;
     }
