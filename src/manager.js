@@ -1,7 +1,7 @@
 import { bilibiliParser } from './bilibili.js';
 import { init } from './media.js';
 
-const API_BASE = 'https://danmaku-demo-server.weizhenye.now.sh/api/bilibili';
+const API_BASE = 'https://danmaku.vercel.app/api/bilibili';
 async function fetchBilibili(url) {
   const aid = (url.match(/\/av(\d+)/i) || [])[1] || '';
   const bvid = (url.match(/\/(BV\w+)/i) || [])[1] || '';

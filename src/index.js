@@ -2,7 +2,6 @@ import './media.js';
 import './manager.js';
 import './pref-monitor.js';
 
-export const SERVER_ORIGIN = 'https://danmaku-demo-server.weizhenye.now.sh';
 export const SAMPLE_MEDIA = {
   video: 'https://media.w3.org/2010/05/video/movie_300.mp4',
   audio: 'https://cdn.jsdelivr.net/gh/goldfire/howler.js@v2.1.3/tests/audio/sound1.mp3',
