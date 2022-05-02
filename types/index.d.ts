@@ -9,7 +9,7 @@ interface Comment {
    * @default media?.currentTime
    */
   time?: number;
-  style?: CSSStyleDeclaration | CanvasRenderingContext2D;
+  style?: Partial<CSSStyleDeclaration> | CanvasRenderingContext2D;
   /**
    * A custom render to draw comment.
    * When it exist, `text` and `style` will be ignored.
