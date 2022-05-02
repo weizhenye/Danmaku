@@ -10,8 +10,8 @@ export default {
       return this._.speed;
     }
     this._.speed = s;
-    if (this._.stage.width) {
-      this._.duration = this._.stage.width / (this.engine === 'canvas' ? devicePixelRatio : 1) / s;
+    if (this._.width) {
+      this._.duration = this._.width / s;
     }
     return s;
   }

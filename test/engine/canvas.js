@@ -67,8 +67,8 @@ describe('comment canvas', function() {
     var canvas = createCommentCanvas(comment, fontSize);
     var ctx = canvas.getContext('2d');
     assert.equal('CANVAS', canvas.tagName);
-    assert.equal(comment.width, canvas.width);
-    assert.equal(comment.height, canvas.height);
+    assert.equal(comment.width * (window.devicePixelRatio || 1), canvas.width);
+    assert.equal(comment.height * (window.devicePixelRatio || 1), canvas.height);
     assert.equal(comment.style.font, ctx.font.trim());
     assert.equal(comment.style.strokeStyle, ctx.strokeStyle);
   });
@@ -136,8 +136,8 @@ describe('comment canvas', function() {
       height: 32
     };
     var canvas = createCommentCanvas(comment, fontSize);
-    assert.equal(comment.width, canvas.width);
-    assert.equal(comment.height, canvas.height);
+    assert.equal(comment.width * (window.devicePixelRatio || 1), canvas.width);
+    assert.equal(comment.height * (window.devicePixelRatio || 1), canvas.height);
   });
 
   it('should deal with lineWidth', function() {
@@ -154,7 +154,7 @@ describe('comment canvas', function() {
         lineWidth: 8
       }
     });
-    assert.equal(canvas2.width, canvas1.width + 16);
-    assert.equal(canvas2.height, canvas1.height + 16);
+    assert.equal(canvas2.width, canvas1.width + 16 * (window.devicePixelRatio || 1));
+    assert.equal(canvas2.height, canvas1.height + 16 * (window.devicePixelRatio || 1));
   });
 });

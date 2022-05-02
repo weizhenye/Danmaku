@@ -43,16 +43,16 @@ export default function(framing, setup, render, remove) {
       cmt = pendingList[i];
       cmt.y = allocate.call(this, cmt);
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-        cmt.x = (this._.stage.width - cmt.width) >> 1;
+        cmt.x = (this._.width - cmt.width) >> 1;
       }
       this._.runningList.push(cmt);
     }
     for (i = 0; i < this._.runningList.length; i++) {
       cmt = this._.runningList[i];
-      var totalWidth = this._.stage.width + cmt.width;
+      var totalWidth = this._.width + cmt.width;
       var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
       if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
-      if (cmt.mode === 'rtl') cmt.x = (this._.stage.width - elapsed + .5) | 0;
+      if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
       render(this._.stage, cmt);
     }
   };

@@ -108,8 +108,8 @@ describe('Initialization', function() {
     danmaku = new Danmaku({
       container: document.getElementById('test-container')
     });
-    assert.equal(640, danmaku._.stage.width);
-    assert.equal(360, danmaku._.stage.height);
+    assert.equal(640, danmaku._.width);
+    assert.equal(360, danmaku._.height);
     assert.equal('640px', danmaku._.stage.style.width);
     assert.equal('360px', danmaku._.stage.style.height);
   });

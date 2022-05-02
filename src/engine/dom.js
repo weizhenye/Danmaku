@@ -50,9 +50,9 @@ export function clear(stage) {
   }
 }
 
-export function resize(stage) {
-  stage.style.width = stage.width + 'px';
-  stage.style.height = stage.height + 'px';
+export function resize(stage, width, height) {
+  stage.style.width = width + 'px';
+  stage.style.height = height + 'px';
 }
 
 export function framing() {

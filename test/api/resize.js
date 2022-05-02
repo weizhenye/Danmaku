@@ -16,8 +16,8 @@ describe('resize API', function() {
     $container.style.width = '1280px';
     $container.style.height = '720px';
     danmaku.resize();
-    assert.equal(1280, danmaku._.stage.width);
-    assert.equal(720, danmaku._.stage.height);
+    assert.equal(1280, danmaku._.width);
+    assert.equal(720, danmaku._.height);
     assert.equal('1280px', danmaku._.stage.style.width);
     assert.equal('720px', danmaku._.stage.style.height);
   });
@@ -31,7 +31,7 @@ describe('resize API', function() {
     $container.style.width = '1280px';
     $container.style.height = '720px';
     danmaku.resize();
-    assert.equal(1280, danmaku._.stage.width);
-    assert.equal(720, danmaku._.stage.height);
+    assert.equal(1280, danmaku._.width);
+    assert.equal(720, danmaku._.height);
   });
 });

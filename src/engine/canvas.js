@@ -1,3 +1,5 @@
+const dpr = window.devicePixelRatio || 1;
+
 export var canvasHeightCache = Object.create(null);
 
 export function canvasHeight(font, fontSize) {
@@ -36,6 +38,7 @@ export function createCommentCanvas(cmt, fontSize) {
   }
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
   var style = cmt.style || {};
   style.font = style.font || '10px sans-serif';
   style.textBaseline = style.textBaseline || 'bottom';
@@ -45,11 +48,11 @@ export function createCommentCanvas(cmt, fontSize) {
     : !!style.strokeStyle * 1;
   ctx.font = style.font;
   cmt.width = cmt.width ||
-    Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2) * devicePixelRatio;
+    Math.max(1, Math.ceil(ctx.measureText(cmt.text).width) + strokeWidth * 2);
   cmt.height = cmt.height ||
-    (Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2) * devicePixelRatio;
-  canvas.width = cmt.width;
-  canvas.height = cmt.height;
+    Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
+  canvas.width = cmt.width * dpr;
+  canvas.height = cmt.height * dpr;
   for (var key in style) {
     ctx[key] = style[key];
   }
@@ -60,12 +63,11 @@ export function createCommentCanvas(cmt, fontSize) {
       baseline = strokeWidth;
       break;
     case 'middle':
-      baseline = cmt.height / devicePixelRatio >> 1;
+      baseline = cmt.height >> 1;
       break;
     default:
-      baseline = cmt.height / devicePixelRatio - strokeWidth;
+      baseline = cmt.height - strokeWidth;
   }
-  ctx.scale(devicePixelRatio, devicePixelRatio);
   if (style.strokeStyle) {
     ctx.strokeText(cmt.text, strokeWidth, baseline);
   }
@@ -98,8 +100,11 @@ export function clear(stage, comments) {
   }
 }
 
-export function resize() {
-  //
+export function resize(stage, width, height) {
+  stage.width = width * dpr;
+  stage.height = height * dpr;
+  stage.style.width = width + 'px';
+  stage.style.height = height + 'px';
 }
 
 export function framing(stage) {
@@ -114,7 +119,7 @@ export function setup(stage, comments) {
 }
 
 export function render(stage, cmt) {
-  stage.context.drawImage(cmt.canvas, cmt.x, cmt.y);
+  stage.context.drawImage(cmt.canvas, cmt.x * dpr, cmt.y * dpr);
 }
 
 export function remove(stage, cmt) {

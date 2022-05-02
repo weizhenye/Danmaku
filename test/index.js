@@ -110,7 +110,7 @@ describe('Danmaku behavior', function() {
     return ensureFraming({ text: 'bottom', mode: 'bottom' }).then(function(result) {
       danmaku = result.danmaku;
       assert.equal(result.comment.x, result.x);
-      assert.equal(danmaku._.stage.height - result.comment.height, result.comment.y);
+      assert.equal(danmaku._.height - result.comment.height, result.comment.y);
     });
   });
 
@@ -132,7 +132,7 @@ describe('Danmaku behavior', function() {
         clearInterval(iv);
         assert.equal(rl[0].height, rl[1].y);
         assert.equal(rl[2].height, rl[3].y);
-        assert.equal(danmaku._.stage.height - rl[4].height - rl[5].height, rl[5].y);
+        assert.equal(danmaku._.height - rl[4].height - rl[5].height, rl[5].y);
         assert.equal(true, rl[6].y > rl[0].y);
         done();
       }
