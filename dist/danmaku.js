@@ -148,7 +148,6 @@
     }
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
     var style = cmt.style || {};
     style.font = style.font || '10px sans-serif';
     style.textBaseline = style.textBaseline || 'bottom';
@@ -163,6 +162,7 @@
       Math.ceil(canvasHeight(style.font, fontSize)) + strokeWidth * 2;
     canvas.width = cmt.width * dpr;
     canvas.height = cmt.height * dpr;
+    ctx.scale(dpr, dpr);
     for (var key in style) {
       ctx[key] = style[key];
     }
