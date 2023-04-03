@@ -1,4 +1,5 @@
 var transform = (function() {
+  if (!globalThis.window) return 'transform'
   var properties = [
     'oTransform', // Opera 11.5
     'msTransform', // IE 9
