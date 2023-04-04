@@ -2,7 +2,6 @@
 
 [![GitHub Action](https://github.com/weizhenye/Danmaku/workflows/CI/badge.svg)](https://github.com/weizhenye/Danmaku/actions)
 [![Coverage](https://badgen.net/codecov/c/github/weizhenye/Danmaku?icon=codecov)](https://codecov.io/gh/weizhenye/Danmaku)
-[![Dependencies](https://badgen.net/david/dep/weizhenye/Danmaku?icon=https://api.iconify.design/si-glyph:connect-2.svg?color=white)](https://david-dm.org/weizhenye/Danmaku)
 [![NPM version](https://badgen.net/npm/v/danmaku?icon=npm)](https://www.npmjs.com/package/danmaku)
 [![License](https://badgen.net/npm/license/danmaku?icon=https://api.iconify.design/octicon:law.svg?color=white)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
 [![File size](https://badgen.net/bundlephobia/minzip/danmaku?icon=https://api.iconify.design/ant-design:file-zip-outline.svg?color=white)](https://bundlephobia.com/result?p=danmaku)
