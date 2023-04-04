@@ -1,4 +1,4 @@
-const dpr = typeof window !== undefined && window.devicePixelRatio || 1;
+const dpr = typeof window !== 'undefined' && window.devicePixelRatio || 1;
 
 export var canvasHeightCache = Object.create(null);
 
