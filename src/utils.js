@@ -1,4 +1,4 @@
-var /* istanbul ignore next */ raf =
+export var /* istanbul ignore next */ raf =
   (
     typeof window !== 'undefined' &&
     (
@@ -11,7 +11,7 @@ var /* istanbul ignore next */ raf =
     return setTimeout(cb, 50 / 3);
   };
 
-var /* istanbul ignore next */ caf =
+export var /* istanbul ignore next */ caf =
   (
     typeof window !== 'undefined' &&
     (
