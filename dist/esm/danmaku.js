@@ -104,7 +104,7 @@ var domEngine = {
   remove: remove,
 };
 
-const dpr = window.devicePixelRatio || 1;
+var dpr = typeof window !== 'undefined' && window.devicePixelRatio || 1;
 
 var canvasHeightCache = Object.create(null);
 
@@ -359,17 +359,27 @@ function createEngine(framing, setup, render, remove) {
 }
 
 var raf =
-  window.requestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
+  (
+    typeof window !== 'undefined' &&
+    (
+      window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame
+    )
+  ) ||
   function(cb) {
     return setTimeout(cb, 50 / 3);
   };
 
 var caf =
-  window.cancelAnimationFrame ||
-  window.mozCancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
+  (
+    typeof window !== 'undefined' &&
+    (
+      window.cancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.webkitCancelAnimationFrame
+    )
+  ) ||
   clearTimeout;
 
 function binsearch(arr, prop, key) {
