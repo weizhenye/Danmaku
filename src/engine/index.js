@@ -13,7 +13,7 @@ export default function(framing, setup, render, remove) {
     for (i = this._.runningList.length - 1; i >= 0; i--) {
       cmt = this._.runningList[i];
       cmtt = this.media ? cmt.time : cmt._utc;
-      if (ct - cmtt > this._.duration) {
+      if (ct - cmtt > (this._.width + cmt.width) / this._.speed) {
         remove(this._.stage, cmt);
         this._.runningList.splice(i, 1);
       }
@@ -28,7 +28,7 @@ export default function(framing, setup, render, remove) {
       // when clicking controls to seek, media.currentTime may changed before
       // `pause` event is fired, so here skips comments out of duration,
       // see https://github.com/weizhenye/Danmaku/pull/30 for details.
-      if (ct - cmtt > this._.duration) {
+      if (ct - cmtt > (this._.width + cmt.width) / this._.speed) {
         ++this._.position;
         continue;
       }
@@ -47,7 +47,7 @@ export default function(framing, setup, render, remove) {
     for (i = 0; i < this._.runningList.length; i++) {
       cmt = this._.runningList[i];
       var totalWidth = this._.width + cmt.width;
-      var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
+      var elapsed = totalWidth * (dn - cmt._utc) * pbr / (totalWidth / this._.speed);
       if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
       if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
