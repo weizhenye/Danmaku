@@ -1,7 +1,9 @@
+import { now } from '../utils.js';
+
 /* eslint no-invalid-this: 0 */
 export default function(cmt) {
   var that = this;
-  var ct = this.media ? this.media.currentTime : Date.now() / 1000;
+  var ct = this.media ? this.media.currentTime : now() / 1000;
   var pbr = this.media ? this.media.playbackRate : 1;
   function willCollide(cr, cmt) {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {

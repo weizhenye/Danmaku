@@ -62,3 +62,9 @@ export function resetSpace(space) {
   space.top = collidableRange();
   space.bottom = collidableRange();
 }
+
+export function now() {
+  return typeof window.performance !== 'undefined' && window.performance.now
+    ? window.performance.now()
+    : Date.now();
+}
