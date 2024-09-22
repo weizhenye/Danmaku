@@ -250,120 +250,6 @@
     remove: remove$1,
   };
 
-  /* eslint no-invalid-this: 0 */
-  function allocate(cmt) {
-    var that = this;
-    var ct = this.media ? this.media.currentTime : Date.now() / 1000;
-    var pbr = this.media ? this.media.playbackRate : 1;
-    function willCollide(cr, cmt) {
-      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-        return ct - cr.time < that._.duration;
-      }
-      var crTotalWidth = that._.width + cr.width;
-      var crElapsed = crTotalWidth * (ct - cr.time) * pbr / that._.duration;
-      if (cr.width > crElapsed) {
-        return true;
-      }
-      // (rtl mode) the right end of `cr` move out of left side of stage
-      var crLeftTime = that._.duration + cr.time - ct;
-      var cmtTotalWidth = that._.width + cmt.width;
-      var cmtTime = that.media ? cmt.time : cmt._utc;
-      var cmtElapsed = cmtTotalWidth * (ct - cmtTime) * pbr / that._.duration;
-      var cmtArrival = that._.width - cmtElapsed;
-      // (rtl mode) the left end of `cmt` reach the left side of stage
-      var cmtArrivalTime = that._.duration * cmtArrival / (that._.width + cmt.width);
-      return crLeftTime > cmtArrivalTime;
-    }
-    var crs = this._.space[cmt.mode];
-    var last = 0;
-    var curr = 0;
-    for (var i = 1; i < crs.length; i++) {
-      var cr = crs[i];
-      var requiredRange = cmt.height;
-      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-        requiredRange += cr.height;
-      }
-      if (cr.range - cr.height - crs[last].range >= requiredRange) {
-        curr = i;
-        break;
-      }
-      if (willCollide(cr, cmt)) {
-        last = i;
-      }
-    }
-    var channel = crs[last].range;
-    var crObj = {
-      range: channel + cmt.height,
-      time: this.media ? cmt.time : cmt._utc,
-      width: cmt.width,
-      height: cmt.height
-    };
-    crs.splice(last + 1, curr - last - 1, crObj);
-
-    if (cmt.mode === 'bottom') {
-      return this._.height - cmt.height - channel % this._.height;
-    }
-    return channel % (this._.height - cmt.height);
-  }
-
-  /* eslint no-invalid-this: 0 */
-  function createEngine(framing, setup, render, remove) {
-    return function() {
-      framing(this._.stage);
-      var dn = Date.now() / 1000;
-      var ct = this.media ? this.media.currentTime : dn;
-      var pbr = this.media ? this.media.playbackRate : 1;
-      var cmt = null;
-      var cmtt = 0;
-      var i = 0;
-      for (i = this._.runningList.length - 1; i >= 0; i--) {
-        cmt = this._.runningList[i];
-        cmtt = this.media ? cmt.time : cmt._utc;
-        if (ct - cmtt > this._.duration) {
-          remove(this._.stage, cmt);
-          this._.runningList.splice(i, 1);
-        }
-      }
-      var pendingList = [];
-      while (this._.position < this.comments.length) {
-        cmt = this.comments[this._.position];
-        cmtt = this.media ? cmt.time : cmt._utc;
-        if (cmtt >= ct) {
-          break;
-        }
-        // when clicking controls to seek, media.currentTime may changed before
-        // `pause` event is fired, so here skips comments out of duration,
-        // see https://github.com/weizhenye/Danmaku/pull/30 for details.
-        if (ct - cmtt > this._.duration) {
-          ++this._.position;
-          continue;
-        }
-        if (this.media) {
-          cmt._utc = dn - (this.media.currentTime - cmt.time);
-        }
-        pendingList.push(cmt);
-        ++this._.position;
-      }
-      setup(this._.stage, pendingList);
-      for (i = 0; i < pendingList.length; i++) {
-        cmt = pendingList[i];
-        cmt.y = allocate.call(this, cmt);
-        this._.runningList.push(cmt);
-      }
-      for (i = 0; i < this._.runningList.length; i++) {
-        cmt = this._.runningList[i];
-        var totalWidth = this._.width + cmt.width;
-        var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
-        if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
-        if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
-        if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-          cmt.x = (this._.width - cmt.width) >> 1;
-        }
-        render(this._.stage, cmt);
-      }
-    };
-  }
-
   var raf =
     (
       typeof window !== 'undefined' &&
@@ -429,6 +315,127 @@
     space.bottom = collidableRange();
   }
 
+  function now() {
+    return typeof window.performance !== 'undefined' && window.performance.now
+      ? window.performance.now()
+      : Date.now();
+  }
+
+  /* eslint no-invalid-this: 0 */
+  function allocate(cmt) {
+    var that = this;
+    var ct = this.media ? this.media.currentTime : now() / 1000;
+    var pbr = this.media ? this.media.playbackRate : 1;
+    function willCollide(cr, cmt) {
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        return ct - cr.time < that._.duration;
+      }
+      var crTotalWidth = that._.width + cr.width;
+      var crElapsed = crTotalWidth * (ct - cr.time) * pbr / that._.duration;
+      if (cr.width > crElapsed) {
+        return true;
+      }
+      // (rtl mode) the right end of `cr` move out of left side of stage
+      var crLeftTime = that._.duration + cr.time - ct;
+      var cmtTotalWidth = that._.width + cmt.width;
+      var cmtTime = that.media ? cmt.time : cmt._utc;
+      var cmtElapsed = cmtTotalWidth * (ct - cmtTime) * pbr / that._.duration;
+      var cmtArrival = that._.width - cmtElapsed;
+      // (rtl mode) the left end of `cmt` reach the left side of stage
+      var cmtArrivalTime = that._.duration * cmtArrival / (that._.width + cmt.width);
+      return crLeftTime > cmtArrivalTime;
+    }
+    var crs = this._.space[cmt.mode];
+    var last = 0;
+    var curr = 0;
+    for (var i = 1; i < crs.length; i++) {
+      var cr = crs[i];
+      var requiredRange = cmt.height;
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        requiredRange += cr.height;
+      }
+      if (cr.range - cr.height - crs[last].range >= requiredRange) {
+        curr = i;
+        break;
+      }
+      if (willCollide(cr, cmt)) {
+        last = i;
+      }
+    }
+    var channel = crs[last].range;
+    var crObj = {
+      range: channel + cmt.height,
+      time: this.media ? cmt.time : cmt._utc,
+      width: cmt.width,
+      height: cmt.height
+    };
+    crs.splice(last + 1, curr - last - 1, crObj);
+
+    if (cmt.mode === 'bottom') {
+      return this._.height - cmt.height - channel % this._.height;
+    }
+    return channel % (this._.height - cmt.height);
+  }
+
+  /* eslint no-invalid-this: 0 */
+  function createEngine(framing, setup, render, remove) {
+    return function(_timestamp) {
+      framing(this._.stage);
+      var timestamp = _timestamp || now();
+      var dn = timestamp / 1000;
+      var ct = this.media ? this.media.currentTime : dn;
+      var pbr = this.media ? this.media.playbackRate : 1;
+      var cmt = null;
+      var cmtt = 0;
+      var i = 0;
+      for (i = this._.runningList.length - 1; i >= 0; i--) {
+        cmt = this._.runningList[i];
+        cmtt = this.media ? cmt.time : cmt._utc;
+        if (ct - cmtt > this._.duration) {
+          remove(this._.stage, cmt);
+          this._.runningList.splice(i, 1);
+        }
+      }
+      var pendingList = [];
+      while (this._.position < this.comments.length) {
+        cmt = this.comments[this._.position];
+        cmtt = this.media ? cmt.time : cmt._utc;
+        if (cmtt >= ct) {
+          break;
+        }
+        // when clicking controls to seek, media.currentTime may changed before
+        // `pause` event is fired, so here skips comments out of duration,
+        // see https://github.com/weizhenye/Danmaku/pull/30 for details.
+        if (ct - cmtt > this._.duration) {
+          ++this._.position;
+          continue;
+        }
+        if (this.media) {
+          cmt._utc = dn - (this.media.currentTime - cmt.time);
+        }
+        pendingList.push(cmt);
+        ++this._.position;
+      }
+      setup(this._.stage, pendingList);
+      for (i = 0; i < pendingList.length; i++) {
+        cmt = pendingList[i];
+        cmt.y = allocate.call(this, cmt);
+        this._.runningList.push(cmt);
+      }
+      for (i = 0; i < this._.runningList.length; i++) {
+        cmt = this._.runningList[i];
+        var totalWidth = this._.width + cmt.width;
+        var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
+        if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
+        if (cmt.mode === 'rtl') cmt.x = this._.width - elapsed;
+        if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+          cmt.x = (this._.width - cmt.width) >> 1;
+        }
+        render(this._.stage, cmt);
+      }
+    };
+  }
+
   /* eslint no-invalid-this: 0 */
   function play() {
     if (!this._.visible || !this._.paused) {
@@ -438,7 +445,7 @@
     if (this.media) {
       for (var i = 0; i < this._.runningList.length; i++) {
         var cmt = this._.runningList[i];
-        cmt._utc = Date.now() / 1000 - (this.media.currentTime - cmt.time);
+        cmt._utc = now() / 1000 - (this.media.currentTime - cmt.time);
       }
     }
     var that = this;
@@ -448,8 +455,8 @@
       this._.engine.render.bind(this),
       this._.engine.remove.bind(this)
     );
-    function frame() {
-      engine.call(that);
+    function frame(timestamp) {
+      engine.call(that, timestamp);
       that._.requestID = raf(frame);
     }
     this._.requestID = raf(frame);
@@ -588,7 +595,7 @@
     }
     cmt.text = (cmt.text || '').toString();
     cmt.mode = formatMode(cmt.mode);
-    cmt._utc = Date.now() / 1000;
+    cmt._utc = now() / 1000;
     if (this.media) {
       var position = 0;
       if (cmt.time === undefined) {
