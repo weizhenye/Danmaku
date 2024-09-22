@@ -1,4 +1,4 @@
-import { formatMode, binsearch } from '../utils.js';
+import { formatMode, binsearch, now } from '../utils.js';
 
 var properties = ['mode', 'time', 'text', 'render', 'style'];
 
@@ -15,7 +15,7 @@ export default function(obj) {
   }
   cmt.text = (cmt.text || '').toString();
   cmt.mode = formatMode(cmt.mode);
-  cmt._utc = Date.now() / 1000;
+  cmt._utc = now() / 1000;
   if (this.media) {
     var position = 0;
     if (cmt.time === undefined) {

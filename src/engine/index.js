@@ -1,10 +1,12 @@
 import allocate from '../internal/allocate.js';
+import { now } from '../utils.js';
 
 /* eslint no-invalid-this: 0 */
 export default function(framing, setup, render, remove) {
-  return function() {
+  return function(_timestamp) {
     framing(this._.stage);
-    var dn = Date.now() / 1000;
+    var timestamp = _timestamp || now();
+    var dn = timestamp / 1000;
     var ct = this.media ? this.media.currentTime : dn;
     var pbr = this.media ? this.media.playbackRate : 1;
     var cmt = null;
@@ -48,8 +50,8 @@ export default function(framing, setup, render, remove) {
       cmt = this._.runningList[i];
       var totalWidth = this._.width + cmt.width;
       var elapsed = totalWidth * (dn - cmt._utc) * pbr / this._.duration;
-      if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + .5) | 0;
-      if (cmt.mode === 'rtl') cmt.x = (this._.width - elapsed + .5) | 0;
+      if (cmt.mode === 'ltr') cmt.x = elapsed - cmt.width;
+      if (cmt.mode === 'rtl') cmt.x = this._.width - elapsed;
       if (cmt.mode === 'top' || cmt.mode === 'bottom') {
         cmt.x = (this._.width - cmt.width) >> 1;
       }
