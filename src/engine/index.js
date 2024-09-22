@@ -5,10 +5,7 @@ import { now } from '../utils.js';
 export default function(framing, setup, render, remove) {
   return function(_timestamp) {
     framing(this._.stage);
-    var timestamp = _timestamp;
-    if (typeof timestamp === 'undefined') {
-      timestamp = now();
-    }
+    var timestamp = _timestamp || now();
     var dn = timestamp / 1000;
     var ct = this.media ? this.media.currentTime : dn;
     var pbr = this.media ? this.media.playbackRate : 1;
