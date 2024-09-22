@@ -1,23 +1,23 @@
 # Danmaku
 
-[![GitHub Action](https://github.com/weizhenye/Danmaku/workflows/CI/badge.svg)](https://github.com/weizhenye/Danmaku/actions)
-[![Coverage](https://badgen.net/codecov/c/github/weizhenye/Danmaku?icon=codecov)](https://codecov.io/gh/weizhenye/Danmaku)
-[![NPM version](https://badgen.net/npm/v/danmaku?icon=npm)](https://www.npmjs.com/package/danmaku)
-[![License](https://badgen.net/npm/license/danmaku?icon=https://api.iconify.design/octicon:law.svg?color=white)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
-[![File size](https://badgen.net/bundlephobia/minzip/danmaku?icon=https://api.iconify.design/ant-design:file-zip-outline.svg?color=white)](https://bundlephobia.com/result?p=danmaku)
-[![jsDelivr](https://badgen.net/jsdelivr/hits/npm/danmaku?icon=https://api.iconify.design/simple-icons:jsdelivr.svg?color=white)](https://www.jsdelivr.com/package/npm/danmaku)
+[![GitHub Action](https://img.shields.io/github/actions/workflow/status/weizhenye/Danmaku/ci.yml?logo=github)](https://github.com/weizhenye/Danmaku/actions)
+[![Codecov](https://img.shields.io/codecov/c/gh/weizhenye/Danmaku?logo=codecov)](https://codecov.io/gh/weizhenye/Danmaku)
+[![License](https://img.shields.io/npm/l/danmaku)](https://github.com/weizhenye/danmaku/blob/master/LICENSE)
+[![File size](https://img.shields.io/bundlephobia/minzip/danmaku)](https://bundlephobia.com/result?p=danmaku)
 
-[![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
+<span>・</span>
+<a href="https://danmaku.js.org/">Online Demo</a>
+<span>・</span>
+<a href="https://github.com/weizhenye/Danmaku/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3">中文文档</a>
+<span>・</span>
 
 Danmaku is a JavaScript library to display flying comments on HTML media elements (video and audio). It can also display comments to your container in real time without timeline.
 
-[Demo](https://danmaku.js.org/)
-
-[中文文档](https://github.com/weizhenye/Danmaku/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3)
-
 ## Installation
 
-You can install it with npm:
+[![NPM Version](https://img.shields.io/npm/v/danmaku?logo=npm)](https://www.npmjs.com/package/danmaku)
+[![jsDelivr](https://img.shields.io/jsdelivr/npm/hm/danmaku?logo=jsdelivr)](https://www.jsdelivr.com/package/npm/danmaku)
+[![](https://img.shields.io/badge/unpkg-555?logo=unpkg)](https://unpkg.com/danmaku/)
 
 ```bash
 npm install danmaku
@@ -31,15 +31,6 @@ import Danmaku from 'danmaku/dist/esm/danmaku.dom.js';
 // Canvas engine only
 import Danmaku from 'danmaku/dist/esm/danmaku.canvas.js';
 ```
-
-Or use CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/danmaku), [unpkg](https://unpkg.com/danmaku/)):
-
-|  | Full | DOM engine only | Canvas engine only |
-| - | - | - | - |
-| UMD | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.js?label=danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.js?label=danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.js?label=danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.js) |
-| UMD minified | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.min.js?label=danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.dom.min.js?label=danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/danmaku.canvas.min.js?label=danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.canvas.min.js) |
-| ESM | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.js?label=esm/danmaku.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.js?label=esm/danmaku.dom.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.js?label=esm/danmaku.canvas.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.js) |
-| ESM minified | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.min.js?label=esm/danmaku.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.dom.min.js?label=esm/danmaku.dom.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.dom.min.js) | [![](https://badgen.net/badgesize/gzip/weizhenye/danmaku/master/dist/esm/danmaku.canvas.min.js?label=esm/danmaku.canvas.min.js)](https://cdn.jsdelivr.net/npm/danmaku/dist/esm/danmaku.canvas.min.js) |
 
 ## Usage
 
@@ -139,7 +130,6 @@ var danmaku = new Danmaku({
   comments: [],
 
   // You can use DOM engine or canvas engine to render comments.
-  // Canvas engine may more efficient than DOM however it costs more memory.
   // 'DOM' by default in full version.
   engine: 'canvas',
 
