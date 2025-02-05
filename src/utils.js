@@ -1,26 +1,30 @@
 export /* istanbul ignore next */ var raf =
   (
-    typeof window !== 'undefined' &&
     (
-      window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame
-    )
-  ) ||
-  function(cb) {
-    return setTimeout(cb, 50 / 3);
-  };
+      typeof window !== 'undefined' &&
+      (
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame
+      )
+    ) ||
+    function (cb) {
+      return setTimeout(cb, 50 / 3);
+    }
+  ).bind(window);
 
 export /* istanbul ignore next */ var caf =
   (
-    typeof window !== 'undefined' &&
     (
-      window.cancelAnimationFrame ||
-      window.mozCancelAnimationFrame ||
-      window.webkitCancelAnimationFrame
-    )
-  ) ||
-  clearTimeout;
+      typeof window !== 'undefined' &&
+      (
+        window.cancelAnimationFrame ||
+        window.mozCancelAnimationFrame ||
+        window.webkitCancelAnimationFrame
+      )
+    ) ||
+    clearTimeout
+  ).bind(window);
 
 export function binsearch(arr, prop, key) {
   var mid = 0;
