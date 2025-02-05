@@ -1,4 +1,4 @@
-export /* istanbul ignore next */ var raf =
+export /* istanbul ignore next */ var raf = (
   (
     typeof window !== 'undefined' &&
     (
@@ -9,9 +9,10 @@ export /* istanbul ignore next */ var raf =
   ) ||
   function(cb) {
     return setTimeout(cb, 50 / 3);
-  };
+  }
+).bind(window);
 
-export /* istanbul ignore next */ var caf =
+export /* istanbul ignore next */ var caf = (
   (
     typeof window !== 'undefined' &&
     (
@@ -20,7 +21,8 @@ export /* istanbul ignore next */ var caf =
       window.webkitCancelAnimationFrame
     )
   ) ||
-  clearTimeout;
+  clearTimeout
+).bind(window);
 
 export function binsearch(arr, prop, key) {
   var mid = 0;
