@@ -104,7 +104,7 @@ var domEngine = {
   remove: remove,
 };
 
-var raf =
+var raf = (
   (
     typeof window !== 'undefined' &&
     (
@@ -115,9 +115,10 @@ var raf =
   ) ||
   function(cb) {
     return setTimeout(cb, 50 / 3);
-  };
+  }
+).bind(window);
 
-var caf =
+var caf = (
   (
     typeof window !== 'undefined' &&
     (
@@ -126,7 +127,8 @@ var caf =
       window.webkitCancelAnimationFrame
     )
   ) ||
-  clearTimeout;
+  clearTimeout
+).bind(window);
 
 function binsearch(arr, prop, key) {
   var mid = 0;
