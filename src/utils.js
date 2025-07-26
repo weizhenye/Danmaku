@@ -1,26 +1,28 @@
-export /* istanbul ignore next */ var raf = typeof window !== 'undefined' ?
-  (
-    (
+export /* istanbul ignore next */ var raf = (function() {
+  if (typeof window !== 'undefined') {
+    var rAF = (
       window.requestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.webkitRequestAnimationFrame
-    ) ||
-    function(cb) {
-      return setTimeout(cb, 50 / 3);
-    }
-  ).bind(window)
-  : () => {};
+    );
+    if (rAF) return rAF.bind(window);
+  }
+  return function(cb) {
+    return setTimeout(cb, 50 / 3);
+  };
+})();
 
-export /* istanbul ignore next */ var caf = typeof window !== 'undefined' ? 
-  (
-    (
+export /* istanbul ignore next */ var caf = (function() {
+  if (typeof window !== 'undefined') {
+    var cAF = (
       window.cancelAnimationFrame ||
       window.mozCancelAnimationFrame ||
       window.webkitCancelAnimationFrame
-    ) ||
-    clearTimeout
-  ).bind(window)
-  : () => {};
+    );
+    if (cAF) return cAF.bind(window);
+  }
+  return clearTimeout;
+})();
 
 export function binsearch(arr, prop, key) {
   var mid = 0;
