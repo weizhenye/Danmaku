@@ -165,31 +165,31 @@
     remove: remove,
   };
 
-  var raf = (
-    (
-      typeof window !== 'undefined' &&
-      (
+  var raf = (function() {
+    if (typeof window !== 'undefined') {
+      var rAF = (
         window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame
-      )
-    ) ||
-    function(cb) {
-      return setTimeout(cb, 50 / 3);
+      );
+      if (rAF) return rAF.bind(window);
     }
-  ).bind(window);
+    return function(cb) {
+      return setTimeout(cb, 50 / 3);
+    };
+  })();
 
-  var caf = (
-    (
-      typeof window !== 'undefined' &&
-      (
+  var caf = (function() {
+    if (typeof window !== 'undefined') {
+      var cAF = (
         window.cancelAnimationFrame ||
         window.mozCancelAnimationFrame ||
         window.webkitCancelAnimationFrame
-      )
-    ) ||
-    clearTimeout
-  ).bind(window);
+      );
+      if (cAF) return cAF.bind(window);
+    }
+    return clearTimeout;
+  })();
 
   function binsearch(arr, prop, key) {
     var mid = 0;
