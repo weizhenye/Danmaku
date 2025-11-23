@@ -42,6 +42,10 @@ export default function(cmt) {
     }
   }
   var channel = crs[last].range;
+  if (this._.mode === 'adaptive' && channel + cmt.height > this._.height) {
+    return null;
+  }
+
   var crObj = {
     range: channel + cmt.height,
     time: this.media ? cmt.time : cmt._utc,

@@ -134,7 +134,13 @@ var danmaku = new Danmaku({
   engine: 'canvas',
 
   // You can also set speed by using `danmaku.speed` API.
-  speed: 144
+  speed: 144,
+
+  // You can use default mode or adaptive mode to render comments.
+  // 'default' by default, available mode: 'default', 'adaptive'.
+  // default mode: all comments are rendered immediately without any collision detection.
+  // adaptive mode: discard the comments that may collide when the screen is fully covered.
+  mode: 'default'
 });
 ```
 

@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Danmaku = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   var transform = (function() {
     /* istanbul ignore next */
@@ -44,13 +44,13 @@
     return node;
   }
 
-  function init() {
+  function init$2() {
     var stage = document.createElement('div');
     stage.style.cssText = 'overflow:hidden;white-space:nowrap;transform:translateZ(0);';
     return stage;
   }
 
-  function clear(stage) {
+  function clear$2(stage) {
     var lc = stage.lastChild;
     while (lc) {
       stage.removeChild(lc);
@@ -58,16 +58,16 @@
     }
   }
 
-  function resize(stage, width, height) {
+  function resize$2(stage, width, height) {
     stage.style.width = width + 'px';
     stage.style.height = height + 'px';
   }
 
-  function framing() {
+  function framing$1() {
     //
   }
 
-  function setup(stage, comments) {
+  function setup$1(stage, comments) {
     var df = document.createDocumentFragment();
     var i = 0;
     var cmt = null;
@@ -86,12 +86,12 @@
     }
   }
 
-  function render(stage, cmt) {
+  function render$1(stage, cmt) {
     cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)';
   }
 
   /* eslint no-invalid-this: 0 */
-  function remove(stage, cmt) {
+  function remove$1(stage, cmt) {
     stage.removeChild(cmt.node);
     /* istanbul ignore else */
     if (!this.media) {
@@ -101,13 +101,13 @@
 
   var domEngine = {
     name: 'dom',
-    init: init,
-    clear: clear,
-    resize: resize,
-    framing: framing,
-    setup: setup,
-    render: render,
-    remove: remove,
+    init: init$2,
+    clear: clear$2,
+    resize: resize$2,
+    framing: framing$1,
+    setup: setup$1,
+    render: render$1,
+    remove: remove$1,
   };
 
   var dpr = typeof window !== 'undefined' && window.devicePixelRatio || 1;
@@ -219,22 +219,22 @@
     stage.style.height = height + 'px';
   }
 
-  function framing$1(stage) {
+  function framing(stage) {
     stage.context.clearRect(0, 0, stage.width, stage.height);
   }
 
-  function setup$1(stage, comments) {
+  function setup(stage, comments) {
     for (var i = 0; i < comments.length; i++) {
       var cmt = comments[i];
       cmt.canvas = createCommentCanvas(cmt, stage._fontSize);
     }
   }
 
-  function render$1(stage, cmt) {
+  function render(stage, cmt) {
     stage.context.drawImage(cmt.canvas, cmt.x * dpr, cmt.y * dpr);
   }
 
-  function remove$1(stage, cmt) {
+  function remove(stage, cmt) {
     // avoid caching canvas to reduce memory usage
     cmt.canvas = null;
   }
@@ -244,10 +244,10 @@
     init: init$1,
     clear: clear$1,
     resize: resize$1,
-    framing: framing$1,
-    setup: setup$1,
-    render: render$1,
-    remove: remove$1,
+    framing: framing,
+    setup: setup,
+    render: render,
+    remove: remove,
   };
 
   var raf = (function() {
@@ -365,6 +365,10 @@
       }
     }
     var channel = crs[last].range;
+    if (this._.mode === 'adaptive' && channel + cmt.height > this._.height) {
+      return null;
+    }
+
     var crObj = {
       range: channel + cmt.height,
       time: this.media ? cmt.time : cmt._utc,
@@ -422,7 +426,11 @@
       for (i = 0; i < pendingList.length; i++) {
         cmt = pendingList[i];
         cmt.y = allocate.call(this, cmt);
-        this._.runningList.push(cmt);
+        if (cmt.y === null) {
+          remove(this._.stage, cmt);
+        } else {
+          this._.runningList.push(cmt);
+        }
       }
       for (i = 0; i < this._.runningList.length; i++) {
         cmt = this._.runningList[i];
@@ -513,7 +521,7 @@
   }
 
   /* eslint-disable no-invalid-this */
-  function init$2(opt) {
+  function init(opt) {
     this._ = {};
     this.container = opt.container || document.createElement('div');
     this.media = opt.media;
@@ -526,6 +534,7 @@
     /* eslint-enable no-undef */
     this._.requestID = 0;
 
+    this._.mode = opt.mode || 'default';
     this._.speed = Math.max(0, opt.speed) || 144;
     this._.duration = 4;
 
@@ -642,14 +651,14 @@
   }
 
   /* eslint-disable no-invalid-this */
-  function clear$2() {
+  function clear() {
     this._.engine.clear(this._.stage, this._.runningList);
     this._.runningList = [];
     return this;
   }
 
   /* eslint-disable no-invalid-this */
-  function resize$2() {
+  function resize() {
     this._.width = this.container.offsetWidth;
     this._.height = this.container.offsetHeight;
     this._.engine.resize(this._.stage, this._.width, this._.height);
@@ -677,7 +686,7 @@
   };
 
   function Danmaku(opt) {
-    opt && init$2.call(this, opt);
+    opt && init.call(this, opt);
   }
   Danmaku.prototype.destroy = function() {
     return destroy.call(this);
@@ -692,13 +701,13 @@
     return hide.call(this);
   };
   Danmaku.prototype.clear = function() {
-    return clear$2.call(this);
+    return clear.call(this);
   };
   Danmaku.prototype.resize = function() {
-    return resize$2.call(this);
+    return resize.call(this);
   };
   Object.defineProperty(Danmaku.prototype, 'speed', speed);
 
   return Danmaku;
 
-})));
+}));

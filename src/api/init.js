@@ -31,6 +31,7 @@ export default function(opt) {
   /* eslint-enable no-undef */
   this._.requestID = 0;
 
+  this._.mode = opt.mode || 'default';
   this._.speed = Math.max(0, opt.speed) || 144;
   this._.duration = 4;
 
