@@ -44,7 +44,11 @@ export default function(framing, setup, render, remove) {
     for (i = 0; i < pendingList.length; i++) {
       cmt = pendingList[i];
       cmt.y = allocate.call(this, cmt);
-      this._.runningList.push(cmt);
+      if (cmt.y === null) {
+        remove(this._.stage, cmt);
+      } else {
+        this._.runningList.push(cmt);
+      }
     }
     for (i = 0; i < this._.runningList.length; i++) {
       cmt = this._.runningList[i];
