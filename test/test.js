@@ -15,6 +15,7 @@ import './api/destroy.js';
 import './api/resize.js';
 import './api/show-hide.js';
 import './api/speed.js';
+import './internal/allocate.js';
 import './engine/canvas.js';
 import './engine/dom.js';
 import './utils.js';
